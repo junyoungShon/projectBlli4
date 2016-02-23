@@ -65,3 +65,10 @@ update blli_posting set posting_status = 'unconfirmed' where posting_status = 'd
 
 select * from blli_mid_category;
 
+select * from blli_member;
+
+delete from blli_member where member_id = 'rhslvkf@gmail.com';
+
+update blli_member set authority = 'ROLE_ADMIN' where member_id = 'gonipal@naver.com';
+update blli_member set authority = 'ROLE_USER' where member_id = 'gonipal@naver.com';
+select * from blli_baby where member_id = 'rhslvkf@gmail.com';

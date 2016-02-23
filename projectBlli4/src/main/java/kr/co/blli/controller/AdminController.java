@@ -158,7 +158,7 @@ public class AdminController {
 	 * @param smallProductInfo
 	 */
 	@ResponseBody
-	@RequestMapping("snsShareCountUp.do")
+	@RequestMapping("admin_snsShareCountUp.do")
 	public void snsShareCountUp(String smallProductId){
 		adminService.snsShareCountUp(smallProductId);
 	}

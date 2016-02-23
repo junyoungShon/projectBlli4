@@ -436,14 +436,23 @@ public class ProductServiceImpl implements ProductService{
 		return totalPostingNum;
 	}
 	@Override
-	public ArrayList<BlliSmallProductVO> getDibSmallProduct(String memberId) {
+	public ListVO getDibSmallProduct(String memberId, String pageNo) {
 		ArrayList<String> dibSmallProductId = (ArrayList<String>)productDAO.getDibSmallProductId(memberId);
 		ArrayList<BlliSmallProductVO> dibSmallProductList = new ArrayList<BlliSmallProductVO>();
 		DecimalFormat df = new DecimalFormat("#,##0");
-		for(int i=0;i<dibSmallProductId.size();i++){
+		int totalSmallProduct = dibSmallProductId.size();
+		int startSmallProductNo = 3*Integer.parseInt(pageNo) - 3;
+		int lastSmallProductNo = 3*Integer.parseInt(pageNo);
+		if(totalSmallProduct == 0){
+			startSmallProductNo = 0;
+			lastSmallProductNo = 0;
+		}else if(totalSmallProduct < 3 || lastSmallProductNo > totalSmallProduct){
+			lastSmallProductNo = totalSmallProduct;
+		}
+		for(int i=startSmallProductNo;i<lastSmallProductNo;i++){
 			BlliSmallProductVO dibSmallProduct = new BlliSmallProductVO();
 			dibSmallProduct = productDAO.getDibSmallProduct(dibSmallProductId.get(i));
-			ArrayList<BlliSmallProductBuyLinkVO> dibSmallProductBuyLink = (ArrayList<BlliSmallProductBuyLinkVO>)productDAO.getDibSmallProductBuyLink(dibSmallProductId.get(i));
+			ArrayList<BlliSmallProductBuyLinkVO> dibSmallProductBuyLink = (ArrayList<BlliSmallProductBuyLinkVO>)productDAO.getDibSmallProductBuyLink(dibSmallProduct.getSmallProductId());
 			dibSmallProduct.setBlliSmallProductBuyLinkVOList(dibSmallProductBuyLink);
 			int minPrice = Integer.parseInt(dibSmallProductBuyLink.get(0).getBuyLinkPrice());
 			for(int j=0;j<dibSmallProductBuyLink.size();j++){
@@ -457,7 +466,9 @@ public class ProductServiceImpl implements ProductService{
 			dibSmallProduct.setOtherSmallProductList(productDAO.getOtherSmallProductList(dibSmallProduct));
 			dibSmallProductList.add(dibSmallProduct);
 		}
-		return dibSmallProductList;
+		int totalPage = (int)Math.ceil(dibSmallProductId.size()/3.0);
+		ListVO dibSmallProductListInfo = new ListVO(dibSmallProductList, totalPage);
+		return dibSmallProductListInfo;
 	}
 
 }
