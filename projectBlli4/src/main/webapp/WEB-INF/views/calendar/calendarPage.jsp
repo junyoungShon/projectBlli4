@@ -56,13 +56,12 @@
 			    var totalCellNumber = 35;
 			    var yearForDB = y-2000;
 			    var monthForDB = m;
+
 			    
-			    
-			    if(yearForDB<10) {
-			    	yearForDB = "0" + yearForDB;
-				}
-				
 			    for (i = 0; i < totalCellNumber; i++) {
+			    	
+			    	var dayForDB = i+1-d1;
+			    	
 			    	
 			        if (i%7==0) {
 			        	calendarText += '</tr>\n<tr>';
@@ -73,30 +72,35 @@
 			        } else {
 			        	var scheduleText = '';
 			        	
-			        	//일정 표시
+			        	//일정 표시 - 해당하지 않으면 반복문 break 하도록 걸어줘야 됨
 			        	for(var j=0;j<memberScheduleList.length;j++) {
+			        		if(yearForDB<10) {
+						    	yearForDB = "0" + yearForDB;
+							}
 			        		if(monthForDB<10) {
 			        			monthForDB = "0" + monthForDB;
 			        		}
-			        		if(i<10) {
-			        			i = "0" + i;
+			        		if(dayForDB<10) {
+			        			dayForDB = "0" + dayForDB;
 			        		}
 			        		
-			        		
-			        		var dateForDB = yearForDB + "/" + monthForDB + "/" + i;
+			        		var dateForDB = yearForDB + "/" + monthForDB + "/" + dayForDB;
 			        		
 				        	if(dateForDB==memberScheduleList[j].scheduleDate) {
-				        		scheduleText += '<p class="cal_bg1" align="center">' + memberScheduleList[j].scheduleTitle + '</p>';
+				        		scheduleText += '<p class="cal_bg1 schedule" align="center">' + memberScheduleList[j].scheduleTitle;
+				        		scheduleText += '<input type="hidden" value='+memberScheduleList[j].scheduleId+'></p>';
 				        	}
 				        	
 				        	
-				        	if(i<10) {
-			        			i = i.substring(1,2);
-			        		}
+				        	if(yearForDB<10) {
+						    	yearForDB = yearForDB.substring(1,2);
+							}
 				        	if(monthForDB<10) {
 				        		monthForDB = monthForDB.substring(1,2);
 			        		}
-				        	
+				        	if(dayForDB<10) {
+				        		dayForDB = dayForDB.substring(1,2);
+			        		}
 			        	}
 						
 			        	//string -> number
@@ -236,6 +240,8 @@
 	
 	function showSchduleDetail(bsvo) {
 		
+		alert(bsvo.scheduleDate);
+		
 		var yearToString = "20" + bsvo.scheduleDate.substring(2,4)+"년 ";
 		
 		//1의 자리라서 앞에 0이 붙어있었다면 지워준다.
@@ -266,6 +272,24 @@
 			
 		document.getElementById('addScheduleForm').innerHTML = showSchduleDetailText;
 	}
+	
+	
+	//일정 클릭시 해당 일정의 상세 정보를 보여준다.
+	$(document).on("click", ".schedule", function(){
+		
+		$.ajax({
+			type: "POST",
+			url: "${initParam.root}member_getSchduleInfoByScheduleId.do",
+			data: "scheduleId="+$(this).children().val(),
+			cache: false,
+			success: function(bsvo){
+				
+				
+				showSchduleDetail(bsvo);
+			}
+	    });
+		
+	});
 	
 	
 	$(document).on("click", "#addScheduleCancelBtn", function(){
@@ -322,7 +346,7 @@
 		
 		$.ajax({
 			type: "POST",
-			url: "${initParam.root}updateSchedule.do",
+			url: "${initParam.root}member_updateSchedule.do",
 			data: "scheduleId="+scheduleIdVal
 					+"&scheduleTitle="+titleVal
 					+"&scheduleLocation="+locationVal
@@ -363,10 +387,6 @@
 	<c:forEach items="${sessionScope.blliMemberVO.blliBabyVOList}" var="blliBabyVOList">
 		<input type="hidden" name="babyNameList" value="${blliBabyVOList.babyName}">
 	</c:forEach>
-	<%-- <c:forEach items="${memberScheduleList}" var="memberScheduleList">
-		<input type="hidden" name="scheduleDate" value="${memberScheduleList.scheduleDate}">
-		<input type="hidden" name="scheduleTitle" value="${memberScheduleList.scheduleTitle}">
-	</c:forEach> --%>
 
     <div class="jbContent">
 		<div class="in_fr">

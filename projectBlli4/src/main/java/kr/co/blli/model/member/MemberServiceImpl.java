@@ -458,6 +458,13 @@ public class MemberServiceImpl implements MemberService {
 	public BlliScheduleVO selectSchedule(BlliScheduleVO bsvo) {
 		return memberDAO.selectSchedule(bsvo);
 	}
+	
+	@Override
+	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId) {
+		return memberDAO.getSchduleInfoByScheduleId(scheduleId);
+	}
+	
+	
 	public int denySendEmail(String memberEmail) {
 		return memberDAO.denySendEmail(memberEmail);
 	}
@@ -471,5 +478,6 @@ public class MemberServiceImpl implements MemberService {
 	public List<BlliScheduleVO> getMemberScheduleList(String memberId) {
 		return memberDAO.getMemberScheduleList(memberId);
 	}
+	
 
 }

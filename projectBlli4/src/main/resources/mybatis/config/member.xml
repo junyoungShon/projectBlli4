@@ -178,6 +178,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from blli_schedule
 		where member_id = #{value}
 	</select>
+	<select id="getSchduleInfoByScheduleId" resultMap="bsvRM">
+		select schedule_id, member_id, baby_name, to_char(schedule_date) as schedule_date, schedule_title, schedule_content, schedule_location, schedule_check_state
+		from blli_schedule
+		where schedule_id = #{value}
+	</select>
 	<!-- 용호 쿼리 끝 -->
 	
 	

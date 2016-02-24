@@ -49,10 +49,12 @@ public interface MemberService {
 	public BlliScheduleVO selectSchedule(BlliScheduleVO bsvo);
 	public int denySendEmail(String memberEmail);
 	public List<BlliScheduleVO> getMemberScheduleList(String memberId);
+	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId);
 
 	
 	
 	//현석 작성 영역
 	public ArrayList<BlliPostingVO> getScrapeInfoByMemberId(BlliMemberVO memberVO);
+
 
 }

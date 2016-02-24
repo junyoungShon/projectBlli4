@@ -572,6 +572,13 @@ public class MemberController {
 		memberService.updateSchedule(bsvo);
 		return memberService.selectSchedule(bsvo);
 	}
+	
+	@RequestMapping("member_getSchduleInfoByScheduleId.do")
+	@ResponseBody
+	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId) {
+		return memberService.getSchduleInfoByScheduleId(scheduleId);
+	}
+	
 
 	@RequestMapping("member_goScrapePage.do")
 	public ModelAndView goScrapePage(HttpServletRequest request) {

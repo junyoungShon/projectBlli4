@@ -42,12 +42,14 @@ public interface MemberDAO {
 	public void updateSchedule(BlliScheduleVO bsvo);
 	public void deleteSchedule(BlliScheduleVO bsvo);
 	public List<BlliScheduleVO> getMemberScheduleList(String memberId);
+	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId);
 
 	
 	
 	//현석 작성 영역
 	public int denySendEmail(String memberEmail);
 	public List<BlliPostingVO> getScrapeInfoByMemberId(BlliMemberVO memberVO);
+
 
 
 }

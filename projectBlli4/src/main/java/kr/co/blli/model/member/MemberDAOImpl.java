@@ -103,7 +103,6 @@ public class MemberDAOImpl implements MemberDAO{
 	@Override
 	public int addSchedule(BlliScheduleVO bsvo) {
 		sqlSessionTemplate.insert("member.addSchedule", bsvo);
-		//System.out.println("MemberDAOImpl:"+ bsvo.getScheduleId());
 		return bsvo.getScheduleId();
 	}
 	@Override
@@ -123,7 +122,10 @@ public class MemberDAOImpl implements MemberDAO{
 	public List<BlliScheduleVO> getMemberScheduleList(String memberId) {
 		return sqlSessionTemplate.selectList("member.getMemberScheduleList", memberId);
 	}
-
+	@Override
+	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId) {
+		return sqlSessionTemplate.selectOne("member.getSchduleInfoByScheduleId", scheduleId);
+	}
 	
 	//현석 작성 영역
 	@Override
@@ -135,7 +137,7 @@ public class MemberDAOImpl implements MemberDAO{
 	public List<BlliPostingVO> getScrapeInfoByMemberId(BlliMemberVO memberVO) {
 		return sqlSessionTemplate.selectList("member.getScrapeInfoByMemberId", memberVO);
 	}
-
+	
 
 
 }
