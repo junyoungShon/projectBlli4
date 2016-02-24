@@ -116,7 +116,6 @@ public class AdminDAOImpl implements AdminDAO{
 	}
 	@Override
 	public void snsShareCountUp(String smallProductId) {
-		System.out.println("타겟 아이디"+smallProductId);
 		sqlSessionTemplate.update("admin.snsShareCountUp", smallProductId);
 	}
 	@Override

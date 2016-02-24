@@ -79,7 +79,6 @@ public class BlliAop {
 					((BlliPostingVO) ((List) retValue).get(i)).setIsDisLike(1);
 				else
 					((BlliPostingVO) ((List) retValue).get(i)).setIsDisLike(0);
-				System.out.println(((List) retValue).get(i));
 			}
 		}else{
 			String postingUrl = ((BlliPostingVO)retValue).getPostingUrl();

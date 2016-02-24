@@ -83,7 +83,6 @@ public class PostingServiceImpl implements PostingService {
 			startPosting = ((currentPage-1)*5+1)+"";
 			endPosting = ((currentPage-1)*5+5)+"";
 		}
-		System.out.println(smallProductId);
 		paraMap.put("startPosting", startPosting);
 		paraMap.put("endPosting", endPosting);
 		paraMap.put("smallProductId", smallProductId);
@@ -107,7 +106,6 @@ public class PostingServiceImpl implements PostingService {
 			startPosting = ((currentPage-1)*5+1)+"";
 			endPosting = ((currentPage-1)*5+5)+"";
 		}
-		System.out.println(smallProductId);
 		paraMap.put("startPosting", startPosting);
 		paraMap.put("endPosting", endPosting);
 		paraMap.put("smallProductId", smallProductId);
@@ -152,7 +150,6 @@ public class PostingServiceImpl implements PostingService {
 		paraMap.put("pageNum", pageNum);
 		//점수순 노출 , 상태(confirmed) , 포스팅 대상 소제품 등을 기준으로 출력<!극혐주의!> 포스팅 관련 이므로 여기있으면 안되지만 구조상 여기왔다 . 상의해보자
 		for(int i=0;i<blliSmallProductVOList.size();i++){
-			System.out.println(blliSmallProductVOList);
 			if(blliSmallProductVOList.get(i)!=null){
 				paraMap.put("smallProductId", blliSmallProductVOList.get(i).getSmallProductId());
 				List<BlliPostingVO> tempList = postingDAO.selectPostingBySmallProductList(paraMap);

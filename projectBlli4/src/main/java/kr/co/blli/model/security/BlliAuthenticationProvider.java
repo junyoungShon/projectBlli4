@@ -42,8 +42,6 @@ public class BlliAuthenticationProvider implements AuthenticationProvider{
 			throws AuthenticationException {
 		UsernamePasswordAuthenticationToken authToken = 
 				(UsernamePasswordAuthenticationToken) authentication;
-		System.out.println("여기 왜 안오냐");
-		System.out.println(authToken.getName()); 
 		BlliMemberVO blliMemberVO = memberDAO.findMemberByIdForLogin(authToken.getName());
 		if(blliMemberVO==null)
 			throw new UsernameNotFoundException(authToken.getName());	

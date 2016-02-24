@@ -73,7 +73,6 @@ public class BlliWordCounter {
 								j--;
 							}
 						}
-						
 						if(resultList[i].length()>1&&resultList[i].length()<11){
 							if(wordAndCountMap.get(resultList[i])!=null){
 								wordAndCountMap.replace(resultList[i], wordAndCountMap.get(resultList[i])+1);
@@ -82,8 +81,6 @@ public class BlliWordCounter {
 							}
 						}
 					}
-				
-				
 				//형용사 추출	
 				}else if(!resultList[i].contains("/n")&&resultList[i].contains("/paa")){
 					if(i!=0)
@@ -109,7 +106,6 @@ public class BlliWordCounter {
 						}
 					}
 				}
-				//System.out.println(i+"번째"+resultList[i].toString());
 			}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -119,18 +115,14 @@ public class BlliWordCounter {
 					workflow.clear();
 				}
 			}
-			System.out.println("총 추출 단어 수:"+wordAndCountMap.size());
 			wordAndCountMap = (HashMap<String, Integer>) sortByValue(wordAndCountMap);
-			System.out.println(wordAndCountMap.size());
 			Iterator<String> it = wordAndCountMap.keySet().iterator();
 			while(it.hasNext()){
 				String key = (String) it.next();
 				int value = wordAndCountMap.get(key);
-				System.out.println("단어 : "+key+" 횟수 : "+value);
 			}
 			long end = System.currentTimeMillis();  //종료시간
 			//종료-시작=실행시간		
-			System.out.println("실행시간  : "+(end-start)/1000.0+"초");
 			return wordAndCountMap;
 	}
 	/**

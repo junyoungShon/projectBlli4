@@ -112,11 +112,9 @@ public class MemberServiceImpl implements MemberService {
 	public void insertBabyInfo(BlliMemberVO blliMemberVO,HttpServletRequest request) throws Exception {
 	    ArrayList<BlliBabyVO> list = new ArrayList<BlliBabyVO>();
 		int targetAmount = Integer.parseInt(request.getParameter("targetAmount"));
-		System.out.println(blliMemberVO.getBlliBabyVOList());
 		SimpleDateFormat formatter  = new SimpleDateFormat("yyyy-MM-dd");
 		Date birthDay = null;
 		for(int i=0;i<targetAmount;i++){
-			System.out.println(targetAmount);
 			BlliBabyVO blliBabyVO = new BlliBabyVO();
 			blliBabyVO.setMemberId(request.getParameter("memberId"));
 			blliBabyVO.setBabyName(request.getParameter("BlliBabyVO["+i+"].babyName"));
@@ -128,7 +126,6 @@ public class MemberServiceImpl implements MemberService {
 			}else{
 				blliBabyVO.setRecommending(0);
 			}
-			System.out.println(blliBabyVO);
 			list.add(blliBabyVO);
 		}
 		if(blliMemberVO.getMemberEmail()!=null){ 
@@ -141,7 +138,6 @@ public class MemberServiceImpl implements MemberService {
 		 memberDAO.updateMemberAuthority(blliMemberVO);
 		 //아이정보를 입력하며 첫째 아이로 아이정보를 수정해줌
 		 for(int i=0;i<list.size();i++){
-			 System.out.println(list.get(i));
 			 memberDAO.insertBabyInfo(list.get(i));
 		 }
 		//아이정보 입력 후 권한을 갱신하여 로그인을 시킨 뒤 페이지 이동 시켜줌
@@ -164,7 +160,6 @@ public class MemberServiceImpl implements MemberService {
 	 */
 	@Override
 	public BlliMemberVO selectBlliMemberInfoByMemberId(String memberId) throws ParseException {
-		System.out.println(memberId);
 		//1. 비밀번호를 제외한 사용자의 모든 정보
 		BlliMemberVO blliMemberVO= memberDAO.selectBlliMemberInfoByMemberId(memberId);
 		//2. 사용자의 아이정보
@@ -172,7 +167,6 @@ public class MemberServiceImpl implements MemberService {
 		List<BlliBabyVO> blliBabyVOList = blliMemberVO.getBlliBabyVOList();
 		//아이의 월령 및 태어난 날 수 세팅
 		for(int i=0;i<blliBabyVOList.size();i++){
-			System.out.println(blliBabyVOList.get(i).getBabyBirthday());
 			int babyDayAge = babyDayAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
 			int babyMonthAge = babyMonthAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
 			blliBabyVOList.get(i).setBabyDayAge(babyDayAge);
@@ -194,7 +188,6 @@ public class MemberServiceImpl implements MemberService {
 		List<BlliBabyVO> blliBabyVOList = memberDAO.selectBabyListByMemberId(memberId);
 		//아이의 월령 및 태어난 날 수 세팅
 		for(int i=0;i<blliBabyVOList.size();i++){
-			System.out.println(blliBabyVOList.get(i).getBabyBirthday());
 			int babyDayAge = babyDayAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
 			int babyMonthAge = babyMonthAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
 			blliBabyVOList.get(i).setBabyDayAge(babyDayAge);
@@ -216,7 +209,6 @@ public class MemberServiceImpl implements MemberService {
 	}
 	public int babyMonthAgeCounter(String babyBirthday) throws ParseException{
 		int babyMonthAge = 0;
-		System.out.println(babyBirthday);
 		String babyBirth[] = babyBirthday.substring(0, 10).split("-");
 		
 		int babyYear = Integer.parseInt(babyBirth[0]);
@@ -226,7 +218,6 @@ public class MemberServiceImpl implements MemberService {
 		int nowYear = today.get(Calendar.YEAR);
 		int nowMonth = (today.get(Calendar.MONTH))+1;
 		int nowDate = today.get(Calendar.DATE);
-		System.out.println(nowYear +" "+ nowMonth + " " + nowDate);
 		//현재 - 생일
 		int diffYears = nowYear - babyYear;
 		int diffMonths = nowMonth - babyMonth;
@@ -256,7 +247,6 @@ public class MemberServiceImpl implements MemberService {
 				babyMonthAge=-1;
 			}
 		}
-		System.out.println(babyMonthAge);
 		return babyMonthAge;
 	}
 	/**
@@ -322,7 +312,6 @@ public class MemberServiceImpl implements MemberService {
 		List<BlliBabyVO> blliBabyVOList = memberDAO.getBabyAgeChangedListOfMember(memberId);
 		//아이의 월령 및 태어난 날 수 세팅
 		for(int i=0;i<blliBabyVOList.size();i++){
-			System.out.println(blliBabyVOList.get(i).getBabyBirthday());
 			int babyDayAge = babyDayAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
 			int babyMonthAge = babyMonthAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
 			blliBabyVOList.get(i).setBabyDayAge(babyDayAge);
@@ -373,7 +362,6 @@ public class MemberServiceImpl implements MemberService {
 		message.setText(mailText, "utf-8", "html");
 		
 		mailSender.send(message);
-		System.out.println(memberName+"님의 메일주소 "+recipient+"로 임시비밀번호 받는 링크 발송");
 	}    
 	
 	/**
@@ -429,7 +417,6 @@ public class MemberServiceImpl implements MemberService {
 		message.setText(mailText, "utf-8", "html");
 		
 		mailSender.send(message);
-		System.out.println(memberName+"님의 메일주소 "+recipient+"로 임시비밀번호 발송");
 	}
 	
 	/**
@@ -469,6 +456,13 @@ public class MemberServiceImpl implements MemberService {
 	public BlliScheduleVO selectSchedule(BlliScheduleVO bsvo) {
 		return memberDAO.selectSchedule(bsvo);
 	}
+	
+	@Override
+	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId) {
+		return memberDAO.getSchduleInfoByScheduleId(scheduleId);
+	}
+	
+	
 	@Override
 	public int denySendEmail(String memberEmail) {
 		return memberDAO.denySendEmail(memberEmail);
@@ -486,6 +480,7 @@ public class MemberServiceImpl implements MemberService {
 	public List<BlliScheduleVO> getMemberScheduleList(String memberId) {
 		return memberDAO.getMemberScheduleList(memberId);
 	}
+	
 
 	@Override
 	public int selectMailAgreeByMemberId(String memberId) {

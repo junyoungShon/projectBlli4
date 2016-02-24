@@ -86,7 +86,6 @@ public class SearchController {
 				viewName = "blli_smallProductDetailPage";
 				mav.addObject("smallProductInfo", smallProductInfo);
 				mav.addObject("blliPostingVOList", postingList);
-				System.out.println("스몰프로덕트 :" +postingList);
 			}else{
 				smallProductList = productService.searchSmallProductList(pageNo, searchWord);
 				viewName = "blli_midCategoryDetailPage";
@@ -248,15 +247,12 @@ public class SearchController {
 	@RequestMapping("member_selectSmallProductRank.do")
 	@ResponseBody
 	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId){
-		System.out.println(productService.selectSmallProductRank(midCategoryId));
 		return productService.selectSmallProductRank(midCategoryId);
 	}
 	@RequestMapping("member_selectPostingBySmallProduct.do")
 	@ResponseBody
 	public List<BlliPostingVO> selectPostingBySmallProduct(String smallProductIdList ,String pageNum,String memberId){
 		//return productService.selectSmallProductRank(midCategoryId);
-		System.out.println(smallProductIdList);
-		System.out.println(pageNum);
 		String list[] = smallProductIdList.split("/");
 		List<BlliSmallProductVO> blliSmallProductVOList = new ArrayList<BlliSmallProductVO>();
 		for(int i=0;i<list.length;i++){
@@ -264,7 +260,6 @@ public class SearchController {
 			blliSmallProductVO.setSmallProductId(list[i]);
 			blliSmallProductVOList.add(blliSmallProductVO);
 		}
-		System.out.println(productService.selectPostingBySmallProductList(blliSmallProductVOList, memberId, pageNum));
 		return productService.selectPostingBySmallProductList(blliSmallProductVOList, memberId, pageNum);
 	}
 	
@@ -286,10 +281,8 @@ public class SearchController {
 	
 	@RequestMapping("goBuyMidPage.do")
 	public ModelAndView goBuyMidPage(BlliBuyLinkClickVO blliBuyLinkClickVO,HttpServletRequest request){
-		System.out.println(blliBuyLinkClickVO);
 		ModelAndView mav = new ModelAndView();
 		String targetURL = request.getParameter("buyLink");
-		System.out.println(targetURL);
 		mav.setViewName("buyMidPage");
 		mav.addObject("blliBuyLinkClickVO", blliBuyLinkClickVO);
 		mav.addObject("targetURL", targetURL);

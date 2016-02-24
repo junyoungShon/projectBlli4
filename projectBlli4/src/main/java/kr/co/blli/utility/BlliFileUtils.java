@@ -50,9 +50,7 @@ public class BlliFileUtils {
         	multipartFile = multipartHttpServletRequest.getFile("BlliBabyVO["+i+"].babyPhoto");
             if(!multipartFile.getOriginalFilename().equals("")){
             	originalFileName = multipartFile.getOriginalFilename();
-                System.out.println(originalFileName);
                 originalFileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-                System.out.println("파일 업로드 위치"+originalFileName);
                 //프로필 사진은 멤버아이디_아이이름.확장자로 저장된다.
                 storedFileName = list.get(i).getMemberId()+"_"+list.get(i).getBabyName()+ originalFileExtension;
                 list.get(i).setBabyPhoto(storedFileName);

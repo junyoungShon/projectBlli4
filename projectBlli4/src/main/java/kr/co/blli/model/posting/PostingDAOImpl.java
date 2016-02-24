@@ -82,7 +82,6 @@ public class PostingDAOImpl implements PostingDAO{
 	}
 	@Override
 	public List<BlliPostingVO> selectPostingBySmallProductId(HashMap<String, String> paraMap) {
-		System.out.println(paraMap);
 		return sqlSessionTemplate.selectList("posting.selectPostingBySmallProductId", paraMap);
 	}
 	@Override

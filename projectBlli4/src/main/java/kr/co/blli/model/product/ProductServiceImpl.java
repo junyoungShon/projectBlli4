@@ -80,7 +80,6 @@ public class ProductServiceImpl implements ProductService{
 	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(
 			List<BlliMidCategoryVO> blliMidCategoryVOList, BlliBabyVO blliBabyVO) {
 		for(int i=0;i<blliMidCategoryVOList.size();i++){
-			System.out.println("추천 중분류 리스트 : "+blliMidCategoryVOList.get(i));
 		}
 		List<BlliSmallProductVO> blliSmallProductVOList = new ArrayList<BlliSmallProductVO>();
 		int recommMidNumber = blliMidCategoryVOList.size();
@@ -136,7 +135,6 @@ public class ProductServiceImpl implements ProductService{
 		paraMap.put("pageNum", pageNum);
 		//점수순 노출 , 상태(confirmed) , 포스팅 대상 소제품 등을 기준으로 출력<!극혐주의!> 포스팅 관련 이므로 여기있으면 안되지만 구조상 여기왔다 . 상의해보자
 		for(int i=0;i<blliSmallProductVOList.size();i++){
-			System.out.println(blliSmallProductVOList);
 			if(blliSmallProductVOList.get(i)!=null){
 				paraMap.put("smallProductId", blliSmallProductVOList.get(i).getSmallProductId());
 				List<BlliPostingVO> tempList = productDAO.selectPostingBySmallProductList(paraMap);
@@ -425,7 +423,6 @@ public class ProductServiceImpl implements ProductService{
 			wordCloudList.set(index, wordCloudList.get(i));
 			wordCloudList.set(i, tempVO);
 		}
-		System.out.println(wordCloudList);
 		return wordCloudList;
 	}
 	
@@ -442,7 +439,6 @@ public class ProductServiceImpl implements ProductService{
 		if(midCategory == null || midCategory.equals("") || midCategory.equals("allMidCategory")){
 			dibSmallProductId = (ArrayList<String>)productDAO.getDibSmallProductId(memberId);
 			for(int i=0;i<dibSmallProductId.size();i++){
-				System.out.println(dibSmallProductId.get(i));
 			}
 		}else{
 			HashMap<String, String> map = new HashMap<String, String>();
@@ -481,7 +477,6 @@ public class ProductServiceImpl implements ProductService{
 		int totalPage = (int)Math.ceil(dibSmallProductId.size()/3.0);
 		ListVO dibSmallProductListInfo = new ListVO(dibSmallProductList, totalPage);
 		for(int i=0;i<dibSmallProductList.size();i++){
-			System.out.println(dibSmallProductList.get(i));
 		}
 		return dibSmallProductListInfo;
 	}

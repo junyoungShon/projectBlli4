@@ -309,7 +309,6 @@ public class CategoryAndProductScheduler {
 				
 				label:
 				for(int i=0;i<midCategoryInfo.size();i++){
-					System.out.println("*************** "+ i +" **************");
 					BlliSmallProductVO blliSmallProductVO = new BlliSmallProductVO();
 					int page = 1;
 					double lastPage = 0;

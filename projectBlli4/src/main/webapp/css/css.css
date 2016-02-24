@@ -1005,6 +1005,7 @@ img {
 	font-family:'Nanum Barun Gothic';
 	vertical-align:top;
 	background:rgba(0,128,192,0.05);
+	cursor:pointer;
 }
 
 .cal_day{

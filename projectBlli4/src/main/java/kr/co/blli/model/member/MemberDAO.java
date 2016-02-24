@@ -43,6 +43,7 @@ public interface MemberDAO {
 	public void updateSchedule(BlliScheduleVO bsvo);
 	public void deleteSchedule(BlliScheduleVO bsvo);
 	public List<BlliScheduleVO> getMemberScheduleList(String memberId);
+	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId);
 
 	
 	
@@ -57,6 +58,7 @@ public interface MemberDAO {
 	public void updateMemberStatusByMemberId(BlliBreakAwayVO blliBreakAwayVO);
 
 	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO);
+
 
 
 }
