@@ -543,12 +543,17 @@ public class MemberController {
 	  * @return
 	  */
 	@RequestMapping("member_goCalenderPage.do")
-	public ModelAndView calendar(String memberId){
-		System.out.println("MemberController: "+memberId);
+	public String calendar(String memberId){
+		return "calendar_calendarPage";
+	}
+	
+	@RequestMapping("member_getMemberScheduleList.do")
+	@ResponseBody
+	public List<BlliScheduleVO> getMemberScheduleList(String memberId){
+		System.out.println("MemberController(getMemberScheduleList): "+memberId);
 		List<BlliScheduleVO> memberScheduleList = memberService.getMemberScheduleList(memberId);
-		
-		System.out.println("MemberController: "+memberScheduleList);
-		return new ModelAndView("calendar_calendarPage", "memberScheduleList", memberScheduleList);
+		System.out.println("MemberController(getMemberScheduleList): "+memberScheduleList);
+		return memberScheduleList;
 	}
 	
 	
