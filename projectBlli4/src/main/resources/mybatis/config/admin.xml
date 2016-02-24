@@ -275,10 +275,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<select id="selectMinMaxUseWhenByMidcategoryId" resultMap="bspvRM">
 		select max(small_product_whentouse_max) as small_product_whentouse_max ,min(small_product_whentouse_min)  
-		as small_product_whentouse_min from blli_small_product where mid_category_id = #{value}
+		as small_product_whentouse_min from blli_small_product where mid_category_id = #{value} and small_product_status = 'confirmedbyadmin'
 	</select>
 	<update id="updateMinMaxUseWhenByMidcategoryId">
-		update blli_mid_category set mid_category_whentouse_max = #{whenToUseMin} , mid_category_whentouse_min = #{whenToUseMin} where mid_category_id = #{midCategoryId}
+		update blli_mid_category set mid_category_whentouse_max = #{whenToUseMax} , mid_category_whentouse_min = #{whenToUseMin} where mid_category_id = #{midCategoryId}
 	</update>
 	<update id="updateMidCategoryMainPhotoLink">
 		update blli_mid_category set mid_category_main_photo_link = #{midCategoryMainPhotoLink} where mid_category_id = #{midCategoryId}

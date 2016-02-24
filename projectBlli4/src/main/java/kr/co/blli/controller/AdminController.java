@@ -165,7 +165,6 @@ public class AdminController {
 	@RequestMapping("admin_allProductDownLoader.do")
 	public void allProductDownLoader(){
 		adminService.allProductDownLoader();
-		System.out.println("사진다운완료");
 	}
 	@RequestMapping("admin_midCategoryUseWhenModifyBySmallProduct.do")
 	public void midCategoryUseWhenModifyBySmallProduct(){

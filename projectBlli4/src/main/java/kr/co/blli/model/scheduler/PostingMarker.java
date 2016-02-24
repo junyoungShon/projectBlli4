@@ -110,10 +110,8 @@ public class PostingMarker {
 				avgBuyLinkClickCount = (double)selectBuyLinkClickCount / (double) diffNowFromDbInsertDate;
 			}
 			if(smallProductId!=null){
-				System.out.println("전체사이즈는 ?"+productNum+" "+smallProductId+" : "+i);
 			//포스팅의 url과 smallProductId를 복합키로하여 하루 평균 스크랩수를 값에 넣는다.
 			buyLinkClickCountMap.put(smallProductId, avgBuyLinkClickCount);
-			System.out.println(buyLinkClickCountMap.size());
 			//하루 평균 스크랩 수를 맵에 넣어준다.
 			}
 		}
@@ -144,14 +142,12 @@ public class PostingMarker {
 			if(releaseDatePoint<0){
 				releaseDatePoint = 0;
 			}
-			System.out.println("출시일 기준 점수 : "+releaseDatePoint);
 			blliSmallProductVO.setSmallProductScore(blliSmallProductVO.getSmallProductScore()+releaseDatePoint);
 			
 			//네이버 쇼핑 순위를 통한 채점
 			int totalSmallProductNum = productDAO.selectSmallProductNumByMidCategoryId(blliSmallProductVO.getMidCategoryId());
 			int naverShoppingRank = blliSmallProductVO.getNaverShoppingRank();
 			int naverShoppinRankPoint = (1-(naverShoppingRank/totalSmallProductNum))*NAVERSHOPINGRANKINGDISTRIBUTION;
-			System.out.println("네이버 쇼핑 기준 점수 : "+naverShoppinRankPoint);
 			blliSmallProductVO.setSmallProductScore(blliSmallProductVO.getSmallProductScore()+naverShoppinRankPoint);
 			
 			//공유 횟수를 통한 채점
@@ -163,9 +159,7 @@ public class PostingMarker {
 			}else if(snsShareCount>0&&snsShareCount<PAGESHAREPOINTDISTRIBUTION){
 				snsShareCountPoint = PAGESHAREPOINTDISTRIBUTION - (PAGESHAREPOINTDISTRIBUTION-snsShareCount);
 			}
-			System.out.println("공유 횟수를 통한 채점 : "+snsShareCountPoint);
 			blliSmallProductVO.setSmallProductScore(blliSmallProductVO.getSmallProductScore()+snsShareCountPoint);
-			System.out.println("총점 : "+blliSmallProductVO.getSmallProductScore());
 			productDAO.updateProductScore(blliSmallProductVO);
 		}
 		//점수 부여 후 순위를 재정렬하는 메서드를 실행시킨다.
@@ -186,7 +180,6 @@ public class PostingMarker {
 		//중분류 제품의 아이디를 활용하여 점수 오름차순으로 정렬하여 랭킹을 설정한다.
 		for(int i=0;i<list.size();i++){
 			//점수 내림차순으로 받아온다.
-			System.out.println(list.get(i));
 			List<BlliSmallProductVO> blliSmallProductVOList = productDAO.selectAllSmallProductByMidCategoryId(list.get(i));
 			Boolean flag =  false;
 			int tempPoint = 0; 
@@ -256,7 +249,6 @@ public class PostingMarker {
 			double ranking = map.get(key);
 			double givenPoint = (Math.round((((1-(ranking/postingNum))*pointDistribution)*10)))*0.1;
 			blliPostingVO.setPostingScore((int) (blliPostingVO.getPostingScore()+givenPoint));
-			System.out.println("복합키"+key+"점수"+givenPoint+"랭킹:"+ranking);
 			vo = blliPostingVO;
 		}else if(vo instanceof BlliSmallProductVO){
 			BlliSmallProductVO blliSmallProductVO =  (BlliSmallProductVO) vo;
@@ -264,7 +256,6 @@ public class PostingMarker {
 			double ranking = map.get(key);
 			double givenPoint = (Math.round((((1-(ranking/postingNum))*pointDistribution)*10)))*0.1;
 			blliSmallProductVO.setSmallProductScore((int) ((blliSmallProductVO.getSmallProductScore())+givenPoint));
-			System.out.println("복합키"+key+"점수"+givenPoint+"랭킹:"+ranking);
 			vo = blliSmallProductVO;
 		}
 		return vo;
@@ -366,7 +357,6 @@ public class PostingMarker {
 			//작성일과 현재 시간의 차이를 기록한 변수
 			double diffNowFromWrittenDate = dayCounter(blliPostingVO.getPostingDate());
 			//디비 삽입일과 현재 시간의 차이를 기록한 변수
-			System.out.println(blliPostingVO.getPostingDbInsertDate());
 			double diffNowFromDbInsertDate = dayCounter(blliPostingVO.getPostingDbInsertDate());
 			
 			//체류 시간과 포스팅 복합키를 맵에 넣어준다
@@ -412,7 +402,6 @@ public class PostingMarker {
 			//디비 삽입일과 현재 시간의 차이를 기록한 변수
 			//double diffNowFromDbInsertDate = dayCounter(blliPostingVO.getPostingDbInsertDate());			
 			
-			System.out.println(blliPostingVO.getPostingDbInsertDate());
 			//체류시간을 통한 채점
 			//맵의 값을s 기준으로 정렬한다.
 			residenceTimeMap = (HashMap<String,Double>)sortByValue(residenceTimeMap);
@@ -441,7 +430,6 @@ public class PostingMarker {
 			if(writtenDatePoint<0){
 				writtenDatePoint = 0;
 			}
-			System.out.println("작성일 기준 점수 : "+writtenDatePoint);
 			blliPostingVO.setPostingScore(blliPostingVO.getPostingScore()+writtenDatePoint);
 			
 			//미디어 수를 기준으로한 채점
@@ -452,7 +440,6 @@ public class PostingMarker {
 			}else if(mediaCount>0&&mediaCount<16){
 				mediaPoint = MEDIAPOINTDISTRIBUTION - (16-mediaCount);
 			}
-			System.out.println("미디어 기준 점수 : "+mediaPoint);
 			blliPostingVO.setPostingScore(blliPostingVO.getPostingScore()+mediaPoint);
 			
 			//포스팅 좋아요 싫어요를 통한 채점
@@ -466,14 +453,11 @@ public class PostingMarker {
 			}else if((postingLike-(postingDisLike*2))<0){
 				postingLikePoint = 0;
 			}
-			System.out.println("좋아요 싫어요 점수: "+postingLikePoint);
 			blliPostingVO.setPostingScore(blliPostingVO.getPostingScore()+postingLikePoint);
 			//네이버 검색 순위를 통한 채점
 			int postingNumInSameSmallProduct = productDAO.selectPostingNumBySmallProductId(blliPostingVO.getSmallProductId());
 			int postingSearchRankPoint = (1-(blliPostingVO.getPostingRank()/postingNumInSameSmallProduct))*NAVERSEARCHRANKINGDISTRIBUTION;
-			System.out.println("네이버 순위를 통한 점수: "+postingSearchRankPoint);
 			blliPostingVO.setPostingScore(blliPostingVO.getPostingScore()+postingSearchRankPoint);
-			System.out.println("총점 : "+blliPostingVO.getPostingScore());
 			postingDAO.updatePostingScore(blliPostingVO);
 		}
 		

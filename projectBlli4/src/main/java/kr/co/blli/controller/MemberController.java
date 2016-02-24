@@ -113,7 +113,6 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 			//메인페이지로 이동할 때 회원이 가진 아이리스트를 전달 받는다.
 			List <BlliBabyVO> blliBabyVOList=blliMemberVO.getBlliBabyVOList();
-			System.out.println(blliBabyVOList);
 			blliMemberVO.setBlliBabyVOList(blliBabyVOList);
 			BlliBabyVO blliBabyVO = null;
 			//추천 받을 아이 추출
@@ -129,13 +128,10 @@ public class MemberController {
 			List<BlliSmallProductVO> blliSmallProductVOList = productService.selectSameAgeMomBestPickedSmallProductList(blliMidCategoryVOList,blliBabyVO);
 			
 			List<BlliPostingVO> blliPostingVOList = postingService.searchPostingBySmallProductList(blliSmallProductVOList,blliMemberVO.getMemberId(),"1");
-			System.out.println(blliSmallProductVOList);
 			for(int i=0;i<blliSmallProductVOList.size();i++){
 				if(blliSmallProductVOList.get(i)!=null) { //용호 추가 - null포인터 방지
-					System.out.println(i+"소제품 명"+blliSmallProductVOList.get(i).getSmallProduct());
 				}
 			}
-			System.out.println(blliPostingVOList);
 			mav.setViewName("home");
 			//회원정보 삽입
 			mav.addObject("blliMemberVO", blliMemberVO);
@@ -145,7 +141,6 @@ public class MemberController {
 			mav.addObject("blliSmallProductVOList", blliSmallProductVOList);
 			//회원에게 추천될 소분류 관련 포스팅 리스트 삽입
 			mav.addObject("blliPostingVOList", blliPostingVOList);
-			System.out.println(mav.toString());
 		
 		return mav;
 	}
@@ -214,7 +209,6 @@ public class MemberController {
 	 */
 	@RequestMapping("joinMemberByEmail.do")
 	public ModelAndView joinMemberByEmail(HttpServletRequest request, BlliMemberVO blliMemberVO){
-		System.out.println(blliMemberVO);
 		memberService.joinMemberByEmail(blliMemberVO);
 		blliMemberVO.setMemberPassword("protected");
 		HttpSession session = request.getSession();
@@ -268,7 +262,6 @@ public class MemberController {
 	@RequestMapping("findMemberBySNSId.do")
 	@ResponseBody
 	public boolean findMemberBySNSId(BlliMemberVO blliMemberVO){
-		System.out.println(blliMemberVO);
 		boolean result = false;
 		if(memberService.findMemberById(blliMemberVO)!=null){
 			result = true;
@@ -289,7 +282,6 @@ public class MemberController {
 	@RequestMapping("findMemberByEmailId.do")
 	@ResponseBody
 	public boolean findMemberByEmailId(BlliMemberVO blliMemberVO){
-		System.out.println(blliMemberVO);
 		boolean result = false;
 		if(memberService.findMemberById(blliMemberVO)!=null){
 			result = true;
@@ -343,7 +335,6 @@ public class MemberController {
 		ModelAndView mav = new ModelAndView();
 		blliMemberVO.setMailAgree(memberService.selectMailAgreeByMemberId(blliMemberVO.getMemberId()));
 		mav.addObject("blliMemberVO", blliMemberVO);
-		System.out.println("회원정보 페이지에서 갱신되나"+blliMemberVO.getMailAgree());
 		mav.setViewName("modifyInfo_modifyMemberInfoPage");
 		return mav;
 	}
@@ -360,7 +351,6 @@ public class MemberController {
 		blliMemberVO = (BlliMemberVO) request.getSession().getAttribute("blliMemberVO");
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("blliMemberVO", blliMemberVO);
-		System.out.println(blliMemberVO.getBlliBabyVOList());
 		mav.setViewName("modifyInfo_modifyBabyInfoPage");
 		return mav;
 	}
@@ -386,7 +376,6 @@ public class MemberController {
 	@RequestMapping("member_deleteRecommendMidCategory.do")
 	@ResponseBody
 	public void deleteRecommendMidCategory(BlliNotRecommMidCategoryVO blliNotRecommMidCategoryVO){
-		System.out.println(blliNotRecommMidCategoryVO);
 		productService.deleteRecommendMidCategory(blliNotRecommMidCategoryVO);
 	}
 	/**
@@ -430,7 +419,6 @@ public class MemberController {
 	@RequestMapping("member_postingScrape.do")
 	@ResponseBody
 	public int postingScrape(BlliMemberScrapeVO blliMemberScrapVO){
-		System.out.println(blliMemberScrapVO);
 		int result=0;
 		result = productService.postingScrape(blliMemberScrapVO);
 		return result;
@@ -543,9 +531,7 @@ public class MemberController {
 	@RequestMapping("member_getMemberScheduleList.do")
 	@ResponseBody
 	public List<BlliScheduleVO> getMemberScheduleList(String memberId){
-		System.out.println("MemberController(getMemberScheduleList): "+memberId);
 		List<BlliScheduleVO> memberScheduleList = memberService.getMemberScheduleList(memberId);
-		System.out.println("MemberController(getMemberScheduleList): "+memberScheduleList);
 		return memberScheduleList;
 	}
 	
@@ -553,7 +539,6 @@ public class MemberController {
 	@RequestMapping("member_addSchedule.do")
 	@ResponseBody
 	public BlliScheduleVO addSchedule(BlliScheduleVO bsvo) {
-		System.out.println("MemberController: "+bsvo);
 		bsvo.setScheduleId(memberService.addSchedule(bsvo)); 
 		return bsvo;
 	}
@@ -561,7 +546,6 @@ public class MemberController {
 	@RequestMapping("member_updateSchedule.do")
 	@ResponseBody
 	public BlliScheduleVO updateSchedule(BlliScheduleVO bsvo) {
-		System.out.println("MemberController: "+bsvo);
 		memberService.updateSchedule(bsvo);
 		return memberService.selectSchedule(bsvo);
 	}
@@ -631,13 +615,11 @@ public class MemberController {
 	@RequestMapping("member_denySendEmail.do")
 	@ResponseBody
 	public void denySendEmail(String memberEmail){
-		System.out.println("동의해제");
 		memberService.denySendEmail(memberEmail);
 	}
 	@RequestMapping("member_acceptSendEmail.do")
 	@ResponseBody
 	public void acceptSendEmail(String memberEmail){
-		System.out.println("동의");
 		memberService.acceptSendEmail(memberEmail);
 	}
 	@RequestMapping("breakAwayFromBlli.do")

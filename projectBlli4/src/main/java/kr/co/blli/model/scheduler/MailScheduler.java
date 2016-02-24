@@ -78,7 +78,6 @@ public class MailScheduler {
 				List<BlliMemberVO> memberList = memberService.getMemberHavingBabyAgeChangedList();
 					
 				if(memberList.size()==0) {
-					System.out.println("월령이 바뀐 아기가 한명도 없습니다.");
 				} else {
 					
 					//해당 회원의 아이 중 월령이 바뀐 아이의 정보를 회원VO가 가진 회원아기VOList 변수에 set 해준다.
@@ -106,12 +105,10 @@ public class MailScheduler {
 						textParams.put("memberBabyName", memberList.get(i).getBlliBabyVOList().get(0).getBabyName());
 						textParams.put("recommendingProductList", memberList.get(i).getBlliRecommendingMidCategoryVOList());
 						textParams.put("memberEmail", recipient);
-						//System.out.println(memberList.get(i).getBlliRecommendingMidCategoryVOList());
 						message.setRecipient(RecipientType.TO, new InternetAddress(recipient)); //import javax.mail.Message.RecipientType;
 						mailText = VelocityEngineUtils.mergeTemplateIntoString(velocityConfig.getVelocityEngine(), contentFile, "utf-8", textParams);
 						message.setText(mailText, "utf-8", "html");
 						mailSender.send(message);
-						System.out.println(memberList.get(i).getMemberName()+"님의 메일주소 "+recipient+"로 메일 발송");
 					}
 				}
 				

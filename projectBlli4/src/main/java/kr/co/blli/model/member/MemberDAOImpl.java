@@ -39,7 +39,6 @@ public class MemberDAOImpl implements MemberDAO{
 	
 	@Override
 	public void insertBabyInfo(BlliBabyVO blliBabyVO) {
-		System.out.println(blliBabyVO);
 		sqlSessionTemplate.insert("member.insertBabyInfo",blliBabyVO);
 	}
 	
@@ -65,7 +64,6 @@ public class MemberDAOImpl implements MemberDAO{
 	
 	@Override
 	public void updateMemberInfoByEmail(BlliMemberVO blliMemberVO) {
-		System.out.println("dao: "+blliMemberVO);
 		sqlSessionTemplate.update("member.updateMemberInfoByEmail", blliMemberVO);
 	}
 	
@@ -112,7 +110,6 @@ public class MemberDAOImpl implements MemberDAO{
 	}
 	@Override
 	public void updateSchedule(BlliScheduleVO bsvo) {
-		System.out.println("MemberDAOImpl: "+bsvo);
 		sqlSessionTemplate.update("member.updateSchedule", bsvo);
 	}
 	@Override
