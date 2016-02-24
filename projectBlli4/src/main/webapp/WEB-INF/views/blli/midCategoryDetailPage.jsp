@@ -1,6 +1,58 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<style>
+.result_bg1, .result_bg2 {
+	margin-top: 0px;
+	height: 490px;
+}
+.in_fr {
+	height: 490px;
+}
+.result_con {
+	width: 470px;
+}
+.result_last ul {
+	margin-top: 0px;
+}
+.result_last {
+    width: 110px;
+}
+.result_last.fr {
+	height: 185px;
+}
+.fr {
+	height: 50px;
+	width: 110px;
+}
+.result_sns {
+	border-bottom: 1px solid red;
+	color: #ff7f50;
+}
+.detail_list.fl, .detail_list.fr{width:500px; height:300px; margin:0 auto; position:relative;}
+.header {
+	position: absolute;
+    left: 0;
+    top: 0;
+    width: 410px;
+    height: 42px;
+    background: #FD9595;
+    margin-top: 62px;
+    margin-left: 20px;
+    border-top: 3px solid red;
+}
+.div_table{overflow-y:auto; width:100%; height:100%;}
+table{background-color: white; width: 100%;}
+table th{height:30px;}
+.th-inner {    
+	position: absolute;
+    top: 0;
+    line-height: 30px;
+    text-align: center;
+    margin-top: 70px;
+    width: 16%;
+}
+</style>
 <script src="https://developers.kakao.com/sdk/js/kakao.story.min.js"></script>
 <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script src="/js/kakaolink.js"></script>
@@ -94,6 +146,20 @@ $(document).ready(function(){
 			}
 		});
 	}); 
+	
+	// ===== Scroll to Top ==== 
+	$(window).scroll(function() {
+	    if ($(this).scrollTop() >= 200) {        // If page is scrolled more than 50px
+	        $('#return-to-top').fadeIn(200);    // Fade in the arrow
+	    } else {
+	        $('#return-to-top').fadeOut(200);   // Else fade out the arrow
+	    }
+	});
+	$('#return-to-top').click(function() {      // When arrow is clicked
+		$('body,html').stop().animate({
+	        scrollTop : 0                       // Scroll to top of body
+	    }, 200);
+	});
 
 	
 	
@@ -116,7 +182,6 @@ $(document).ready(function(){
 								document.getElementsByTagName("body")[0].clientHeight; // 스크린 높이 구하기
 		if($scrollTop ==  $contentsHeight - $screenHeight) {
 			if(totalPage < count){
-				$("#loading").hide();
 				return false;
 			}
 			loadArticle(count);
@@ -252,83 +317,17 @@ $(document).ready(function(){
 <div id="body">
 <c:forEach items="${requestScope.resultList}" var="smallProductList" varStatus="i">
 <c:if test="${i.count%2 == 1}">
+<c:if test="${i.count == 1}">
+<div class="result_bg1" style="margin-top: 65px;">
+</c:if>
+<c:if test="${i.count != 1}">
 <div class="result_bg1">
-	<div class="in_fr" style="height:330px;">
-		<div class="result_num">
-			${i.count}
-		</div>
-		<div class="result_con">
-			<div class="result_ti">
-				<a href="${initParam.root}goSmallProductDetailView.do?smallProduct=${smallProductList.smallProduct}" style="text-decoration:none; color: black;">${smallProductList.smallProduct}</a> 
-			</div>
-			<div>
-				<div class="result_foto fl">
-					<img src="${smallProductList.smallProductMainPhotoLink}" alt="${smallProductList.smallProduct}" style="width: 100%; height: 100%; vertical-align: middle;">
-					<div class="product_month">
-						${smallProductList.smallProductWhenToUseMin}~${smallProductList.smallProductWhenToUseMax}<br/>
-						개월
-					</div>
-				</div>
-				<div class="fl">
-					<div class="midKeyword">
-					<ul>
-						<c:forEach items="${smallProductList.blliWordCloudVOList}" var="wordList">
-							<li>
-								<span class="midKeyword${wordList.wordLevel}">${wordList.word}</span>
-							</li>
-						</c:forEach>
-					</ul>
-					</div>
-					<div class="product_price">
-						<div class="fl">
-							<p class="result_gray">최저가</p>
-							<p class="result_price">${smallProductList.minPrice}원</p>
-						</div>
-						<div class="fr">
-								<div style="margin-top: 15px" class="smallProductDibBtn">
-						<c:if test="${smallProductList.isDib==0}">
-							<i class="fa fa-heart-o fa-2x" style="color: red"></i>
-						</c:if>
-						<c:if test="${smallProductList.isDib==1}">
-							<i class="fa fa-heart fa-2x" style="color: red"></i>
-						</c:if>
-							<span class="dibsCount" style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
-							<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
-						</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="result_last fr">
-			<ul>
-				<li>
-					<p class="result_sns">${smallProductList.dbInsertPostingCount}</p>
-					<p class="result_sns_text">blog</p>
-				</li>
-				<li>
-					<p class="result_sns">${smallProductList.smallProductScore}</p>
-					<p class="result_sns_text">Point</p>
-				</li>
-			</ul>
-			<div>
-				<!-- 페이스북 공유 -->
-				<!-- 공유끝 -->
-				<a onclick='postToFeed("${smallProductList.smallProduct}", "${smallProductList.smallProductMainPhotoLink}"); return false;' style="cursor: pointer;"><img src="${initParam.root}img/fbShareBtn.png" alt="페이스북 공유하기"></a>
-				<a style="cursor:pointer;" id='kakao-login-btn' 
-				onclick="kakaolink_send('블리!', 'http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${smallProductList.smallProduct}');" >
-				<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기" style="width:78px;border-radius:10px;"></a>
-			</div>
-		</div>
-	</div>
-</div>
+</c:if>
 </c:if>
 <c:if test="${i.count%2 == 0}">
 <div class="result_bg2">
-	<div class="in_fr" style="clear:both;">
-		<div class="result_num">
-			${i.count}
-		</div>
+</c:if>
+	<div class="in_fr">
 		<div class="result_con">
 			<div class="result_ti">
 				<a href="${initParam.root}goSmallProductDetailView.do?smallProduct=${smallProductList.smallProduct}" style="text-decoration:none; color: black;">${smallProductList.smallProduct}</a> 
@@ -341,60 +340,137 @@ $(document).ready(function(){
 						개월
 					</div>
 				</div>
-				<div class="fl">
-				<div class="midKeyword">
-				<ul>
-					<c:forEach items="${smallProductList.blliWordCloudVOList}" var="wordList">
+				<div style="width: 110px; height: 235px; float: right;">
+					<div class="result_last fr">
+					<ul>
 						<li>
-							<span class="midKeyword${wordList.wordLevel}">${wordList.word}</span>
+							<p class="result_sns">${smallProductList.smallProductRanking}</p>
+							<p class="result_sns_text">Rank</p>
 						</li>
-					</c:forEach>
-				</ul>
+						<li>
+							<p class="result_sns">${smallProductList.smallProductScore}</p>
+							<p class="result_sns_text">Point</p>
+						</li>
+						<li>
+							<p class="result_sns">${smallProductList.dbInsertPostingCount}</p>
+							<p class="result_sns_text">Blog</p>
+						</li>
+					</ul>
+					<div>
+						<!-- 페이스북 공유 -->
+						<!-- 공유끝 -->
+						<a onclick='postToFeed("${smallProductList.smallProduct}", "${smallProductList.smallProductMainPhotoLink}"); return false;' style="cursor: pointer; margin-left: 20px;"><img src="${initParam.root}img/fbShareBtn.png" alt="페이스북 공유하기" style="margin-top: 30px;"></a>
+						<a style="cursor:pointer; margin-left: 20px;" id='kakao-login-btn' 
+						onclick="kakaolink_send('블리!', 'http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${smallProductList.smallProduct}');" >
+						<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기" style="width:78px;border-radius:10px; margin-top: 10px;"></a>
+					</div>
 				</div>
-					<div class="product_price">
-						<div class="fl">
-							<p class="result_gray">최저가</p>
-							<p class="result_price">${smallProductList.minPrice}원</p>
-						</div>
-						<div class="fr">
-						<div style="margin-top: 15px" class="smallProductDibBtn">
-						<c:if test="${smallProductList.isDib==0}">
-							<i class="fa fa-heart-o fa-2x" style="color: red"></i>
-						</c:if>
-						<c:if test="${smallProductList.isDib==1}">
-							<i class="fa fa-heart fa-2x" style="color: red"></i>
-						</c:if>
-							<span class="dibsCount" style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
-							<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
-						</div>
-						</div>
+					<div class="fr">
+							<div class="fl" style="margin-top: 10px;">
+								<p class="result_gray">최저가</p>
+								<p class="result_price">${smallProductList.minPrice}원</p>
+							</div>
+							<div class="fr" style="width: 54px;">
+								<div style="margin-top: 15px; float: right;" class="smallProductDibBtn">
+							<c:if test="${smallProductList.isDib==0}">
+								<i class="fa fa-heart-o fa-2x" style="color: red"></i>
+							</c:if>
+							<c:if test="${smallProductList.isDib==1}">
+								<i class="fa fa-heart fa-2x" style="color: red"></i>
+							</c:if>
+								<span class="dibsCount" style="font-size: 15px ;color: gray;">${smallProductList.smallProductDibsCount}</span>
+								<input type="hidden" value="${smallProductList.smallProductId}" class="smallProductId">
+							</div>
+							</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="result_last fr">
-			<ul>
-				<li>
-					<p class="result_sns">${smallProductList.dbInsertPostingCount}</p>
-					<p class="result_sns_text">blog</p>
-				</li>
-				<li>
-					<p class="result_sns">${smallProductList.smallProductScore}</p>
-					<p class="result_sns_text">Point</p>
-				</li>
-			</ul>
-			<div>
-				<!-- 페이스북 공유 -->
-				<!-- 공유끝 -->
-				<a onclick='postToFeed("${smallProductList.smallProduct}", "${smallProductList.smallProductMainPhotoLink}"); return false;' style="cursor: pointer;"><img src="${initParam.root}img/fbShareBtn.png" alt="페이스북 공유하기"></a>
-				<a style="cursor:pointer;" id='kakao-login-btn' 
-				onclick="kakaolink_send('블리!', 'http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${smallProductList.smallProduct}');" >
-				<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기" style="width:78px;border-radius:10px;"></a>
+		
+		<div class="detail_list fl" style="width: 410px; height: 247.5px;">
+			<div class="result_ti">
+				쇼핑몰 리스트 
+			</div>
+			<div class="header"></div>
+			<div style="height: 207.5px;" class="div_table">
+				<table>
+					<colgroup>
+						<col width="20%">
+						<col width="20%">
+						<col width="20%">
+						<col width="20%">
+						<col width="20%">
+					</colgroup>
+					<thead>
+					<tr>
+						<th>
+							<div class="th-inner">쇼핑몰</div>
+						</th>
+						<th>
+							<div class="th-inner">판매가</div>
+						</th>
+						<th>
+							<div class="th-inner">배송비</div>
+						</th>
+						<th>
+							<div class="th-inner">부가정보</div>
+						</th>
+						<th>
+							<div class="th-inner">사러가기</div>
+						</th>
+					</tr>
+					</thead>
+					<tbody>
+					<c:forEach items="${smallProductList.blliSmallProductBuyLinkVOList}" var="sellerInfo">
+						<tr>
+							<td>
+								${sellerInfo.seller}
+							</td>
+							<td>
+								${sellerInfo.buyLinkPrice}원
+							</td>
+							<td>
+								${sellerInfo.buyLinkDeliveryCost}
+							</td>
+							<td>
+								<c:if test="${sellerInfo.buyLinkOption == null}">
+									없음
+								</c:if>
+								<c:if test="${sellerInfo.buyLinkOption != null}">
+									${sellerInfo.buyLinkOption}
+								</c:if>
+							</td>
+							<td>
+								<form action="goBuyMidPage.do" method="post">
+									<img src="${initParam.root}img/bt_buy.png" alt="사러가기" onclick="submit();" style="cursor: pointer;">
+									<input type="hidden" name="buyLink" value="${sellerInfo.buyLink}"> 
+									<input type="hidden" name="smallProductId" value="${smallProductInfo.smallProductId}"> 
+									<input type="hidden" name="memberId" value="${sessionScope.blliMemberVO.memberId}"> 
+									<input type="hidden" name="seller" value="${sellerInfo.seller}"> 
+								</form>
+							</td>
+						</tr>
+					</c:forEach>
+					</tbody>
+				</table>
 			</div>
 		</div>
+		
+		<div class="midKeyword" style="width: 510px; padding: 0px; clear: both; background: none;">
+			<div class="result_ti" style="margin-left: 15px;">
+				Keyword
+			</div>
+			<ul style="padding: 10px; width: 450px; margin-left: 10px;">
+				<c:forEach items="${smallProductList.blliWordCloudVOList}" var="wordList">
+					<li>
+						<span class="midKeyword${wordList.wordLevel}">${wordList.word}</span>
+					</li>
+				</c:forEach>
+			</ul>
+		</div>
+		
 	</div>
 </div>
-</c:if>
 </c:forEach>
+<a href="#" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
 </div>
-<p align="center"><img id="loading" src="${initParam.root}image/loading.gif" style="width: 50px"></p>

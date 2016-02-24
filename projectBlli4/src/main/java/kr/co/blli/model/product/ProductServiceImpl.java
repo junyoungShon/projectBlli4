@@ -310,6 +310,7 @@ public class ProductServiceImpl implements ProductService{
 		for(int i=0;i<smallProductList.size();i++){
 			DecimalFormat df = new DecimalFormat("#,##0");
 			smallProductList.get(i).setMinPrice(df.format(Integer.parseInt(smallProductList.get(i).getMinPrice())));
+			smallProductList.get(i).setBlliSmallProductBuyLinkVOList(productDAO.getSmallProductBuyLink(smallProductList.get(i).getSmallProductId()));
 		}
 		return smallProductList;
 	}
@@ -460,7 +461,7 @@ public class ProductServiceImpl implements ProductService{
 		for(int i=startSmallProductNo;i<lastSmallProductNo;i++){
 			BlliSmallProductVO dibSmallProduct = new BlliSmallProductVO();
 			dibSmallProduct = productDAO.getDibSmallProduct(dibSmallProductId.get(i));
-			ArrayList<BlliSmallProductBuyLinkVO> dibSmallProductBuyLink = (ArrayList<BlliSmallProductBuyLinkVO>)productDAO.getDibSmallProductBuyLink(dibSmallProduct.getSmallProductId());
+			ArrayList<BlliSmallProductBuyLinkVO> dibSmallProductBuyLink = (ArrayList<BlliSmallProductBuyLinkVO>)productDAO.getSmallProductBuyLink(dibSmallProduct.getSmallProductId());
 			dibSmallProduct.setBlliSmallProductBuyLinkVOList(dibSmallProductBuyLink);
 			int minPrice = Integer.parseInt(dibSmallProductBuyLink.get(0).getBuyLinkPrice());
 			for(int j=0;j<dibSmallProductBuyLink.size();j++){
