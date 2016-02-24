@@ -100,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	<!-- 회원의 이메일로 회원의 정보를 찾아온다. -->
 	<select id="selectBlliMemberInfoByMemberId" resultMap="bmvRM">
-		select member_id,member_email,member_name,member_state,authority from blli_member where member_id=#{value}
+		select member_id,member_email,member_name,member_state,authority,mail_agree from blli_member where member_id=#{value}
 	</select>
 	<!-- 회원의 이메일로 아이들의 정보를 받아온다. -->
 	<select id="selectBabyListByMemberId" resultMap="bbvRM">
@@ -115,6 +115,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update blli_member set member_email = #{memberEmail}, member_name =#{memberName} , member_password=#{memberPassword} where member_id = #{memberId}
 	</update>
 	
+	<!-- 회원의 정보를 바꿔줍니다. -->
+	<update id="updateMemberStatusByMemberId">
+		update blli_member set member_state = -1 where member_id = #{memberId}
+	</update>
+	<!-- 회원의 탈퇴사유와 탈퇴 정보를 삽입해줍니다.. -->
+	<update id="breakAwayFromBlli">
+		insert into blli_break_away (member_id,break_away_reason,break_away_date) values (#{memberId},#{breakAwayReason},sysdate)
+	</update>
 	<!-- 준영 쿼리 끝 -->
 	
 	
@@ -191,9 +199,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="denySendEmail">
 		update blli_member set mail_agree = 1 where member_email = #{memberEmail}
 	</update>
+	<update id="acceptSendEmail">
+		update blli_member set mail_agree = 0 where member_email = #{memberEmail}
+	</update>
 	
 	<select id="getScrapeInfoByMemberId" resultMap="bpvRM">
 		select posting_url, small_product_id from blli_member_scrape where member_id = #{memberId}
+	</select>
+	<select id="selectMailAgreeByMemberId" resultType="Integer">
+		select mail_agree from blli_member where member_id = #{value}
 	</select>
 	<!-- 현석 쿼리 끝 -->
 	

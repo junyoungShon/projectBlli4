@@ -108,7 +108,7 @@ public class AdminController {
 	 * @param urlAndProduct
 	 */
 	@ResponseBody
-	@RequestMapping("admin_admin_registerPosting.do")
+	@RequestMapping("admin_registerPosting.do")
 	public void registerPosting(@RequestBody List<Map<String, Object>> urlAndImage){
 		adminService.registerPosting(urlAndImage);
 	}
@@ -158,7 +158,7 @@ public class AdminController {
 	 * @param smallProductInfo
 	 */
 	@ResponseBody
-	@RequestMapping("admin_snsShareCountUp.do")
+	@RequestMapping("snsShareCountUp.do")
 	public void snsShareCountUp(String smallProductId){
 		adminService.snsShareCountUp(smallProductId);
 	}

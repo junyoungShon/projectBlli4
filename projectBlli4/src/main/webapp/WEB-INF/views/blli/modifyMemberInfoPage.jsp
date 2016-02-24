@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"  %>
 <style type="text/css">
 	.alertDiv{
 		margin-top: -15px;
@@ -19,6 +20,12 @@
 	var repasswordValidity = false;
 	
 	$(document).ready(function(){
+		$(':input[name="breakAwayReason"]').keyup(function(){
+			$(this).val($(':input[name="breakAwayReason"]').val().substring(0,100));
+		});
+		$('#breakAwayFromBlliModal').on('hidden.bs.modal', function (e) {
+			$(':input[name="breakAwayReason"]').val('');
+		});
 		$.ajax({
 			type:"get",
 			url:"footerStatics.do",
@@ -98,6 +105,41 @@
 			}
 			document.getElementById("memberInfoForm").submit();
 		}
+		function emailReceiveStatusChanger(){
+			var emailStatus = $('#emailReceiveStatus').val();
+			if(emailStatus==0){
+					$.ajax({
+						type:"get",
+						url:"member_denySendEmail.do?memberEmail=${sessionScope.blliMemberVO.memberEmail}",
+						success:function(data){
+							$('#emailStatusDIV').text('이메일 수신 거부 해제');
+							$('#emailReceiveStatus').val('1');
+							alert('이메일 수신이 동의되었습니다!');
+						}
+					});
+			}else{
+				if(confirm('정말 이메일 수신동의를 해제하시겠습니까?')){
+					$.ajax({
+						type:"get",
+						url:"member_acceptSendEmail.do?memberEmail=${sessionScope.blliMemberVO.memberEmail}",
+						success:function(data){
+							$('#emailStatusDIV').text('이메일 수신 동의 해제');
+							$('#emailReceiveStatus').val('0');
+							alert('이메일 수신이 거부되었습니다!');
+						}
+					});
+				}
+			}
+		}
+		function breakAwayFromBlli(){
+			if($(':input[name="breakAwayReason"]').val().length<10){
+				alert('탈퇴사유를 10자 이상 작성해주세요');
+			}else if($(':input[name="breakAwayReason"]').val().length>100){
+				alert('탈퇴사유는 10자 이상 100자 미만으로 작성해주세요!');
+			}else if(confirm('탈퇴하신 이메일로는 다시 가입하실 수 없습니다. 정말 탈퇴하시겠습니까?')){
+				$('#breakAwayFromBlliForm').submit();
+			}
+		}
 </script>
 
 </head>
@@ -124,7 +166,14 @@
                                     <a class="btn btn-danger btn-block" onclick="submitMemberInfo()" style="margin-top:30px;">수정</a>
                                 </form>
                                 <div class="forgot">
-                                    <a href="#" class="btn btn-simple btn-danger">비밀번호를 잊으셨나요?</a>
+                                	<c:if test="${requestScope.blliMemberVO.mailAgree==0}">
+                                    	<a href="#" class="btn btn-simple btn-danger" onclick="emailReceiveStatusChanger()" id="emailStatusDIV">이메일 수신 동의 해제</a>
+                                	</c:if>
+                                	<c:if test="${requestScope.blliMemberVO.mailAgree==1}">
+                                    	<a href="#" class="btn btn-simple btn-danger" onclick="emailReceiveStatusChanger()" id="emailStatusDIV">이메일 수신 거부 해제</a>
+                                	</c:if>
+                                	<input type="hidden" value="${requestScope.blliMemberVO.mailAgree}" id="emailReceiveStatus">
+                                    <a href="#" class="btn btn-simple btn-danger" data-toggle="modal" data-target="#breakAwayFromBlliModal">회원 탈퇴하기</a>
                                 </div>
                             </div>
                         </div>
@@ -142,3 +191,24 @@
 				</div>
 			</div>
 		</div>
+		<div class="modal fade" id="breakAwayFromBlliModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">회원 탈퇴하기</h4>
+      </div>
+      <div class="modal-body">
+        <p></p>
+        <form action="breakAwayFromBlli.do" method="post" id="breakAwayFromBlliForm">
+        	<textarea class="form-control" rows="3" placeholder="탈퇴사유를 적어주세요!(10자 이상)" name="breakAwayReason"></textarea>
+        	<input type="hidden" name="memberId" value="${sessionScope.blliMemberVO.memberId}">
+        </form>
+      </div>
+      <div class="modal-footer" style="padding:10px;">
+        <button type="button" class="btn btn-default" data-dismiss="modal">탈퇴취소</button>
+        <button type="button" class="btn btn-primary" onclick="breakAwayFromBlli()">탈퇴 완료</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

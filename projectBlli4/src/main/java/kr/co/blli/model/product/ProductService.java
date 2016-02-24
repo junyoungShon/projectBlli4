@@ -3,6 +3,7 @@ package kr.co.blli.model.product;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBuyLinkClickVO;
@@ -59,7 +60,9 @@ public interface ProductService {
 
 	public String selectTotalProductNum();
 
-	public ListVO getDibSmallProduct(String memberId, String pageNo);
+	public ListVO getDibSmallProduct(String memberId, String pageNo, String midCategory);
+
+	public TreeMap<String, Integer> getDibMidCategoryList(String memberId);
 
 
 }

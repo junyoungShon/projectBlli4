@@ -1,7 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<style>
+.detail_list.fl, .detail_list.fr{width:500px; height:300px; margin:0 auto; position:relative;}
+.header {
+	position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 62px;
+    margin-left: 20px;
+    width: 500px;
+    height: 42px;
+    background: #FD9595;
+    border-top: 3px solid red;
+}
+.body{overflow-x:hidden; overflow-y:scroll; width:100%; height:100%;}
+table{background-color: white; width: 100%; overflow-x: hidden; overflow-y: scroll;}
+table th{height:30px;}
+.th-inner {    
+	position: absolute;
+    top: 0;
+    line-height: 30px;
+    text-align: center;
+    margin-top: 70px;
+    width: 16%;
+}
+</style>
 <script>
 $.ajaxSetup({ cache: false });
 
@@ -52,7 +76,6 @@ $.ajaxSetup({ cache: false });
 							+smallProductId+"&postingTotalResidenceTime="
 							+residenceTime,
 							success:function(date){
-							alert('체류시간 기록 완료 : '+residenceTime+'초');
 							}
 					});
 				}else{
@@ -216,7 +239,6 @@ $.ajaxSetup({ cache: false });
 	    			var rightPostingAjaxHTML = "";
 	    			
 	    			if(data.length==0){
-	    				alert('현재 추천되는 소제품 관련 포스팅은 여기까지 입니다 ^^');
 	    			}
 	    			for(var i=0;i<data.length;i++){
 	    				var postingScrapeAjaxHTML = '<i class="fa fa-bookmark-o postingScrapeBtn" style="color: gray" data-tooltip-text="스크랩해두시면 스크랩페이지에서 다시볼 수 있어요!"></i> ';
@@ -333,23 +355,22 @@ $.ajaxSetup({ cache: false });
 							<p class="result_sns_text">Point</p>
 						</li>
 					</ul>
-					<div style="text-align:center;">
+					<div>
 					<!-- 페이스북 공유 -->
 					<div id="fb-root"></div>
 				    <script src='http://connect.facebook.net/en_US/all.js'></script>
 				     <script src="https://developers.kakao.com/sdk/js/kakao.story.min.js"></script>
-<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
-<script src="/js/kakaolink.js"></script>
+					<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+					<script src="/js/kakaolink.js"></script>
 				    <!-- 공유끝 -->
 					<a onclick='postToFeed(); return false;'><img src="${initParam.root}img/fbShareBtn.png" alt="페이스북 공유하기"></a>
 					<a style="cursor:pointer;" id='kakao-login-btn' 
 					onclick="kakaolink_send('블리!', 'http://bllidev.dev/projectBlli2/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}');" >
-					<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기"></a>
-					
+					<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기" style="width:78px;border-radius:10px;"></a>
+				
 					</div>
 					<script> 
 					      FB.init({appId: "476938162497817", status: true, cookie: true});
-					  	
 					      function postToFeed() {
 					        var obj = {
 					          method: 'feed',
@@ -368,8 +389,6 @@ $.ajaxSetup({ cache: false });
 					      }
 					  	 // 사용할 앱의 JavaScript 키를 설정해 주세요.
 					      Kakao.init('7e613c0241d9f07553638f04b7df66ef');
-					
-							
 					      function kakaolink_send(text, targetURL){
 					    	var n = "http://bllidev.dev/projectBlli2/goSmallProductDetailView.do?smallProduct=".length;
 					    	var koreanWord = targetURL.substring(n,targetURL.length);
@@ -410,45 +429,44 @@ $.ajaxSetup({ cache: false });
 									type:"get",
 									url:"snsShareCountUp.do?smallProductId=${requestScope.smallProductInfo.smallProduct.smallProductId}",
 									success:function(){
-										
 								}
 							}); 
 					     }
-					
 				</script>
 				</div>
 			</div>
 		</div>
 		<div class="result_bg2">
-			<div class="in_fr" style="clear:both;">
+			<div class="in_fr" style="clear:both; width: 1080px;">
 				<div class="detail_list fl">
 					<div class="result_ti">
 						쇼핑몰 리스트 
 					</div>
-					<div style="overflow-y:auto; height: 247px;">
+					<div class="header"></div>
+					<div style="overflow-y:auto; height: 247px;" class="body">
 						<table>
 							<colgroup>
-								<col width="15%">
-								<col width="15%">
 								<col width="20%">
-								<col width="30%">
+								<col width="20%">
+								<col width="20%">
+								<col width="20%">
 								<col width="20%">
 							</colgroup>
 							<tr>
 								<th>
-									쇼핑몰
+									<div class="th-inner">쇼핑몰</div>
 								</th>
 								<th>
-									판매가
+									<div class="th-inner">판매가</div>
 								</th>
 								<th>
-									배송비
+									<div class="th-inner">배송비</div>
 								</th>
 								<th>
-									부가정보
+									<div class="th-inner">부가정보</div>
 								</th>
 								<th>
-									사러가기
+									<div class="th-inner">사러가기</div>
 								</th>
 							</tr>
 							<c:forEach items="${requestScope.smallProductInfo.buyLink}" var="sellerInfo">
@@ -489,7 +507,8 @@ $.ajaxSetup({ cache: false });
 					<div class="result_ti">
 						동일 제품점수별로 보기
 					</div>
-					<div style="overflow-y:auto; height: 247px;">
+					<div class="header" style="width: 500px;"></div>
+					<div style="overflow-y:auto; height: 247px;" class="body">
 						<table id="otherProductInfo">
 							<colgroup>
 								<col width="10%">
@@ -499,16 +518,16 @@ $.ajaxSetup({ cache: false });
 							</colgroup>
 							<tr>
 								<th>
-									순위
+									<div class="th-inner" style="width: 8%;">순위</div>
 								</th>
 								<th>
-									제품명
+									<div class="th-inner" style="width: 50%;">제품명</div>
 								</th>
 								<th>
-									점수
+									<div class="th-inner" style="width: 17%;">점수</div>
 								</th>
 								<th>
-									보러가기
+									<div class="th-inner" style="width: 17%;">보러가기</div>
 								</th>
 							</tr>
 							<c:forEach items="${requestScope.smallProductInfo.otherSmallProductList}" var="productList" varStatus="rank">

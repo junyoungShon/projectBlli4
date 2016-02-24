@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeMap;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
@@ -18,6 +19,7 @@ import kr.co.blli.model.posting.PostingService;
 import kr.co.blli.model.product.ProductService;
 import kr.co.blli.model.security.BlliUserDetailsService;
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliBreakAwayVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
@@ -91,14 +93,7 @@ public class MemberController {
 	 */
 	@RequestMapping("member_proceedingToMain.do")
 	public ModelAndView proceedingToMain(HttpServletRequest request){
-		HttpSession session =  request.getSession();
-		SecurityContext ctx=(SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
-		Authentication auth=ctx.getAuthentication();
-		//메인 페이지로 이동하며 세션에 blliMemberVO객체를 담아준다.
-		//Query : member_id,member_email,member_name,member_state,authority,recommending_baby_name
-		BlliMemberVO blliMemberVO = memberService.selectBlliMemberInfoByMemberId(auth.getName());
 		ModelAndView mav = new ModelAndView();
-		session.setAttribute("blliMemberVO", blliMemberVO);
 		mav.setViewName("redirect:member_goMain.do");
 		return mav;
 	}
@@ -116,9 +111,9 @@ public class MemberController {
 		HttpSession session =  request.getSession();
 		BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
 		ModelAndView mav = new ModelAndView();
-		if(blliMemberVO!=null){
 			//메인페이지로 이동할 때 회원이 가진 아이리스트를 전달 받는다.
-			List <BlliBabyVO> blliBabyVOList=memberService.selectBabyListByMemberId(blliMemberVO.getMemberId());
+			List <BlliBabyVO> blliBabyVOList=blliMemberVO.getBlliBabyVOList();
+			System.out.println(blliBabyVOList);
 			blliMemberVO.setBlliBabyVOList(blliBabyVOList);
 			BlliBabyVO blliBabyVO = null;
 			//추천 받을 아이 추출
@@ -151,10 +146,6 @@ public class MemberController {
 			//회원에게 추천될 소분류 관련 포스팅 리스트 삽입
 			mav.addObject("blliPostingVOList", blliPostingVOList);
 			System.out.println(mav.toString());
-		}else{
-			session.invalidate();
-			mav.setViewName("loginPage");
-		}
 		
 		return mav;
 	}
@@ -197,7 +188,7 @@ public class MemberController {
 		mav.setViewName("/admin/adminPage");
 		return mav;
 	}
-	@RequestMapping("memberjoin_member_insertBabyInfo.do")
+	@RequestMapping("memberjoin_insertBabyInfo.do")
 	public String memberJoinInsertBabyInfo(){
 		return "memberjoin/insertBabyInfo";
 	}
@@ -229,7 +220,7 @@ public class MemberController {
 		HttpSession session = request.getSession();
 		session.setAttribute("blliMemberVO", blliMemberVO);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:authorityCheck.do");
+		mav.setViewName("memberjoin/insertBabyInfo");
 		return mav;
 	}
 	/**
@@ -316,7 +307,7 @@ public class MemberController {
 	  * @param request
 	 * @throws Exception 
 	 */
-	@RequestMapping("admin_insertBabyInfo.do")
+	@RequestMapping("memberjoin_insertDBBabyInfo.do")
 	public String insertBabyInfo
 	(HttpServletRequest request,BlliMemberVO blliMemberVO) throws Exception{
 		memberService.insertBabyInfo(blliMemberVO,request);
@@ -350,7 +341,9 @@ public class MemberController {
 	(HttpServletRequest request,BlliMemberVO blliMemberVO){
 		blliMemberVO = (BlliMemberVO) request.getSession().getAttribute("blliMemberVO");
 		ModelAndView mav = new ModelAndView();
+		blliMemberVO.setMailAgree(memberService.selectMailAgreeByMemberId(blliMemberVO.getMemberId()));
 		mav.addObject("blliMemberVO", blliMemberVO);
+		System.out.println("회원정보 페이지에서 갱신되나"+blliMemberVO.getMailAgree());
 		mav.setViewName("modifyInfo_modifyMemberInfoPage");
 		return mav;
 	}
@@ -480,7 +473,7 @@ public class MemberController {
 		String result = "true";
 		Iterator<String> itr =  request.getFileNames();
 	    MultipartFile mpf = request.getFile(itr.next());
-	    if(mpf.getSize()>=200000){
+	    if(mpf.getSize()>=2000000){
 	    	result = "fail";
 	    }
 	    return result;
@@ -604,25 +597,56 @@ public class MemberController {
 	}
 	
 	@RequestMapping("member_goDibPage.do")
-	public ModelAndView goDibPage(HttpServletRequest request) {
+	public ModelAndView goDibPage(HttpServletRequest request, String midCategory) {
 		HttpSession session = request.getSession();
 		BlliMemberVO memberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
-		ListVO dibSmallProduct = productService.getDibSmallProduct(memberVO.getMemberId(), "1");
+		ListVO dibSmallProduct = productService.getDibSmallProduct(memberVO.getMemberId(), "1", midCategory);
 		for(int i=0;i<dibSmallProduct.getList().size();i++){
 			((BlliSmallProductVO) dibSmallProduct.getList().get(i)).setPostingList(postingService.getPostingSlideListInfo(((BlliSmallProductVO)dibSmallProduct.getList().get(i)).getSmallProductId()));
 		}
-		return new ModelAndView("blli_dibPage", "smallProductList", dibSmallProduct);
+		TreeMap<String, Integer> midCategoryList = productService.getDibMidCategoryList(memberVO.getMemberId());
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("blli_dibPage");
+		mav.addObject("smallProductList", dibSmallProduct);
+		mav.addObject("midCategoryList", midCategoryList);
+		if(midCategory == null || midCategory.equals("")){
+			midCategory = "allMidCategory";
+		}
+		mav.addObject("currMidCategory", midCategory);
+		return mav;
 	}
 	
 	@ResponseBody
 	@RequestMapping("member_getDibSmallProductList.do")
-	public ArrayList<BlliSmallProductVO> getDibSmallProductList(HttpServletRequest request, String pageNo) {
+	public ArrayList<BlliSmallProductVO> getDibSmallProductList(HttpServletRequest request, String pageNo, String midCategory) {
 		HttpSession session = request.getSession();
 		BlliMemberVO memberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
-		ListVO dibSmallProduct = productService.getDibSmallProduct(memberVO.getMemberId(), pageNo);
+		ListVO dibSmallProduct = productService.getDibSmallProduct(memberVO.getMemberId(), pageNo, midCategory);
 		for(int i=0;i<dibSmallProduct.getList().size();i++){
 			((BlliSmallProductVO) dibSmallProduct.getList().get(i)).setPostingList(postingService.getPostingSlideListInfo(((BlliSmallProductVO)dibSmallProduct.getList().get(i)).getSmallProductId()));
 		}
 		return (ArrayList<BlliSmallProductVO>) dibSmallProduct.getList();
+	}
+	
+	@RequestMapping("member_denySendEmail.do")
+	@ResponseBody
+	public void denySendEmail(String memberEmail){
+		System.out.println("동의해제");
+		memberService.denySendEmail(memberEmail);
+	}
+	@RequestMapping("member_acceptSendEmail.do")
+	@ResponseBody
+	public void acceptSendEmail(String memberEmail){
+		System.out.println("동의");
+		memberService.acceptSendEmail(memberEmail);
+	}
+	@RequestMapping("breakAwayFromBlli.do")
+	public String breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO,HttpServletRequest request){
+		HttpSession session = request.getSession();
+		if(session!=null){
+			session.invalidate();
+		}
+		memberService.breakAwayFromBlli(blliBreakAwayVO);
+		return "redirect:index.do";
 	}
 }

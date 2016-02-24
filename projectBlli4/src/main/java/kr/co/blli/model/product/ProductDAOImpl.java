@@ -543,6 +543,14 @@ public class ProductDAOImpl implements ProductDAO{
 		return sqlSessionTemplate.selectOne("product.selectMinPriceBySmallProductId", smallProductId);
 	}
 
+	@Override
+	public List<String> getDibMidCategoryId(String memberId) {
+		return sqlSessionTemplate.selectList("product.getDibMidCategory", memberId);
+	}
 
+	@Override
+	public List<String> getDibSmallProductIdByMidCategory(HashMap<String, String> map) {
+		return sqlSessionTemplate.selectList("product.getDibSmallProductIdByMidCategory", map);
+	}
 
 }

@@ -134,7 +134,7 @@
 			if(userRePassword.length>=12){
 				$('#memberRePasswordInsertMSG').text('비밀번호는 6글자 이상, 12글자 이하로 입력해주세요');
 				$(this).val(userRePassword.substring(0,12));
-			}else if(userRePassword.length>6){
+			}else if(userRePassword.length>5){
 				if($(':input[name="memberPassword"]').val()==userRePassword){
 					$('#memberRePasswordInsertMSG').text('비밀번호가 확인되었습니다.');
 					repasswordValidity = true;

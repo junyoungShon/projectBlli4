@@ -635,6 +635,91 @@ public class CategoryAndProductScheduler {
 											smallProductStatusDeadToUnconfirmed++;
 											logger.warn(smallProductCount+" - "+midCategory+" - "+smallProduct+" - dead -> unconfirmed");
 										}
+									}else if(smallProductStatus.equals("confirmedbyadmin")){ // db 세팅 후 지울 것!!!
+										
+										try{
+											doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
+													"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
+											if(doc.select("message").text().contains("Query limit exceeded")){
+												key = "0a044dc7c63b8f3b9394e1a5e49db7ab";
+												doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
+														"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
+												if(doc.select("message").text().contains("Query limit exceeded")){
+													key = "2a636a785d0e03f7048319f8adb3d912";
+													doc = Jsoup.connect("http://openapi.naver.com/search?key="+key+"&query="+smallProduct+
+															"&display=1&start=1&target=blog&sort=sim").timeout(5000).get();
+												}
+											}
+										}catch(SocketTimeoutException se){
+											continue;
+										}
+										if(doc.select("message").text().contains("Query limit exceeded")){
+											break label;
+										}
+										String totalPostingText = doc.select("total").text().trim();
+										if(totalPostingText.equals("")){
+											totalPostingText = "0";
+										}
+										int smallProductPostingCount = Integer.parseInt(totalPostingText);
+										
+										if(smallProductPostingCount >= 20 && smallProductPostingCount <= 50 && resultCount > 10){
+											if(naverShoppingRank > maxSmallProduct){
+												productDAO.updateSmallProductStatusToDead(smallProductId);
+												BlliSmallProductVO smallProductVO = productDAO.getSmallProductWhenToUse(midCategoryId);
+												smallProductVO.setMidCategoryId(midCategoryId);
+												updateSmallProductStatusToDead++;
+												smallProductCount++;
+												logger.warn(smallProductCount+" - "+midCategory+" - "+smallProduct+" - confirmed -> dead");
+												continue;
+											}
+										}else if(smallProductPostingCount < 50 || smallProductPostingCount > 1000){
+											productDAO.updateSmallProductStatusToDead(smallProductId);
+											BlliSmallProductVO smallProductVO = productDAO.getSmallProductWhenToUse(midCategoryId);
+											smallProductVO.setMidCategoryId(midCategoryId);
+											updateSmallProductStatusToDead++;
+											smallProductCount++;
+											logger.warn(smallProductCount+" - "+midCategory+" - "+smallProduct+" - confirmed -> dead");
+											continue;
+										}
+										
+										blliSmallProductVO.setSmallProductPostingCount(smallProductPostingCount);
+										blliSmallProductVO.setNaverShoppingRank(naverShoppingRank);
+										blliSmallProductVO.setSmallProductId(smallProductId);
+										
+										productDAO.updateSmallProduct(blliSmallProductVO);
+										smallProductCount++;
+										updateSmallProductCount++;
+										
+										doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+
+										smallProductId+"&cat_id="+midCategoryId+"&frm=NVSHMDL&query=").timeout(0).get();
+										
+										Elements ele = doc.select("#price_compare tbody tr");
+										for(Element elem : ele){
+											BlliSmallProductBuyLinkVO blliSmallProductBuyLinkVO = new BlliSmallProductBuyLinkVO();
+											String buyLink = elem.select(".buy_area a").attr("href");
+											String buyLinkPrice = elem.select(".price a").text().replace(",", "");
+											String buyLinkDeliveryCost = elem.select(".gift").first().text().trim();
+											String buyLinkOption = elem.select(".gift").last().text().trim();
+											String seller = elem.select(".mall a").text();
+											if(seller.equals("")){
+												seller = elem.select(".mall a img").attr("alt");
+											}
+											
+											blliSmallProductBuyLinkVO.setSmallProductId(smallProductId);
+											blliSmallProductBuyLinkVO.setBuyLink(buyLink);
+											blliSmallProductBuyLinkVO.setBuyLinkPrice(buyLinkPrice);
+											blliSmallProductBuyLinkVO.setBuyLinkDeliveryCost(buyLinkDeliveryCost);
+											blliSmallProductBuyLinkVO.setBuyLinkOption(buyLinkOption);
+											blliSmallProductBuyLinkVO.setSeller(seller);
+											
+											int isSmallProductSeller = productDAO.isSmallProductSeller(blliSmallProductBuyLinkVO);
+											if(isSmallProductSeller == 0){
+												productDAO.insertSmallProductBuyLink(blliSmallProductBuyLinkVO);
+												logger.warn(smallProductCount+" - "+midCategory+" - "+smallProduct+" - "+seller+" - insert");
+											}
+										}
+										
+										
 									}else{
 										smallProductCount++;
 										notUpdateProductCount++;

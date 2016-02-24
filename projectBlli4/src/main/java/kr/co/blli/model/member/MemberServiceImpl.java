@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import kr.co.blli.model.security.BlliUserDetails;
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliBreakAwayVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
@@ -159,14 +160,24 @@ public class MemberServiceImpl implements MemberService {
 	  * @작성자 : junyoung
 	  * @param memberId
 	  * @return
+	 * @throws ParseException 
 	 */
 	@Override
-	public BlliMemberVO selectBlliMemberInfoByMemberId(String memberId) {
+	public BlliMemberVO selectBlliMemberInfoByMemberId(String memberId) throws ParseException {
 		System.out.println(memberId);
 		//1. 비밀번호를 제외한 사용자의 모든 정보
 		BlliMemberVO blliMemberVO= memberDAO.selectBlliMemberInfoByMemberId(memberId);
 		//2. 사용자의 아이정보
 		blliMemberVO.setBlliBabyVOList(memberDAO.selectBabyListByMemberId(memberId));
+		List<BlliBabyVO> blliBabyVOList = blliMemberVO.getBlliBabyVOList();
+		//아이의 월령 및 태어난 날 수 세팅
+		for(int i=0;i<blliBabyVOList.size();i++){
+			System.out.println(blliBabyVOList.get(i).getBabyBirthday());
+			int babyDayAge = babyDayAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
+			int babyMonthAge = babyMonthAgeCounter(blliBabyVOList.get(i).getBabyBirthday());
+			blliBabyVOList.get(i).setBabyDayAge(babyDayAge);
+			blliBabyVOList.get(i).setBabyMonthAge(babyMonthAge);
+		}
 		return blliMemberVO;
 	}
 	/**
@@ -458,6 +469,7 @@ public class MemberServiceImpl implements MemberService {
 	public BlliScheduleVO selectSchedule(BlliScheduleVO bsvo) {
 		return memberDAO.selectSchedule(bsvo);
 	}
+<<<<<<< HEAD
 	
 	@Override
 	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId) {
@@ -465,10 +477,16 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	
+=======
+	@Override
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli4.git
 	public int denySendEmail(String memberEmail) {
 		return memberDAO.denySendEmail(memberEmail);
 	}
-
+	@Override
+	public int acceptSendEmail(String memberEmail) {
+		return memberDAO.acceptSendEmail(memberEmail);
+	}
 	@Override
 	public ArrayList<BlliPostingVO> getScrapeInfoByMemberId(BlliMemberVO memberVO) {
 		return (ArrayList<BlliPostingVO>)memberDAO.getScrapeInfoByMemberId(memberVO);
@@ -478,6 +496,19 @@ public class MemberServiceImpl implements MemberService {
 	public List<BlliScheduleVO> getMemberScheduleList(String memberId) {
 		return memberDAO.getMemberScheduleList(memberId);
 	}
+	
+
+	@Override
+	public int selectMailAgreeByMemberId(String memberId) {
+		return memberDAO.selectMailAgreeByMemberId(memberId);
+	}
+
+	@Override
+	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO) {
+		memberDAO.breakAwayFromBlli(blliBreakAwayVO);
+		memberDAO.updateMemberStatusByMemberId(blliBreakAwayVO);
+	}
+
 	
 
 }

@@ -3,6 +3,7 @@ package kr.co.blli.model.member;
 import java.util.List;
 
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliBreakAwayVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
@@ -49,6 +50,14 @@ public interface MemberDAO {
 	//현석 작성 영역
 	public int denySendEmail(String memberEmail);
 	public List<BlliPostingVO> getScrapeInfoByMemberId(BlliMemberVO memberVO);
+
+	public int acceptSendEmail(String memberEmail);
+
+	public int selectMailAgreeByMemberId(String memberId);
+
+	public void updateMemberStatusByMemberId(BlliBreakAwayVO blliBreakAwayVO);
+
+	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO);
 
 
 
