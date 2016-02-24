@@ -196,7 +196,7 @@ public class MemberController {
 		mav.setViewName("/admin/adminPage");
 		return mav;
 	}
-	@RequestMapping("memberjoin_admin_insertBabyInfo.do")
+	@RequestMapping("memberjoin_insertBabyInfo.do")
 	public String memberJoinInsertBabyInfo(){
 		return "memberjoin/insertBabyInfo";
 	}
@@ -228,7 +228,7 @@ public class MemberController {
 		HttpSession session = request.getSession();
 		session.setAttribute("blliMemberVO", blliMemberVO);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("redirect:authorityCheck.do");
+		mav.setViewName("memberjoin/insertBabyInfo");
 		return mav;
 	}
 	/**
@@ -315,7 +315,7 @@ public class MemberController {
 	  * @param request
 	 * @throws Exception 
 	 */
-	@RequestMapping("admin_insertBabyInfo.do")
+	@RequestMapping("memberjoin_insertDBBabyInfo.do")
 	public String insertBabyInfo
 	(HttpServletRequest request,BlliMemberVO blliMemberVO) throws Exception{
 		memberService.insertBabyInfo(blliMemberVO,request);
@@ -479,7 +479,7 @@ public class MemberController {
 		String result = "true";
 		Iterator<String> itr =  request.getFileNames();
 	    MultipartFile mpf = request.getFile(itr.next());
-	    if(mpf.getSize()>=200000){
+	    if(mpf.getSize()>=2000000){
 	    	result = "fail";
 	    }
 	    return result;

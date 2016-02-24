@@ -28,7 +28,7 @@
 	</sec:authorize>
 	<sec:authorize access="hasRole('ROLE_RESTRICTED')">
 		<script type="text/javascript">
-			location.replace('${initParam.root}memberjoin_admin_insertBabyInfo.do');
+			location.replace('${initParam.root}memberjoin_insertBabyInfo.do');
 		</script>
 	</sec:authorize>
 	<!-- 미인증 유저에게는 로그인 폼이 제공된다. -->
