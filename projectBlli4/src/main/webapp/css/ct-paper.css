@@ -81,7 +81,7 @@ blockquote small {
 /*     General overwrite     */
 body {
   color: #66615b;
-  font-size: 16px;
+  font-size: 12px;
   font-family: 'Montserrat', "Helvetica", Arial, sans-serif; }
 
 a {
@@ -94,7 +94,6 @@ a {
   a:hover, a:focus {
     color: #3091B2;
     text-decoration: none; }
-
 hr {
   border-color: #F1EAE0; }
 
@@ -2559,7 +2558,7 @@ textarea.form-control {
   .register-background .container {
     margin-top: 6%;
     position: relative;
-    z-index: 3;
+    z-index: 0;
 }
 .register-card .title {
     color: #B33C12;

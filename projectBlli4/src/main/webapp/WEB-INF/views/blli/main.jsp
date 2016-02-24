@@ -347,7 +347,6 @@
 <div class="main_yellow">
 		<div class="in_fr">
 			<div class="main_yellow_in">
-			
 				<select class="babyChanger">
 				<c:forEach items="${requestScope.blliMemberVO.blliBabyVOList}" var="babyList">
 					<c:choose>
@@ -401,7 +400,7 @@
 									</i>
 									<div class="productName" style="font-size: 15px;font-weight: bold; margin-top:-15px">${recommProductList.midCategory}</div>
 									<div class="productInstDetail" style="color: white; padding: 10px; text-align: justify;">
-										일회용 기저귀는 아이가 항상 철결함을 유지할 수 있게 도와주며, 엄마는 쉽게 아이의 큰일을 처리할 수 있어요!(50자 설명)
+										${recommProductList.midCategoryInfo}
 									</div>
 									<div class="smallProductDetailBtn">
 										<a href="searchSmallProduct.do?searchWord=${recommProductList.midCategory}" style="color: white"> 
@@ -454,7 +453,6 @@
 						<div class="fr">
 						<div style="margin-top: 15px" class="smallProductDibBtn" data-tooltip-text="찜해두시면 스크랩페이지에서 다시 보실 수 있어요!">
 						<c:if test="${blliSmallProductVOList.isDib==0}">
-						${blliSmallProductVOList.isDib}
 							<i class="fa fa-heart-o fa-2x" style="color: red"></i>
 						</c:if>
 						<c:if test="${blliSmallProductVOList.isDib==1}">
@@ -466,7 +464,7 @@
 						</div>
 					</div>
 				</li>
-					</c:forEach>
+				</c:forEach>
 			</ul>
 		</div>
 	</div>

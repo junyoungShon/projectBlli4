@@ -440,7 +440,7 @@
                         	<div class="col-md-4" style="height: 450px; ">
                             	<div class="register-card" style="margin-bottom:20px">
                                 	<h3 class="title">첫째 아이 정보입력</h3>
-                               		<form class="register-form" action="member_insertBabyInfo.do" method="post" id="babyInfoForm" method="post" name="babyInfoInsertForm" enctype="multipart/form-data">
+                               		<form class="register-form" action="memberjoin_insertDBBabyInfo.do" method="post" id="babyInfoForm" method="post" name="babyInfoInsertForm" enctype="multipart/form-data">
 		                        	<div style="height: 108px">
         			                	<div class="fl">
 		                        		<label>

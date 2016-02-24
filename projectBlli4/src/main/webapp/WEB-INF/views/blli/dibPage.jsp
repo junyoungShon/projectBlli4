@@ -110,7 +110,7 @@ function kakaolink_send(text, targetURL){
 function snsShareCountUp(){
 	 $.ajax({
 			type:"get",
-			url:"admin_snsShareCountUp.do?smallProductId=${smallProductInfo.smallProductId}",
+			url:"snsShareCountUp.do?smallProductId=${smallProductInfo.smallProductId}",
 			success:function(){
 				
 			}
@@ -540,7 +540,7 @@ $(document).ready(function(){
 					<div class="result_last fr" style="width: 150px; margin-top: 4px;">
 						<div style="text-align:center;">
 						<!-- 페이스북 공유 -->
-							    <!-- 공유끝 -->
+						<!-- 공유끝 -->
 						<a onclick='postToFeed("${smallProductInfo.smallProduct}", "${smallProductInfo.smallProductMainPhotoLink}"); return false;' style="cursor: pointer;"><img src="${initParam.root}img/fbShareBtn.png" alt="페이스북 공유하기"></a>
 						<a style="cursor:pointer;" id='kakao-login-btn' 
 						onclick="kakaolink_send('블리!', 'http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${smallProductInfo.smallProduct}');" >

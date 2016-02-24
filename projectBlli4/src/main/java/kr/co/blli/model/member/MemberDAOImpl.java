@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliBreakAwayVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
@@ -130,11 +131,31 @@ public class MemberDAOImpl implements MemberDAO{
 	public int denySendEmail(String memberEmail) {
 		return sqlSessionTemplate.update("member.denySendEmail", memberEmail);
 	}
+	@Override
+	public int acceptSendEmail(String memberEmail) {
+		return sqlSessionTemplate.update("member.acceptSendEmail", memberEmail);
+	}
 
 	@Override
 	public List<BlliPostingVO> getScrapeInfoByMemberId(BlliMemberVO memberVO) {
 		return sqlSessionTemplate.selectList("member.getScrapeInfoByMemberId", memberVO);
 	}
+
+	@Override
+	public int selectMailAgreeByMemberId(String memberId) {
+		return sqlSessionTemplate.selectOne("member.selectMailAgreeByMemberId", memberId);
+	}
+
+	@Override
+	public void updateMemberStatusByMemberId(BlliBreakAwayVO blliBreakAwayVO) {
+		sqlSessionTemplate.update("member.updateMemberStatusByMemberId", blliBreakAwayVO);
+	}
+
+	@Override
+	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO) {
+		sqlSessionTemplate.insert("member.breakAwayFromBlli",blliBreakAwayVO);
+	}
+
 
 
 

@@ -267,6 +267,21 @@ CREATE TABLE blli_word_cloud (
 	word_count		number(6) NOT NULL,
 	constraint fk_blli_word_cloud_sp_id foreign key(small_product_id) references blli_small_product(small_product_id)
 );
+drop table PERSISTENT_LOGINS cascade constraint;
+CREATE TABLE PERSISTENT_LOGINS(
+	USERNAME VARCHAR2(64) NOT NULL,
+	SERIES VARCHAR2(64) PRIMARY KEY,
+	TOKEN VARCHAR2(64) NOT NULL,
+	LAST_USED TIMESTAMP NOT NULL
+)
+
+drop table BLLI_BREAK_AWAY cascade constraint;
+CREATE TABLE BLLI_BREAK_AWAY(
+	member_id varchar2(30) primary key,
+	break_away_reason varchar2(500) not null,
+	break_away_date date not null
+)
+
 ------------------------------------------------------------------------------------------------------------
 
 drop sequence blli_schedule_seq;
