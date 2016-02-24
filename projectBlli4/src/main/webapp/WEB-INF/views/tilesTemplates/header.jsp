@@ -174,14 +174,14 @@ clear:left;
 			</div>
 		</div>
 	</form>
-	<form action="${initParam.root}searchSmallProduct.do" method="get">
+	<form action="${initParam.root}searchSmallProduct.do" method="get" id="test">
 		<div class="jbMenu">
 			<div class="in_fr">
 				<a href="${initParam.root}member_goMain.do"><img src="${initParam.root}img/top_logo.png" style="margin-top:-6px" alt="탑로고"
 					class="logo"></a>
 				<div class="top_search">
 					<input type="text" class="search_text" placeholder="검색어를 입력하세요" name="searchWord">
-					<a href="${initParam.root}searchSmallProduct.do" onclick="$(this).closest('form').submit()"><img src="${intiParam.root}img/search.png" alt="검색"></a>
+					<a href="${initParam.root}searchSmallProduct.do" onclick="$('#test').submit()"><img src="${intiParam.root}img/search.png" alt="검색"></a>
 				</div>
 				<div class="top_nav">
 					<div class="menubar">

@@ -1,16 +1,11 @@
 package kr.co.blli.controller;
 
-import java.util.Iterator;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kr.co.blli.model.vo.BlliMemberVO;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public class SnsLinkPermitInterceptor extends HandlerInterceptorAdapter{
@@ -21,7 +16,8 @@ public class SnsLinkPermitInterceptor extends HandlerInterceptorAdapter{
 		Boolean flag = true;
 		//요청에 대해 이전 주소 출력
 		String requestUrl = request.getRequestURL().toString();
-		if(!requestUrl.startsWith("http://bllidev.dev/blli/")||request!=null){
+		if(!requestUrl.startsWith("http://localhost:8888/projectBlli4/")||request!=null){
+		/*if(!requestUrl.startsWith("http://bllidev.dev/blli/")||request!=null){*/
 			//타 사이트의 링크를 통해 본 페이지에 접근하고자 할 때 접근을 허용해줌
 			HttpSession session =  request.getSession();
 			/*SecurityContext ctx=(SecurityContext) session.getAttribute("SPRING_SECURITY_CONTEXT");
@@ -30,7 +26,6 @@ public class SnsLinkPermitInterceptor extends HandlerInterceptorAdapter{
 			//Query : member_id,member_email,member_name,member_state,authority,recommending_baby_name
 			BlliMemberVO blliMemberVO = new BlliMemberVO();
 			blliMemberVO.setMemberId("anonymousBySns");
-			ModelAndView mav = new ModelAndView();
 			session.setAttribute("blliMemberVO", blliMemberVO);
 			flag = true;
 		}

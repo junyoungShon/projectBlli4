@@ -127,9 +127,11 @@ $.ajaxSetup({ cache: false });
 		//소제품 찜하기 스크립트
 		$('.in_fr').on("click", ".smallProductDibBtn",function(){
 			var smallProductId = $(this).children('.smallProductId').val();
+			alert(smallProductId);
+			alert("${sessionScope.blliMemberVO.memberId}");
 			$.ajax({
 				type:"get",
-				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+smallProductId,
+				url:"member_smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+smallProductId,
 				success:function(result){
 					$('.smallProductDibBtn').each(function(index){
 						if($($('.smallProductDibBtn').get(index)).children('.smallProductId').val()==smallProductId){

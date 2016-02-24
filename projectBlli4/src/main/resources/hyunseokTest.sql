@@ -79,4 +79,6 @@ update blli_member set authority = 'ROLE_ADMIN' where member_id = 'gonipal@naver
 update blli_member set authority = 'ROLE_USER' where member_id = 'gonipal@naver.com';
 select * from blli_baby where member_id = 'rhslvkf@gmail.com';
 
+select mid_category_id, min(small_product_whentouse_min), max(small_product_whentouse_max) from blli_small_product where small_product_status = 'confirmed' group by mid_category_id;
 
+select * from blli_member where member_id = 'gonipal@naver.com';

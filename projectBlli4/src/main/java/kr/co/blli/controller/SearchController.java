@@ -73,6 +73,9 @@ public class SearchController {
 			}
 		}
 		ModelAndView mav = new ModelAndView();
+		if(searchWord == null){
+			searchWord = "";
+		}
 		ArrayList<BlliSmallProductVO> smallProductList = productService.searchMidCategory(pageNo, searchWord);
 		String viewName = "";
 		if(smallProductList.isEmpty()){
