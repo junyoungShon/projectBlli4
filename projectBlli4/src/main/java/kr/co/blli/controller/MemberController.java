@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeMap;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
@@ -592,22 +593,31 @@ public class MemberController {
 	}
 	
 	@RequestMapping("member_goDibPage.do")
-	public ModelAndView goDibPage(HttpServletRequest request) {
+	public ModelAndView goDibPage(HttpServletRequest request, String midCategory) {
 		HttpSession session = request.getSession();
 		BlliMemberVO memberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
-		ListVO dibSmallProduct = productService.getDibSmallProduct(memberVO.getMemberId(), "1");
+		ListVO dibSmallProduct = productService.getDibSmallProduct(memberVO.getMemberId(), "1", midCategory);
 		for(int i=0;i<dibSmallProduct.getList().size();i++){
 			((BlliSmallProductVO) dibSmallProduct.getList().get(i)).setPostingList(postingService.getPostingSlideListInfo(((BlliSmallProductVO)dibSmallProduct.getList().get(i)).getSmallProductId()));
 		}
-		return new ModelAndView("blli_dibPage", "smallProductList", dibSmallProduct);
+		TreeMap<String, Integer> midCategoryList = productService.getDibMidCategoryList(memberVO.getMemberId());
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("blli_dibPage");
+		mav.addObject("smallProductList", dibSmallProduct);
+		mav.addObject("midCategoryList", midCategoryList);
+		if(midCategory == null || midCategory.equals("")){
+			midCategory = "allMidCategory";
+		}
+		mav.addObject("currMidCategory", midCategory);
+		return mav;
 	}
 	
 	@ResponseBody
 	@RequestMapping("member_getDibSmallProductList.do")
-	public ArrayList<BlliSmallProductVO> getDibSmallProductList(HttpServletRequest request, String pageNo) {
+	public ArrayList<BlliSmallProductVO> getDibSmallProductList(HttpServletRequest request, String pageNo, String midCategory) {
 		HttpSession session = request.getSession();
 		BlliMemberVO memberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
-		ListVO dibSmallProduct = productService.getDibSmallProduct(memberVO.getMemberId(), pageNo);
+		ListVO dibSmallProduct = productService.getDibSmallProduct(memberVO.getMemberId(), pageNo, midCategory);
 		for(int i=0;i<dibSmallProduct.getList().size();i++){
 			((BlliSmallProductVO) dibSmallProduct.getList().get(i)).setPostingList(postingService.getPostingSlideListInfo(((BlliSmallProductVO)dibSmallProduct.getList().get(i)).getSmallProductId()));
 		}

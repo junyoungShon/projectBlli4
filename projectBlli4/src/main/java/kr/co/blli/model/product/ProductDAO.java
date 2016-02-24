@@ -185,4 +185,8 @@ public interface ProductDAO {
 
 	String selectMinPriceBySmallProductId(String smallProductId);
 
+	List<String> getDibMidCategoryId(String memberId);
+
+	List<String> getDibSmallProductIdByMidCategory(HashMap<String, String> map);
+
 }

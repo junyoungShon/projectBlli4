@@ -16,6 +16,32 @@
 	line-height:30px;
 	margin-top: 65px;
 }
+.dib_mid_category a:HOVER {
+	color: #ff7f50;
+}
+.detail_list.fl, .detail_list.fr{width:500px; height:300px; margin:0 auto; position:relative;}
+.header {
+	position: absolute;
+    left: 0;
+    top: 0;
+    width: 410px;
+    height: 42px;
+    background: #FD9595;
+    margin-top: 62px;
+    margin-left: 20px;
+    border-top: 3px solid red;
+}
+.body{overflow-x:hidden; overflow-y:scroll; width:100%; height:100%;}
+table{background-color: white; width: 100%; overflow-x: hidden; overflow-y: scroll;}
+table th{height:30px;}
+.th-inner {    
+	position: absolute;
+    top: 0;
+    line-height: 30px;
+    text-align: center;
+    margin-top: 70px;
+    width: 16%;
+}
 </style>
 <!-- bxSlider Javascript file -->
 <script src="${initParam.root}js/jquery.bxslider.min.js"></script>
@@ -91,45 +117,6 @@ function snsShareCountUp(){
 	}); 
 }
 
-$(document).ready(function(){
-	
-	$( '.jbMenu' ).addClass( 'jbFixed' );
-	
-	$(".postingImg").show();
-	
-	$('.slider').bxSlider({
-	    mode: 'vertical',
-	    minSlides: 3,
-	    slideMargin: 10
-	});
-	
-	//소제품 찜하기 스크립트
-	$(".smallProductDibBtn").click(function(){
-		var smallProductId = $(this).children('.smallProductId').val();
-		$.ajax({
-			type:"get",
-			url:"member_smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+smallProductId,
-			success:function(result){
-				$('.smallProductDibBtn').each(function(index){
-					if($($('.smallProductDibBtn').get(index)).children('.smallProductId').val()==smallProductId){
-						if(result==1){
-							$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart-o").addClass("fa-heart");
-							var dibsCount = $($('.smallProductDibBtn').get(index)).children('.dibsCount').text();
-							dibsCount *= 1
-							$($('.smallProductDibBtn').get(index)).children('.dibsCount').text(dibsCount+1);
-						}else{
-							$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart").addClass("fa-heart-o");
-							var dibsCount = $($('.smallProductDibBtn').get(index)).children('.dibsCount').text();
-							dibsCount *= 1
-							$($('.smallProductDibBtn').get(index)).children('.dibsCount').text(dibsCount-1);
-						}
-					}
-				}) 
-			}
-		});
-	}); 
-});
-
 //블로그로 이동시키며 체류시간을 측정하는 함수
 function goBlogPosting(targetURL,smallProductId){
 	//도착시간 체크를 위해 
@@ -184,6 +171,7 @@ $(window).on("scroll",function () {
 
 var totalPage = ${requestScope.smallProductList.totalPage};
 var pageNo = 1;
+var midCategory = "${requestScope.currMidCategory}";
 
 //스크롤 감지 및 호출
 function infiniteScroll(){
@@ -196,7 +184,7 @@ function infiniteScroll(){
 		pageNo++;
 		if(totalPage >= pageNo){
 			setTimeout(function(){
-				loadDibSmallProduct(pageNo);
+				loadDibSmallProduct(pageNo, midCategory);
 			},1000);
 		}else{
 			return false;
@@ -204,11 +192,11 @@ function infiniteScroll(){
 	}
 }
 
-function loadDibSmallProduct(pageNo){
+function loadDibSmallProduct(pageNo, midCategory){
 	$.ajax({
 		type: "POST",
 		url: "${initParam.root}member_getDibSmallProductList.do",
-		data: "pageNo="+pageNo,
+		data: "pageNo="+pageNo+"&midCategory="+midCategory,
 		success: function(resultData){
 			var appendInfo = "";
 			for(var i=0;i<resultData.length;i++){
@@ -229,7 +217,7 @@ function loadDibSmallProduct(pageNo){
 				appendInfo += "<div class='slider"+pageNo+"' style='float: left;'>";
 				for(var j=0;j<resultData[i].postingList.length;j++){
 					appendInfo += "<div class='slide'>";
-					appendInfo += "<a href='javascript:goBlogPosting('"+resultData[i].postingList[j].postingUrl+"','"+resultData[i].postingList[j].smallProductId+"');' data-tooltip-text='블로그 구경가기'>";
+					appendInfo += "<a href='javascript:goBlogPosting(\""+resultData[i].postingList[j].postingUrl+"\",\""+resultData[i].postingList[j].smallProductId+"\");' data-tooltip-text='블로그 구경가기'>";
 					appendInfo += "<img src='"+resultData[i].postingList[j].postingPhotoLink+"' class='postingImg' width='145px;' alt='"+resultData[i].smallProduct+"'>";
 					appendInfo += "</a>";
 					appendInfo += "</div>";
@@ -244,7 +232,7 @@ function loadDibSmallProduct(pageNo){
 				appendInfo += "<div class='result_foto fl'>";
 				appendInfo += "<img src='"+resultData[i].smallProductMainPhotoLink+"' alt='"+resultData[i].smallProduct+"'"; 
 				appendInfo += "style='width: 100%; height: 100%; vertical-align: middle; cursor: pointer;'";
-				appendInfo += "onclick='script:location.href='${initParam.root}goSmallProductDetailView.do?smallProduct="+resultData[i].smallProduct+"';'>";
+				appendInfo += "onclick='script:location.href=\"${initParam.root}goSmallProductDetailView.do?smallProduct="+resultData[i].smallProduct+"\";'>";
 				appendInfo += "<div class='product_month'>";
 				appendInfo += resultData[i].smallProductWhenToUseMin+"~"+resultData[i].smallProductWhenToUseMax+"<br/>";
 				appendInfo += "개월";
@@ -283,8 +271,8 @@ function loadDibSmallProduct(pageNo){
 				appendInfo += "<div class='result_last fr' style='width: 150px; margin-top: 4px;'>";
 				appendInfo += "<div style='text-align:center;'>";
 				appendInfo += "<a onclick='postToFeed(\""+resultData[i].smallProduct+"\", \""+resultData[i].smallProductMainPhotoLink+"\"); return false;' style='cursor: pointer;'><img src='${initParam.root}img/fbShareBtn.png' alt='페이스북 공유하기'></a>";
-				appendInfo += "<a style='cursor:pointer;' id='kakao-login-btn' onclick='kakaolink_send(\"블리!\", \"http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct="+resultData[i].smallProduct+"\");'>";
-				appendInfo += "<img src='${initParam.root}img/kakaoShareBtn.png' alt='카스 공유하기'></a>";
+				appendInfo += "<a style='cursor:pointer; margin-left: 4px;' id='kakao-login-btn' onclick='kakaolink_send(\"블리!\", \"http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct="+resultData[i].smallProduct+"\");'>";
+				appendInfo += "<img src='${initParam.root}img/kakaoShareBtnOriginal.png' alt='카스 공유하기'></a>";
 				appendInfo += "</div>";
 				appendInfo += "</div>";
 				appendInfo += "</div>";
@@ -295,7 +283,8 @@ function loadDibSmallProduct(pageNo){
 				appendInfo += "<div class='result_ti'>";
 				appendInfo += "쇼핑몰 리스트"; 
 				appendInfo += "</div>";
-				appendInfo += "<div style='overflow-y:auto; height: 207.5px;'>";
+				appendInfo += "<div class='header'></div>";
+				appendInfo += "<div style='overflow-y:auto; height: 207.5px;' class='body'>";
 				appendInfo += "<table>";
 				appendInfo += "<colgroup>";
 				appendInfo += "<col width='20%'>";
@@ -306,19 +295,19 @@ function loadDibSmallProduct(pageNo){
 				appendInfo += "</colgroup>";
 				appendInfo += "<tr>";
 				appendInfo += "<th>";
-				appendInfo += "쇼핑몰";
+				appendInfo += "<div class='th-inner'>쇼핑몰</div>";
 				appendInfo += "</th>";
 				appendInfo += "<th>";
-				appendInfo += "판매가";
+				appendInfo += "<div class='th-inner'>판매가</div>";
 				appendInfo += "</th>";
 				appendInfo += "<th>";
-				appendInfo += "배송비";
+				appendInfo += "<div class='th-inner'>배송비</div>";
 				appendInfo += "</th>";
 				appendInfo += "<th>";
-				appendInfo += "부가정보";
+				appendInfo += "<div class='th-inner'>부가정보</div>";
 				appendInfo += "</th>";
 				appendInfo += "<th>";
-				appendInfo += "사러가기";
+				appendInfo += "<div class='th-inner'>사러가기</div>";
 				appendInfo += "</th>";
 				appendInfo += "</tr>";
 				for(var j=0;j<resultData[i].blliSmallProductBuyLinkVOList.length;j++){
@@ -353,11 +342,12 @@ function loadDibSmallProduct(pageNo){
 				appendInfo += "</table>";
 				appendInfo += "</div>";
 				appendInfo += "</div>"; 
-				appendInfo += "<div class='detail_list fr' style='width: 410px; height: 247.5px;'>";
+				appendInfo += "<div class='detail_list fr' style='width: 410px; height: 247.5px; padding-top: 0px;'>";
 				appendInfo += "<div class='result_ti'>";
 				appendInfo += "동일 제품점수별로 보기";
 				appendInfo += "</div>";
-				appendInfo += "<div style='overflow-y:auto; height: 207.5px;'>";
+				appendInfo += "<div class='header' style='margin-top: 42px;'></div>";
+				appendInfo += "<div style='overflow-y:auto; height: 207.5px;' class='body'>";
 				appendInfo += "<table id='otherProductInfo'>";
 				appendInfo += "<colgroup>";
 				appendInfo += "<col width='10%'>";
@@ -367,16 +357,16 @@ function loadDibSmallProduct(pageNo){
 				appendInfo += "</colgroup>";
 				appendInfo += "<tr>";
 				appendInfo += "<th>";
-				appendInfo += "순위";
+				appendInfo += "<div class='th-inner' style='margin-top: 50px; width: 7%;'>순위</div>";
 				appendInfo += "</th>";
 				appendInfo += "<th>";
-				appendInfo += "제품명";
+				appendInfo += "<div class='th-inner' style='margin-top: 50px; width: 45%;'>제품명</div>";
 				appendInfo += "</th>";
 				appendInfo += "<th>";
-				appendInfo += "점수";
+				appendInfo += "<div class='th-inner' style='margin-top: 50px; width: 15%;'>점수</div>";
 				appendInfo += "</th>";
 				appendInfo += "<th>";
-				appendInfo += "보러가기";
+				appendInfo += "<div class='th-inner' style='margin-top: 50px; width: 16%;'>보러가기</div>";
 				appendInfo += "</th>";
 				appendInfo += "</tr>";
 				for(var j=0;j<resultData[i].otherSmallProductList.length;j++){
@@ -391,7 +381,7 @@ function loadDibSmallProduct(pageNo){
 					appendInfo += resultData[i].otherSmallProductList[j].smallProductScore;
 					appendInfo += "</td>";
 					appendInfo += "<td>";
-					appendInfo += "<a href='${initParam.root}goSmallProductDetailView.do?smallProduct="+resultData[i].smallProduct+"'><img src='${initParam.root}img/bt_see.png' alt='보러가기'></a>";
+					appendInfo += "<a href='${initParam.root}goSmallProductDetailView.do?smallProduct="+resultData[i].otherSmallProductList[j].smallProduct+"'><img src='${initParam.root}img/bt_see.png' alt='보러가기'></a>";
 					appendInfo += "</td>";
 					appendInfo += "</tr>";
 				}
@@ -412,12 +402,75 @@ function loadDibSmallProduct(pageNo){
 		} //success
 	}); //ajax
 }
+$(document).on("click", ".smallProductDibBtn", function(){
+	//소제품 찜하기 스크립트
+	var smallProductId = $(this).children('.smallProductId').val();
+	$.ajax({
+		type:"get",
+		url:"member_smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+smallProductId,
+		success:function(result){
+			$('.smallProductDibBtn').each(function(index){
+				if($($('.smallProductDibBtn').get(index)).children('.smallProductId').val()==smallProductId){
+					if(result==1){
+						$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart-o").addClass("fa-heart");
+						var dibsCount = $($('.smallProductDibBtn').get(index)).children('.dibsCount').text();
+						dibsCount *= 1
+						$($('.smallProductDibBtn').get(index)).children('.dibsCount').text(dibsCount+1);
+					}else{
+						$($('.smallProductDibBtn').get(index)).children('.fa').removeClass("fa-heart").addClass("fa-heart-o");
+						var dibsCount = $($('.smallProductDibBtn').get(index)).children('.dibsCount').text();
+						dibsCount *= 1
+						$($('.smallProductDibBtn').get(index)).children('.dibsCount').text(dibsCount-1);
+					}
+				}
+			}) 
+		}
+	});
+});
 
+$(document).ready(function(){
+	
+	$( '.jbMenu' ).addClass( 'jbFixed' );
+	
+	$(".postingImg").show();
+	
+	$('.slider').bxSlider({
+	    mode: 'vertical',
+	    minSlides: 3,
+	    slideMargin: 10
+	});
+	
+	$(".allDibMidCategory").click(function(){
+		location.href="${initParam.root}member_goDibPage.do?midCategory=allMidCategory";
+	});
+	
+	$(".dibMidCategory").click(function(){
+		location.href="${initParam.root}member_goDibPage.do?midCategory="+$(this).text();
+	});
+	
+});
 </script>
 <div class="dib_mid_category">
-	<c:if test="${fn:length(requestScope.smallProductList.list) >= 2}">
-		<a href="#" class="allMidCategory">전체</a>(${fn:length(requestScope.smallProductList.list)}) &nbsp; &nbsp; 
+	<c:if test="${fn:length(requestScope.midCategoryList) >= 2}">
+		<c:set var="allDibMidCategoryCount" value="${0}"/>
+		<c:forEach items="${requestScope.midCategoryList}" var="midCategory">
+			<c:set var="allDibMidCategoryCount" value="${allDibMidCategoryCount + midCategory.value}"/>
+		</c:forEach>
+		<c:if test="${requestScope.currMidCategory == 'allMidCategory'}">
+			<a href="#" class="allDibMidCategory" style="color: #ff7f50">전체</a>(${allDibMidCategoryCount}) &nbsp; &nbsp; 
+		</c:if>
+		<c:if test="${requestScope.currMidCategory != 'allMidCategory'}">
+			<a href="#" class="allDibMidCategory">전체</a>(${allDibMidCategoryCount}) &nbsp; &nbsp; 
+		</c:if>
 	</c:if>
+	<c:forEach items="${requestScope.midCategoryList}" var="midCategory">
+		<c:if test="${midCategory.key == requestScope.currMidCategory}">
+			<a href="#" class="dibMidCategory" style="color: #ff7f50">${midCategory.key}</a>(${midCategory.value}) &nbsp; &nbsp;
+		</c:if>
+		<c:if test="${midCategory.key != requestScope.currMidCategory}">
+			<a href="#" class="dibMidCategory">${midCategory.key}</a>(${midCategory.value}) &nbsp; &nbsp;
+		</c:if>
+	</c:forEach>
 </div>
 <div id="dibContent">
 	<c:forEach items="${requestScope.smallProductList.list}" var="smallProductInfo" varStatus="index">
@@ -491,7 +544,7 @@ function loadDibSmallProduct(pageNo){
 						<a onclick='postToFeed("${smallProductInfo.smallProduct}", "${smallProductInfo.smallProductMainPhotoLink}"); return false;' style="cursor: pointer;"><img src="${initParam.root}img/fbShareBtn.png" alt="페이스북 공유하기"></a>
 						<a style="cursor:pointer;" id='kakao-login-btn' 
 						onclick="kakaolink_send('블리!', 'http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${smallProductInfo.smallProduct}');" >
-						<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기"></a>
+						<img src="${initParam.root}img/kakaoShareBtnOriginal.png" alt="카스 공유하기"></a>
 						</div>
 					</div>
 				</div>
@@ -503,7 +556,8 @@ function loadDibSmallProduct(pageNo){
 					<div class="result_ti">
 						쇼핑몰 리스트 
 					</div>
-					<div style="overflow-y:auto; height: 207.5px;">
+					<div class="header"></div>
+					<div style="overflow-y:auto; height: 207.5px;" class="body">
 						<table>
 							<colgroup>
 								<col width="20%">
@@ -512,23 +566,26 @@ function loadDibSmallProduct(pageNo){
 								<col width="20%">
 								<col width="20%">
 							</colgroup>
+							<thead>
 							<tr>
 								<th>
-									쇼핑몰
+									<div class="th-inner">쇼핑몰</div>
 								</th>
 								<th>
-									판매가
+									<div class="th-inner">판매가</div>
 								</th>
 								<th>
-									배송비
+									<div class="th-inner">배송비</div>
 								</th>
 								<th>
-									부가정보
+									<div class="th-inner">부가정보</div>
 								</th>
 								<th>
-									사러가기
+									<div class="th-inner">사러가기</div>
 								</th>
 							</tr>
+							</thead>
+							<tbody>
 							<c:forEach items="${smallProductInfo.blliSmallProductBuyLinkVOList}" var="sellerInfo">
 								<tr>
 									<td>
@@ -559,15 +616,17 @@ function loadDibSmallProduct(pageNo){
 									</td>
 								</tr>
 							</c:forEach>
+							</tbody>
 						</table>
 					</div>
 				</div>
 				
-				<div class="detail_list fr" style="width: 410px; height: 247.5px;">
+				<div class="detail_list fr" style="width: 410px; height: 247.5px; padding-top: 0px;">
 					<div class="result_ti">
 						동일 제품점수별로 보기
 					</div>
-					<div style="overflow-y:auto; height: 207.5px;">
+					<div class="header" style="margin-top: 42px;"></div>
+					<div style="overflow-y:auto; height: 207.5px;" class="body">
 						<table id="otherProductInfo">
 							<colgroup>
 								<col width="10%">
@@ -575,20 +634,23 @@ function loadDibSmallProduct(pageNo){
 								<col width="20%">
 								<col width="20%">
 							</colgroup>
+							<thead>
 							<tr>
 								<th>
-									순위
+									<div class="th-inner" style="margin-top: 50px; width: 7%;">순위</div>
 								</th>
 								<th>
-									제품명
+									<div class="th-inner" style="margin-top: 50px; width: 45%;">제품명</div>
 								</th>
 								<th>
-									점수
+									<div class="th-inner" style="margin-top: 50px; width: 15%;">점수</div>
 								</th>
 								<th>
-									보러가기
+									<div class="th-inner" style="margin-top: 50px; width: 16%;">보러가기</div>
 								</th>
 							</tr>
+							</thead>
+							<tbody>
 							<c:forEach items="${smallProductInfo.otherSmallProductList}" var="productList" varStatus="rank">
 								<tr>
 									<td>
@@ -605,6 +667,7 @@ function loadDibSmallProduct(pageNo){
 									</td>
 								</tr>
 							</c:forEach>
+							</tbody>
 						</table>
 					</div>
 				</div>

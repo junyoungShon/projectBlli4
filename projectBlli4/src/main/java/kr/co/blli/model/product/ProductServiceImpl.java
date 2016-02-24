@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.TreeMap;
 
 import javax.annotation.Resource;
 
@@ -436,8 +437,19 @@ public class ProductServiceImpl implements ProductService{
 		return totalPostingNum;
 	}
 	@Override
-	public ListVO getDibSmallProduct(String memberId, String pageNo) {
-		ArrayList<String> dibSmallProductId = (ArrayList<String>)productDAO.getDibSmallProductId(memberId);
+	public ListVO getDibSmallProduct(String memberId, String pageNo, String midCategory) {
+		ArrayList<String> dibSmallProductId = new ArrayList<String>();
+		if(midCategory == null || midCategory.equals("") || midCategory.equals("allMidCategory")){
+			dibSmallProductId = (ArrayList<String>)productDAO.getDibSmallProductId(memberId);
+			for(int i=0;i<dibSmallProductId.size();i++){
+				System.out.println(dibSmallProductId.get(i));
+			}
+		}else{
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("memberId", memberId);
+			map.put("midCategory", midCategory);
+			dibSmallProductId = (ArrayList<String>)productDAO.getDibSmallProductIdByMidCategory(map);
+		}
 		ArrayList<BlliSmallProductVO> dibSmallProductList = new ArrayList<BlliSmallProductVO>();
 		DecimalFormat df = new DecimalFormat("#,##0");
 		int totalSmallProduct = dibSmallProductId.size();
@@ -468,7 +480,24 @@ public class ProductServiceImpl implements ProductService{
 		}
 		int totalPage = (int)Math.ceil(dibSmallProductId.size()/3.0);
 		ListVO dibSmallProductListInfo = new ListVO(dibSmallProductList, totalPage);
+		for(int i=0;i<dibSmallProductList.size();i++){
+			System.out.println(dibSmallProductList.get(i));
+		}
 		return dibSmallProductListInfo;
+	}
+	@Override
+	public TreeMap<String, Integer> getDibMidCategoryList(String memberId) {
+		TreeMap<String, Integer> dibMidCategoryList = new TreeMap<String, Integer>();
+		ArrayList<String> dibMidCategoryNameList = (ArrayList<String>)productDAO.getDibMidCategoryId(memberId);
+		for(int i=0;i<dibMidCategoryNameList.size();i++){
+			String dibMidCategory = dibMidCategoryNameList.get(i);
+			if(!dibMidCategoryList.containsKey(dibMidCategory)){
+				dibMidCategoryList.put(dibMidCategory, 1);
+			}else{
+				dibMidCategoryList.put(dibMidCategory, dibMidCategoryList.get(dibMidCategory) + 1);
+			}
+		}
+		return dibMidCategoryList;
 	}
 
 }

@@ -48,6 +48,7 @@ update blli_posting set posting_status = 'unconfirmed' where posting_status = 'c
 select small_product_id from blli_member_dibs where member_id = 'gonipal@naver.com';
 
 select small_product_id from blli_small_product where small_product_status = 'confirmedbyadmin';
+select small_product_id from blli_small_product where small_product_status = 'confirmedbyadmin' and mid_category = '수입기저귀';
 
 select * from blli_small_product where small_product_status = 'confirmed';
 
@@ -67,8 +68,15 @@ select * from blli_mid_category;
 
 select * from blli_member;
 
+select count(*) from blli_small_product where small_product_status = 'confirmedbyadmin' or small_product_status = 'confirmed';
+select count(*) from blli_small_product where small_product_status = 'confirmedbyadmin';
+
+select count(*) from blli_posting where posting_status = 'unconfirmed';
+
 delete from blli_member where member_id = 'rhslvkf@gmail.com';
 
 update blli_member set authority = 'ROLE_ADMIN' where member_id = 'gonipal@naver.com';
 update blli_member set authority = 'ROLE_USER' where member_id = 'gonipal@naver.com';
 select * from blli_baby where member_id = 'rhslvkf@gmail.com';
+
+
