@@ -57,13 +57,10 @@ public interface MemberService {
 	//현석 작성 영역
 	public ArrayList<BlliPostingVO> getScrapeInfoByMemberId(BlliMemberVO memberVO);
 
-<<<<<<< HEAD
-=======
 	public int acceptSendEmail(String memberEmail);
 
 	public int selectMailAgreeByMemberId(String memberId);
 
 	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO);
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli4.git
 
 }

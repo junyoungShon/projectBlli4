@@ -142,9 +142,6 @@ public class MemberDAOImpl implements MemberDAO{
 	public List<BlliPostingVO> getScrapeInfoByMemberId(BlliMemberVO memberVO) {
 		return sqlSessionTemplate.selectList("member.getScrapeInfoByMemberId", memberVO);
 	}
-<<<<<<< HEAD
-	
-=======
 
 	@Override
 	public int selectMailAgreeByMemberId(String memberId) {
@@ -160,9 +157,6 @@ public class MemberDAOImpl implements MemberDAO{
 	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO) {
 		sqlSessionTemplate.insert("member.breakAwayFromBlli",blliBreakAwayVO);
 	}
-
-
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli4.git
 
 
 }
