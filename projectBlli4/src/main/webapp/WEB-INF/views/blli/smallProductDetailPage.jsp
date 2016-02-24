@@ -52,7 +52,6 @@ $.ajaxSetup({ cache: false });
 							+smallProductId+"&postingTotalResidenceTime="
 							+residenceTime,
 							success:function(date){
-							alert('체류시간 기록 완료 : '+residenceTime+'초');
 							}
 					});
 				}else{
@@ -216,7 +215,6 @@ $.ajaxSetup({ cache: false });
 	    			var rightPostingAjaxHTML = "";
 	    			
 	    			if(data.length==0){
-	    				alert('현재 추천되는 소제품 관련 포스팅은 여기까지 입니다 ^^');
 	    			}
 	    			for(var i=0;i<data.length;i++){
 	    				var postingScrapeAjaxHTML = '<i class="fa fa-bookmark-o postingScrapeBtn" style="color: gray" data-tooltip-text="스크랩해두시면 스크랩페이지에서 다시볼 수 있어요!"></i> ';
@@ -336,23 +334,21 @@ $.ajaxSetup({ cache: false });
 							<p class="result_sns_text">Point</p>
 						</li>
 					</ul>
-					<div style="text-align:center;">
+					<div>
 					<!-- 페이스북 공유 -->
 					<div id="fb-root"></div>
 				    <script src='http://connect.facebook.net/en_US/all.js'></script>
 				     <script src="https://developers.kakao.com/sdk/js/kakao.story.min.js"></script>
-<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
-<script src="/js/kakaolink.js"></script>
+					<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+					<script src="/js/kakaolink.js"></script>
 				    <!-- 공유끝 -->
 					<a onclick='postToFeed(); return false;'><img src="${initParam.root}img/fbShareBtn.png" alt="페이스북 공유하기"></a>
-					<a style="cursor:pointer;" id='kakao-login-btn' 
-					onclick="kakaolink_send('블리!', 'http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}');" >
-					<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기"></a>
+					<a style="cursor:pointer;" id='kakao-login-btn' onclick="kakaolink_send('블리!', 'http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}');" >
+					<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기" style="margin-left: 9px"></a>
 					
 					</div>
 					<script> 
 					      FB.init({appId: "476938162497817", status: true, cookie: true});
-					  	
 					      function postToFeed() {
 					        var obj = {
 					          method: 'feed',
@@ -371,8 +367,6 @@ $.ajaxSetup({ cache: false });
 					      }
 					  	 // 사용할 앱의 JavaScript 키를 설정해 주세요.
 					      Kakao.init('7e613c0241d9f07553638f04b7df66ef');
-					
-							
 					      function kakaolink_send(text, targetURL){
 					    	var n = "http://bllidev.dev/projectBlli2/goSmallProductDetailView.do?smallProduct=".length;
 					    	var koreanWord = targetURL.substring(n,targetURL.length);
@@ -413,11 +407,9 @@ $.ajaxSetup({ cache: false });
 									type:"get",
 									url:"snsShareCountUp.do?smallProductId=${requestScope.smallProductInfo.smallProduct.smallProductId}",
 									success:function(){
-										
 								}
 							}); 
 					     }
-					
 				</script>
 				</div>
 			</div>

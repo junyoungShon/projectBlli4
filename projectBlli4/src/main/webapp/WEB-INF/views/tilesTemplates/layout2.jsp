@@ -34,13 +34,11 @@
 <body>
    
       <!-- Header -->
-      <div class="wrapper">
-			<div class="register-background" style="background-image: url('../img/modifyBg.jpg')"> 
+	<div class="register-background" style="background-image: url('../img/modifyBg.jpg')"> 
       <tiles:insertAttribute name="header"/>
  	 <!-- <div class="jbContent"> -->
  	<!-- main -->
  	<tiles:insertAttribute name="main"/>
- 	</div>
  	</div>
   	<!-- </div> -->
     </div>

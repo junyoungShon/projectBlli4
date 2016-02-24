@@ -2559,7 +2559,7 @@ textarea.form-control {
   .register-background .container {
     margin-top: 6%;
     position: relative;
-    z-index: 3;
+    z-index: 0;
 }
 .register-card .title {
     color: #B33C12;

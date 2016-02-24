@@ -124,7 +124,8 @@
                                     <a class="btn btn-danger btn-block" onclick="submitMemberInfo()" style="margin-top:30px;">수정</a>
                                 </form>
                                 <div class="forgot">
-                                    <a href="#" class="btn btn-simple btn-danger">비밀번호를 잊으셨나요?</a>
+                                    <a href="#" class="btn btn-simple btn-danger">이메일 수신 동의 해제</a>
+                                    <a href="#" class="btn btn-simple btn-danger">회원 탈퇴하기</a>
                                 </div>
                             </div>
                         </div>
