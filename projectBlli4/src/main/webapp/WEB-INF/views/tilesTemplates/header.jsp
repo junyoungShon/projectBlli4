@@ -9,7 +9,7 @@ border:0px;
 margin:0px;
 padding:0px;
 font: 67.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
-font-size:14px;
+font-size:100%;
 font-weight:bold;
 }
 
@@ -119,9 +119,10 @@ clear:left;
 					     <li><a href="#">추천 제품확인</a></li>
 					     <li><a href="${initParam.root}member_goModifyMemberInfoPage.do">회원 정보 수정</a></li>
 					     <li><a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보 확인</a></li>
-					     <li><a href="${initParam.root}logout.do">로그아웃</a></li>
+					    
 					    </ul>
 					 </li>
+					  <li><a href="${initParam.root}logout.do">로그아웃</a></li>
 					</ul>
 					</div>
 					<%-- <a href="${initParam.root}member_goModifyMemberInfoPage.do">회원정보수정</a>   ㅣ   
@@ -140,9 +141,9 @@ clear:left;
 				<div class="top_nav">
 					<div class="menubar">
 					<ul>
-					 <li><a href="${initParam.root}member_goMain.do">Home</a></li>
+					 <li><a href="${initParam.root}member_goMain.do">Main</a></li>
 					 <li><a href="#">알림</a></li>
-					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">일정</a></li>
+					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>
 					 <li><a href="#" id="current">마이페이지</a>
 						<ul>
 					     <li><a href="${initParam.root}member_goDibPage.do">찜 제품 확인</a></li>
@@ -150,9 +151,10 @@ clear:left;
 					     <li><a href="#">추천 제품확인</a></li>
 					     <li><a href="${initParam.root}member_goModifyMemberInfoPage.do">회원 정보 수정</a></li>
 					     <li><a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보 확인</a></li>
-					     <li><a href="${initParam.root}logout.do">로그아웃</a></li>
+					    
 					    </ul>
 					 </li>
+					  <li><a href="${initParam.root}logout.do">로그아웃</a></li>
 					</ul>
 					</div>
 					<%-- <a href="${initParam.root}member_goDibPage.do">찜</a>   ㅣ
@@ -184,9 +186,9 @@ clear:left;
 				<div class="top_nav">
 					<div class="menubar">
 					<ul>
-					 <li><a href="${initParam.root}member_goMain.do">Home</a></li>
+					 <li><a href="${initParam.root}member_goMain.do">Main</a></li>
 					 <li><a href="#">알림</a></li>
-					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">일정</a></li>
+					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>
 					 <li><a href="#" id="current">마이페이지</a>
 						<ul>
 					     <li><a href="${initParam.root}member_goDibPage.do">찜 제품 확인</a></li>
@@ -194,9 +196,9 @@ clear:left;
 					     <li><a href="#">추천 제품확인</a></li>
 					     <li><a href="${initParam.root}member_goModifyMemberInfoPage.do">회원 정보 수정</a></li>
 					     <li><a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보 확인</a></li>
-					     <li><a href="${initParam.root}logout.do">로그아웃</a></li>
 					    </ul>
 					 </li>
+					  <li><a href="${initParam.root}logout.do">로그아웃</a></li>
 					</ul>
 					</div>
 				</div>

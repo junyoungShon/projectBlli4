@@ -91,7 +91,7 @@ function search_unconfirmedPosting(){
 			if(confirm("확실합니까?")){
 				var json_data=JSON.stringify(urlAndImage);
 				$.ajax({
-					url:"admin_admin_registerPosting.do",
+					url:"admin_registerPosting.do",
 					type:"POST",
 					dataType:"json",
 					data:json_data,

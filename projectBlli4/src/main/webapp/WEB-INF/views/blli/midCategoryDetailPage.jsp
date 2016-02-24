@@ -1,7 +1,74 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<script type="text/javascript">
+<script src="https://developers.kakao.com/sdk/js/kakao.story.min.js"></script>
+<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+<script src="/js/kakaolink.js"></script>
+<script src='http://connect.facebook.net/en_US/all.js'></script>
+<script>
+FB.init({appId: "476938162497817", status: true, cookie: true});
+	
+function postToFeed(smallProduct, smallProductMainPhotoLink) {
+	alert(smallProduct);
+  var obj = {
+    method: 'feed',
+    redirect_uri:"http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct="+smallProduct,
+    link: "http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct="+smallProduct,
+    picture: 'http://bllidev.dev/blli/scrawlImage/smallProduct/'+smallProductMainPhotoLink,
+    name: '충동구매보다 빠른 합리적 소비!',
+    caption: '블리가 추천하는 유아용품! 포스팅과 함께 확인하세요',
+    description: '블리가 추천하는 유아용품! 광고없는 !! 포스팅과 함께 확인하세요'
+  };
+
+  function callback(response) {
+		snsShareCountUp();
+  }
+  FB.ui(obj, callback);
+}
+ // 사용할 앱의 JavaScript 키를 설정해 주세요.
+Kakao.init('7e613c0241d9f07553638f04b7df66ef');
+
+function kakaolink_send(text, targetURL){
+	var n = "http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=".length;
+	var koreanWord = targetURL.substring(n,targetURL.length);
+	var url = targetURL.substring(0,n)+encodeURIComponent(koreanWord);
+	alert("koreanWord:"+koreanWord);
+	Kakao.Auth.login({
+		success: function(authObj) {
+			 Kakao.API.request( {
+				 url : '/v1/api/story/linkinfo',
+				 data : {
+				   url : url
+				 }
+			   }).then(function(res) {
+				 // 이전 API 호출이 성공한 경우 다음 API를 호출합니다.
+				 return Kakao.API.request( {
+				   url : '/v1/api/story/post/link',
+				   data : {
+					 link_info : res
+				   }
+				 });
+			   }).then(function(res) {
+				 return Kakao.API.request( {
+				   url : '/v1/api/story/mystory',
+				   data : { id : res.id }
+				 });
+			   }).then(function(res) {
+				 snsShareCountUp();
+			   }, function (err) {
+				 alert(JSON.stringify(err));
+			   });
+		}
+	});
+}
+function snsShareCountUp(){
+	 $.ajax({
+			type:"get",
+			url:"snsShareCountUp.do?smallProductId=${smallProductInfo.smallProductId}",
+			success:function(){
+			}
+	}); 
+}
 $(document).ready(function(){
 	$( '.jbMenu' ).addClass( 'jbFixed' );
 	
@@ -161,13 +228,17 @@ $(document).ready(function(){
 						div += "<p class='result_sns_text'>Point</p>";
 						div += "</li>";
 						div += "</ul>";
-						div += "<div style='text-align:center;'>";
-						div += "<a href='#'><img src='${initParam.root}img/facebook.png' alt='페이스북'></a>";
-						div += "<a href='#'><img src='${initParam.root}img/twitter.png' alt='트위터'></a>";
+						div += "<div>";
+						div += "<a onclick='postToFeed(\""+resultData[i].smallProduct+"\", \""+resultData[i].smallProductMainPhotoLink+"\"); return false;' style='cursor: pointer;'><img src='${initParam.root}img/fbShareBtn.png' alt='페이스북 공유하기'></a>";
+						div += "<a style='cursor:pointer;' id='kakao-login-btn' onclick='kakaolink_send(\"블리!\", \"http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct="+resultData[i].smallProduct+"\");'>";
+						div += "<img src='${initParam.root}img/kakaoShareBtn.png' alt='카스 공유하기' style='width:78px;border-radius:10px;'></a>";
 						div += "</div>";
 						div += "</div>";
 						div += "</div>";
 						div += "</div>";
+						div += "<a onclick='postToFeed(\""+resultData[i].smallProduct+"\", \""+resultData[i].smallProductMainPhotoLink+"\"); return false;' style='cursor: pointer;'><img src='${initParam.root}img/fbShareBtn.png' alt='페이스북 공유하기'></a>";
+						div += "<a style='cursor:pointer;' id='kakao-login-btn' onclick='kakaolink_send(\"블리!\", \"http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct="+resultData[i].smallProduct+"\");'>";
+						div += "<img src='${initParam.root}img/kakaoShareBtn.png' alt='카스 공유하기' style='width:78px;border-radius:10px;'></a>";
 					}
 				}
 				setTimeout(function(){ // 시간 지연
@@ -240,9 +311,13 @@ $(document).ready(function(){
 					<p class="result_sns_text">Point</p>
 				</li>
 			</ul>
-			<div style="text-align:center;">
-				<a href="#"><img src="${initParam.root}img/facebook.png" alt="페이스북"></a>
-				<a href="#"><img src="${initParam.root}img/twitter.png" alt="트위터"></a>
+			<div>
+				<!-- 페이스북 공유 -->
+				<!-- 공유끝 -->
+				<a onclick='postToFeed("${smallProductList.smallProduct}", "${smallProductList.smallProductMainPhotoLink}"); return false;' style="cursor: pointer;"><img src="${initParam.root}img/fbShareBtn.png" alt="페이스북 공유하기"></a>
+				<a style="cursor:pointer;" id='kakao-login-btn' 
+				onclick="kakaolink_send('블리!', 'http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${smallProductList.smallProduct}');" >
+				<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기" style="width:78px;border-radius:10px;"></a>
 			</div>
 		</div>
 	</div>
@@ -308,9 +383,13 @@ $(document).ready(function(){
 					<p class="result_sns_text">Point</p>
 				</li>
 			</ul>
-			<div style="text-align:center;">
-				<a href="#"><img src="${initParam.root}img/facebook.png" alt="페이스북"></a>
-				<a href="#"><img src="${initParam.root}img/twitter.png" alt="트위터"></a>
+			<div>
+				<!-- 페이스북 공유 -->
+				<!-- 공유끝 -->
+				<a onclick='postToFeed("${smallProductList.smallProduct}", "${smallProductList.smallProductMainPhotoLink}"); return false;' style="cursor: pointer;"><img src="${initParam.root}img/fbShareBtn.png" alt="페이스북 공유하기"></a>
+				<a style="cursor:pointer;" id='kakao-login-btn' 
+				onclick="kakaolink_send('블리!', 'http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${smallProductList.smallProduct}');" >
+				<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기" style="width:78px;border-radius:10px;"></a>
 			</div>
 		</div>
 	</div>

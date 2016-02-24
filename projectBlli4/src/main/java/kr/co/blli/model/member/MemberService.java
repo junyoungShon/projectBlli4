@@ -9,6 +9,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import kr.co.blli.model.vo.BlliBabyVO;
+import kr.co.blli.model.vo.BlliBreakAwayVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliPostingVO;
@@ -23,7 +24,7 @@ public interface MemberService {
 
 	public void insertBabyInfo(BlliMemberVO blliMemberVO, HttpServletRequest request) throws Exception;
 
-	public BlliMemberVO selectBlliMemberInfoByMemberId(String memberId);
+	public BlliMemberVO selectBlliMemberInfoByMemberId(String memberId) throws ParseException;
 
 	public void joinMemberBySNS(BlliMemberVO blliMemberVO);
 
@@ -54,5 +55,11 @@ public interface MemberService {
 	
 	//현석 작성 영역
 	public ArrayList<BlliPostingVO> getScrapeInfoByMemberId(BlliMemberVO memberVO);
+
+	public int acceptSendEmail(String memberEmail);
+
+	public int selectMailAgreeByMemberId(String memberId);
+
+	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO);
 
 }

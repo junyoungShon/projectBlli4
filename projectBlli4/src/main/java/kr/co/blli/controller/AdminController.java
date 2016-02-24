@@ -108,7 +108,7 @@ public class AdminController {
 	 * @param urlAndProduct
 	 */
 	@ResponseBody
-	@RequestMapping("admin_admin_registerPosting.do")
+	@RequestMapping("admin_registerPosting.do")
 	public void registerPosting(@RequestBody List<Map<String, Object>> urlAndImage){
 		adminService.registerPosting(urlAndImage);
 	}

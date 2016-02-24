@@ -105,7 +105,7 @@ $.ajaxSetup({ cache: false });
 			var smallProductId = $(this).children('.smallProductId').val();
 			$.ajax({
 				type:"get",
-				url:"member_smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+smallProductId,
+				url:"smallProductDib.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+smallProductId,
 				success:function(result){
 					$('.smallProductDibBtn').each(function(index){
 						if($($('.smallProductDibBtn').get(index)).children('.smallProductId').val()==smallProductId){
@@ -130,7 +130,7 @@ $.ajaxSetup({ cache: false });
 			var comp = $(this);
 			$.ajax({
 				type:"get",
-				url:"member_postingScrape.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(comp).parent('.sns').children('.smallProductIdInfo').val()
+				url:"postingScrape.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(comp).parent('.sns').children('.smallProductIdInfo').val()
 						+'&postingUrl='+$(comp).parent('.sns').children('.postingUrlInfo').val(),
 				success:function(result){
 					if(result==1){
@@ -152,7 +152,7 @@ $.ajaxSetup({ cache: false });
 			var comp = $(this);
 			$.ajax({
 				type:"get",
-				url:"member_postingLike.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(comp).parent('.sns').children('.smallProductIdInfo').val()
+				url:"postingLike.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(comp).parent('.sns').children('.smallProductIdInfo').val()
 						+'&postingUrl='+$(comp).parent('.sns').children('.postingUrlInfo').val(),
 				success:function(result){
 					if(result==1){
@@ -175,7 +175,7 @@ $.ajaxSetup({ cache: false });
 			var comp = $(this);
 			$.ajax({
 				type:"get",
-				url:"member_postingDisLike.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(comp).parent('.sns').children('.smallProductIdInfo').val()
+				url:"postingDisLike.do?memberId=${sessionScope.blliMemberVO.memberId}&smallProductId="+$(comp).parent('.sns').children('.smallProductIdInfo').val()
 						+'&postingUrl='+$(comp).parent('.sns').children('.postingUrlInfo').val(),
 				success:function(result){
 					if(result==1){
@@ -274,9 +274,6 @@ $.ajaxSetup({ cache: false });
 		}
 		
 	});
-	function goBuyMidPage(){
-		$('#smallProductLinkInfo').submit();
-	}
 </script>
 <div class="jbContent">
 	<div class="result_bg1">
@@ -343,18 +340,19 @@ $.ajaxSetup({ cache: false });
 					<script src="/js/kakaolink.js"></script>
 				    <!-- 공유끝 -->
 					<a onclick='postToFeed(); return false;'><img src="${initParam.root}img/fbShareBtn.png" alt="페이스북 공유하기"></a>
-					<a style="cursor:pointer;" id='kakao-login-btn' onclick="kakaolink_send('블리!', 'http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}');" >
-					<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기" style="margin-left: 9px"></a>
-					
+					<a style="cursor:pointer;" id='kakao-login-btn' 
+					onclick="kakaolink_send('블리!', 'http://bllidev.dev/projectBlli2/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}');" >
+					<img src="${initParam.root}img/kakaoShareBtn.png" alt="카스 공유하기" style="width:78px;border-radius:10px;"></a>
+				
 					</div>
 					<script> 
 					      FB.init({appId: "476938162497817", status: true, cookie: true});
 					      function postToFeed() {
 					        var obj = {
 					          method: 'feed',
-					          redirect_uri:"http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}",
-					          link: "http://bllidev.dev/blli/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}",
-					          picture: 'http://bllidev.dev/blli/scrawlImage/smallProduct/${requestScope.smallProductInfo.smallProduct.smallProductMainPhotoLink}',
+					          redirect_uri:"http://bllidev.dev/projectBlli2/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}",
+					          link: "http://bllidev.dev/projectBlli2/goSmallProductDetailView.do?smallProduct=${requestScope.smallProductInfo.smallProduct.smallProduct}",
+					          picture: 'http://bllidev.dev/projectBlli2/scrawlImage/smallProduct/${requestScope.smallProductInfo.smallProduct.smallProductMainPhotoLink}',
 					          name: '충동구매보다 빠른 합리적 소비!',
 					          caption: '블리가 추천하는 유아용품! 포스팅과 함께 확인하세요',
 					          description: '블리가 추천하는 유아용품! 광고없는 !! 포스팅과 함께 확인하세요'
@@ -466,8 +464,8 @@ $.ajaxSetup({ cache: false });
 										</c:if>
 									</td>
 									<td>
-										<a href="#" onclick="goBuyMidPage()"><img src="${initParam.root}img/bt_buy.png" alt="사러가기"></a>
 										<form action="goBuyMidPage.do" method="post" id="smallProductLinkInfo">
+											<img src="${initParam.root}img/bt_buy.png" alt="사러가기" onclick="submit();" style="cursor: pointer;">
 											<input type="hidden" name="buyLink" value="${sellerInfo.buyLink}"> 
 											<input type="hidden" name="smallProductId" value="${sellerInfo.smallProductId}"> 
 											<input type="hidden" name="memberId" value="${sessionScope.blliMemberVO.memberId}"> 
@@ -531,12 +529,9 @@ $.ajaxSetup({ cache: false });
 		<div id="slide_img_list">
 			<c:forEach items="${requestScope.postingSlideList}" var="postingList">
 				<div style="height: 175px; display: inline-block;">
-					<img src="${postingList.postingPhotoLink}" alt="${requestScope.smallProductInfo.smallProduct.smallProduct}" class="slideImg">
-					<div onmouseover="this.style.color='yellow'" onmouseout="this.style.color='#ff7f50'" 
-					style="cursor:pointer; text-overflow: ellipsis; height: 10px; color: #ff7f50; font-weight: bold; font-family: 'Nanum Barun Gothic'; text-align: right;" 
-					data-tooltip-text="블로그 구경가기" onclick="goBlogPosting('${postingList.postingUrl}','${postingList.smallProductId}')">
-						${postingList.postingAuthor}
-					</div>	
+					<a href="javascript:goBlogPosting('${postingList.postingUrl}','${postingList.smallProductId}');">
+						<img src="${postingList.postingPhotoLink}" alt="${requestScope.smallProductInfo.smallProduct.smallProduct}" class="slideImg">
+					</a>
 				</div>
 			</c:forEach>
 		</div>
