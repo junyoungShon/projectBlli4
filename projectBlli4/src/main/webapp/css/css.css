@@ -598,7 +598,6 @@ img {
 	text-align:center;
 	vertical-align:middle;
 	border-bottom:1px solid #000;
-
 }
 
 .detail_slide{
@@ -1005,6 +1004,7 @@ img {
 	padding:10px;
 	font-family:'Nanum Barun Gothic';
 	vertical-align:top;
+	background:rgba(0,128,192,0.05);
 }
 
 .cal_day{
@@ -1040,14 +1040,16 @@ img {
 
 /* calpendar_plus */
 
-.cal_plus_form{
-	position:fixed;
+.cal_plus_form {
+	border:1px solid #ff8040;
 	width:280px;
-	height:100%;
-	background:#fee04a;
+	height:90.5%;
+	background:#ffffcc;
 	right:0;
 	font-family:'Nanum Barun Gothic';
 	padding:20px;
+	position:absolute;
+	top:57px;
 }
 
 .cal_plus_ti{
