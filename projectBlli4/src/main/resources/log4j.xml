@@ -21,7 +21,7 @@
 
 	<!-- 일주일 간격으로 로그 파일 생성(로컬) -->
     <appender name="rollingFileInLocal" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="C:/Users/junyoung/git/blli/blli/src/main/webapp/logFile/blliLog.log"/>
+        <param name="File" value="C:/Users/용호/git/projectBlli4/projectBlli4/src/main/webapp/logFile/blliLog.log"/>
         <param name="Append" value="true"/>
         <param name="DatePattern" value="'.'yyyy-ww"/> 
         <layout class="org.apache.log4j.PatternLayout">
@@ -30,7 +30,7 @@
     </appender>
 	<!-- 일주일 간격으로 로그 파일 생성(로컬) -->
     <appender name="errorByUser" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="File" value="C:/Users/junyoung/git/blli/blli/src/main/webapp/logFile/errorByUser.log"/>
+        <param name="File" value="C:/Users/용호/git/projectBlli4/projectBlli4/src/main/webapp/logFile/errorByUser.log"/>
         <param name="Append" value="true"/>
         <param name="DatePattern" value="'.'yyyy-ww"/> 
         <layout class="org.apache.log4j.PatternLayout">
@@ -55,6 +55,16 @@
             <param name="ConversionPattern" value="%m%n" />
         </layout>   
     </appender>
+    
+	<logger name="kr.co.blli.aop">
+        <level value="ERROR"/>
+        <appender-ref ref="errorByUser"/>
+    </logger>
+    
+    <logger name="kr.co.blli.model.scheduler">
+        <level value="ERROR"/>
+        <appender-ref ref="rollingFileInLocal" />
+    </logger>
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
@@ -73,15 +83,6 @@
 		<level value="info" />
 	</logger>
 	
-	<logger name="kr.co.blli.aop">
-        <level value="ERROR"/>
-        <appender-ref ref="errorByUser"/>
-    </logger>
-    
-    <logger name="kr.co.blli.model.scheduler">
-        <level value="ERROR"/>
-        <appender-ref ref="rollingFileInLocal" />
-    </logger>
 	
 	<!-- Root Logger -->
 	<root>
