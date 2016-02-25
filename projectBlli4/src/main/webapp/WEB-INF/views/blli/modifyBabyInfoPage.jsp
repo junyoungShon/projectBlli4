@@ -6,7 +6,7 @@
 <script type="text/javascript">
 		
 	//이메일 유효성 변수
-	var emailValidity = false;
+	var emailValidity = true;
 	//쌍둥이 선택 시 몇번째 칸 아이인지 저장하는 변수
 	var selectBabyNum ;
 	//최근 업로드된 사진번호 저장 변수
@@ -383,150 +383,560 @@
 		  });
 </script>
 
-<body>
-
-		 <div class="register-background" style="background-image: url('${initParam.root}img/modifyBg.jpg"> 
+<body>	
+		<c:set value="${requestScope.blliMemberVO.blliBabyVOList}" var="list"></c:set>
+		<c:set value="${fn:length(list)}" var="listSize"></c:set>
+			<div class="register-background"> 
             	<div class="filter-black"></div>
                 	<div class="container">
                     	<div class="row" style="margin-top: 6%;">
-			                <form class="register-form" action="member_updateBabyInfo.do" method="post" id="babyInfoForm" method="post" name="babyInfoInsertForm" enctype="multipart/form-data">
-                    		<c:forEach end="2" var="blliBabyList" varStatus="i" items="${requestScope.blliMemberVO.blliBabyVOList}">
-                    			<c:choose>
-                    				<c:when test="${blliBabyList!=null}">
-                    					<div class="col-md-4 info_bg${i.index+1}" style="height: 450px; display: block">
-			                            	<div class="register-card" style="margin-bottom:20px">
-			                                	<h3 class="title">${i.index+1} 번째 아이 정보입력</h3>
-												<div class="email_bg" style="top: 15%; display : none;">
-													이메일 주소 <input type="text" name="memberEmail" placeholder="Email 주소" value="${sessionScope.blliMemberVO.memberEmail}">
-												</div>
-					                        	<div style="height: 108px">
-			        			                	<div class="fl">
-					                        		<label>
-			        			                		<input type="file" class="babyPhoto" name="BlliBabyVO[${i.index}].babyPhoto" id="babyPhotoInput${i.index}" 
-			        			                		style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(${i.index})">
-				                			            <c:if test="${blliBabyList.babyPhoto ne 'default'}">
-				                			           	 <img src="${initParam.root}babyphoto/${blliBabyList.babyPhoto}" alt="Thumbnail Image" 
-				                			            class="img-thumbnail img-responsive" id="babyPhoto${i.index}" style="height: 100px;width: 100px;">
-														</c:if>
-														<c:if test="${blliBabyList.babyPhoto eq 'default'}">
-				                			           	 <img src="${initParam.root}img/baby_foto.jpg" alt="Thumbnail Image" 
-				                			            class="img-thumbnail img-responsive" id="babyPhoto${i.index}" style="height: 100px;width: 100px;">
-														</c:if>
-			                        				</label>
-			                        				</div>
-			                        				<div class="fl" style="margin-left: 20px">
-			                        					
-				                         				<label class="radio checked BlliBaby${i.index+1}Gender">
-				                            			<span class="icons">
-				                            				<span class="first-icon fa fa-circle-o fa-base"></span>
-				                            				<span class="second-icon fa fa-dot-circle-o fa-base"></span>
-				                            			</span>
-				                            			<input name="BlliBabyVO[${i.index}].babySex" type="radio" value="남자" data-toggle="radio">
-				                            			<i></i>남자
-				                          				</label>
-				                          				<label class="radio BlliBaby${i.index+1}Gender">
-							                            <span class="icons">
-								                            <span class="first-icon fa fa-circle-o fa-base"></span>
-								                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
-							                            </span>
-							                            <input name="BlliBabyVO[${i.index}].babySex" type="radio" value="여자" data-toggle="radio">
-							                            <i></i>여자
-							                         	</label>
-							                          	<label class="radio BlliBaby${i.index+1}Gender">
-							                            <span class="icons">
-							                          		<span class="first-icon fa fa-circle-o fa-base"></span>
-								                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
-								                        </span>
-							                            <input name="BlliBabyVO[${i.index}].babySex" type="radio" value="쌍둥이" data-toggle="radio">
-							                            <i></i>쌍둥이
-							                         	</label>
-			                           				</div>
-			                      		  		</div> 
-					                      		<div style="text-align: left ;height: 150px;">
-					                      			<label>아이 이름</label>
-					                                <input type="text" class="form-control babyName" name="BlliBabyVO[${i.index}].babyName" placeholder="이름" value="${blliBabyList.babyName}">
-					                                <div class="alertDiv" id="memberIdInsertMSG"></div>
-					                                <label>아이 생일</label>
-					                                <input type="text" class="form-control babyBirthday" style="background: white; cursor: pointer;"
-					                                id="datepicker${i.index+1}" name="BlliBabyVO[${i.index}].babyBirthday" readonly="readonly" value="${blliBabyList.babyBirthday}">
-					                                <div class="alertDiv" id="memberIdInsertMSG"></div>
-					                      		</div>
-			                        		</div>
-			                            </div>
-										<c:set value="${i.index}" var="babyNum"/>
-                    				</c:when>
-                    			</c:choose>
-                    		</c:forEach>
-			                            <c:forEach begin="${babyNum+1}" end="${2-babyNum}" step="1" varStatus="i">
-			                            <div class="col-md-4 info_bg${i.index+1}" style="height: 450px;">
-			                            	<div class="register-card" style="margin-bottom:20px">
-							                <span class="fr" style="margin-top: -20px;margin-right: -15px;">
-				                            <a href="#" onclick="cancelInfoBg2()">
-				                            	<i class="fa fa-times"></i>
-				                            	</a>
+		<c:if test="${listSize==1}">
+			<div class="col-md-4" style="height: 450px; ">
+                            	<div class="register-card" style="margin-bottom:20px">
+                                	<h3 class="title">첫째 아이 정보입력</h3>
+                               		<form class="register-form" action="member_updateBabyInfo.do" method="post" id="babyInfoForm" method="post" name="babyInfoInsertForm" enctype="multipart/form-data">
+		                        	<div style="height: 108px">
+        			                	<div class="fl">
+		                        		<label>
+        			                		<input type="file" class="babyPhoto" name="BlliBabyVO[0].babyPhoto" id="babyPhotoInput0" 
+        			                		style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(0)">
+	                			            <img src="${initParam.root}img/baby_foto.jpg" alt="Thumbnail Image" 
+	                			            class="img-thumbnail img-responsive" id="babyPhoto0" style="height: 100px;width: 100px;">
+                        				</label>
+                        				</div>
+                        				<div class="fl" style="margin-left: 20px">
+                        					
+	                         				<label class="radio checked BlliBaby1Gender">
+	                            			<span class="icons">
+	                            				<span class="first-icon fa fa-circle-o fa-base"></span>
+	                            				<span class="second-icon fa fa-dot-circle-o fa-base"></span>
+	                            			</span>
+	                            			<input name="BlliBabyVO[0].babySex" type="radio" value="남자" data-toggle="radio">
+	                            			<i></i>남자
+	                          				</label>
+	                          				<label class="radio BlliBaby1Gender">
+				                            <span class="icons">
+					                            <span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
 				                            </span>
-			                                	<h3 class="title">${i.index+1} 번째 아이 정보입력</h3>
-			                               		<form class="register-form" action="admin_insertBabyInfo.do" method="post" id="babyInfoForm" method="post" name="babyInfoInsertForm" enctype="multipart/form-data">
-												<div class="email_bg" style="top: 15%; display : none;">
-												</div>
-					                        	<div style="height: 108px">
-			        			                	<div class="fl">
-					                        		<label>
-			        			                		<input type="file" class="babyPhoto" name="BlliBabyVO[${i.index}].babyPhoto" id="babyPhotoInput0" 
-			        			                		style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(${i.index})">
-				                			            <img src="${initParam.root}babyphooto/${babyList.babyPhoto}" alt="Thumbnail Image" 
-				                			            class="img-thumbnail img-responsive" id="babyPhoto${i.index}" style="height: 100px;width: 100px;">
-			                        				</label>
-			                        				</div>
-			                        				<div class="fl" style="margin-left: 20px">
-			                        					
-				                         				<label class="radio checked BlliBaby${i.index+1}Gender">
-				                            			<span class="icons">
-				                            				<span class="first-icon fa fa-circle-o fa-base"></span>
-				                            				<span class="second-icon fa fa-dot-circle-o fa-base"></span>
-				                            			</span>
-				                            			<input name="BlliBabyVO[${i.index}].babySex" type="radio" value="남자" data-toggle="radio">
-				                            			<i></i>남자
-				                          				</label>
-				                          				<label class="radio BlliBaby${i.index+1}Gender">
-							                            <span class="icons">
-								                            <span class="first-icon fa fa-circle-o fa-base"></span>
-								                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
-							                            </span>
-							                            <input name="BlliBabyVO[${i.index}].babySex" type="radio" value="여자" data-toggle="radio">
-							                            <i></i>여자
-							                         	</label>
-							                          	<label class="radio BlliBaby${i.index+1}Gender">
-							                            <span class="icons">
-							                          		<span class="first-icon fa fa-circle-o fa-base"></span>
-								                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
-								                        </span>
-							                            <input name="BlliBabyVO[${i.index}].babySex" type="radio" value="쌍둥이" data-toggle="radio">
-							                            <i></i>쌍둥이
-							                         	</label>
-			                           				</div>
-			                      		  		</div> 
-					                      		<div style="text-align: left ;height: 150px;">
-					                      			<label>아이 이름</label>
-					                                <input type="text" class="form-control babyName" name="BlliBabyVO[${i.index}].babyName" placeholder="이름" value="${babyList.babyName}">
-					                                <div class="alertDiv" id="memberIdInsertMSG"></div>
-					                                <label>아이 생일</label>
-					                                <input type="text" class="form-control babyBirthday" style="background: white; cursor: pointer;"
-					                                id="datepicker${i.index+1}" name="BlliBabyVO[${i.index}].babyBirthday" readonly="readonly" value="${babyList.babyBirthday}">
-					                                <div class="alertDiv" id="memberIdInsertMSG"></div>
-					                      		</div>
-			                        		</div>
-			                            </div>
-                    					<div class="col-md-4 info_bg${i.index+1}_before" style="height: 450px;" >
-			                            <div class="register-card" style="margin-bottom:20px height:400px; width:350px;background-color: rgba(255,255,255,0.5);">
-			                            	<a class="btn btn-fill btn-warning" onclick="addInfoBg${i.index+1}()" style="margin-top: 50%;margin-left: 40%; width: 66px;">
-			                            	<i class="fa fa-plus fa-3x" style="margin-left: -13px;margin-top: 2px"></i>
-			                            	</a>
-			                       		 </div>
-                            			</div>
-			                            </c:forEach>
-                        	
+				                            <input name="BlliBabyVO[0].babySex" type="radio" value="여자" data-toggle="radio">
+				                            <i></i>여자
+				                         	</label>
+				                          	<label class="radio BlliBaby1Gender">
+				                            <span class="icons">
+				                          		<span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+					                        </span>
+				                            <input name="BlliBabyVO[0].babySex" type="radio" value="쌍둥이" data-toggle="radio">
+				                            <i></i>쌍둥이
+				                         	</label>
+                           				</div>
+                      		  		</div> 
+		                      		<div style="text-align: left ;height: 150px;">
+		                      			<label>아이 이름</label>
+		                                <input type="text" class="form-control babyName" name="BlliBabyVO[0].babyName" placeholder="이름" value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyName}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                                <label>아이 생일</label>
+		                                <input type="text" class="form-control babyBirthday" style="background: white; cursor: pointer;"
+		                                id="datepicker1" name="BlliBabyVO[0].babyBirthday" readonly="readonly" value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyBirthday}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                      		</div>
+                        		</div>
+                            </div>
                         
+                         <div class="col-md-4 info_bg2" style="display: none">
+                            <div class="register-card"  style="margin-bottom:20px">
+                            <span class="fr" style="margin-top: -20px;margin-right: -15px;">
+                            <a href="#" onclick="cancelInfoBg2()">
+                            	<i class="fa fa-times"></i>
+                            	</a>
+                            </span>
+                            <h3 class="title">둘째 아이 정보입력</h3>
+                        	<div style="height: 108px">
+        			                	<div class="fl">
+	                			            <label>
+        			                		<input type="file" class="babyPhoto" name="BlliBabyVO[1].babyPhoto" id="babyPhotoInput1" 
+        			                		style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(1)">
+	                			            <img src="${initParam.root}img/baby_foto.jpg" alt="Thumbnail Image" 
+	                			            class="img-thumbnail img-responsive" id="babyPhoto1" style="height: 100px;width: 100px;">
+                        				</label>
+                        				</div>
+                        				<div class="fl" style="margin-left: 20px">
+	                         				<label class="radio checked BlliBaby2Gender">
+	                            			<span class="icons">
+	                            				<span class="first-icon fa fa-circle-o fa-base"></span>
+	                            				<span class="second-icon fa fa-dot-circle-o fa-base"></span>
+	                            			</span>
+	                            			<input name="BlliBabyVO[1].babySex" type="radio" value="남자" data-toggle="radio">
+	                            			<i></i>남자
+	                          				</label>
+	                          				<label class="radio BlliBaby2Gender">
+				                            <span class="icons">
+					                            <span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+				                            </span>
+				                            <input name="BlliBabyVO[1].babySex" type="radio" value="여자" data-toggle="radio">
+				                            <i></i>여자
+				                         	</label>
+				                          	<label class="radio BlliBaby2Gender">
+				                            <span class="icons">
+				                          		<span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+					                        </span>
+				                            <input name="BlliBabyVO[1].babySex" type="radio" value="쌍둥이" data-toggle="radio">
+				                            <i></i>쌍둥이
+				                         	</label>
+                           				</div>
+                      		  		</div> 
+		                      		<div style="text-align: left ;height: 150px;">
+		                      			<label>아이 이름</label>
+		                                <input type="text" class="form-control babyName" name="BlliBabyVO[1].babyName" placeholder="이름">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                                <label>아이 생일</label>
+		                                <input class="form-control babyBirthday" id ="datepicker2" style="background: white; cursor: pointer;"
+		                                name="BlliBabyVO[1].babyBirthday" readonly="readonly" type="text">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                      		</div>
+                        		</div>
+                            </div>
+                            
+                            
+                            <div class="col-md-4 info_bg2_before" style="height: 450px;" >
+                            <div class="register-card" style="margin-bottom:20px height:400px; width:350px;background-color: rgba(255,255,255,0.5);">
+                            	<a class="btn btn-fill btn-warning" onclick="addInfoBg2()" style="margin-top: 50%;margin-left: 40%; width: 66px;">
+                            	<i class="fa fa-plus fa-3x" style="margin-left: -13px;margin-top: 2px"></i>
+                            	</a>
+                       		 </div>
+                            </div>
+                        	
+                         <div class="col-md-4 info_bg3" style="display: none">
+                            <div class="register-card" style="margin-bottom:30px">
+                            <span class="fr" style="margin-top: -20px;margin-right: -15px;">
+                            <a href="#" onclick="cancelInfoBg3()">
+                            	<i class="fa fa-times"></i>
+                            	</a>
+                            </span>
+                                <h3 class="title">셋째 아이정보입력</h3>
+                        	<div style="height: 108px">
+        			                	<div class="fl">
+	                			            <label>
+        			                		<input type="file" class="babyPhoto" name="BlliBabyVO[2].babyPhoto" id="babyPhotoInput2" 
+        			                		style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(2)">
+	                			            <img src="${initParam.root}img/baby_foto.jpg" alt="Thumbnail Image" 
+	                			            class="img-thumbnail img-responsive" id="babyPhoto2" style="height: 100px;width: 100px;">
+                        				</div>
+                        				<div class="fl" style="margin-left: 20px">
+	                         				<label class="radio checked BlliBaby3Gender">
+	                            			<span class="icons">
+	                            				<span class="first-icon fa fa-circle-o fa-base"></span>
+	                            				<span class="second-icon fa fa-dot-circle-o fa-base"></span>
+	                            			</span>
+	                            			<input name="BlliBabyVO[2].babySex" type="radio" value="남자" data-toggle="radio">
+	                            			<i></i>남자
+	                          				</label>
+	                          				<label class="radio BlliBaby1Gender">
+				                            <span class="icons">
+					                            <span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+				                            </span>
+				                            <input name="BlliBabyVO[2].babySex" type="radio" value="여자" data-toggle="radio">
+				                            <i></i>여자
+				                         	</label>
+				                          	<label class="radio BlliBaby3Gender">
+				                            <span class="icons">
+				                          		<span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+					                        </span>
+				                            <input name="BlliBabyVO[2].babySex" type="radio" value="쌍둥이" data-toggle="radio">
+				                            <i></i>쌍둥이
+				                         	</label>
+                           				</div>
+                      		  		</div> 
+		                      		<div style="text-align: left ;height: 150px;">
+		                      			<label>아이 이름</label>
+		                                <input type="text" class="form-control babyName" name="BlliBabyVO[2].babyName" placeholder="이름">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                                <label>아이 생일</label>
+		                                <input class="form-control babyBirthday"  id ="datepicker3" style="background: white; cursor: pointer;"
+		                                 name="BlliBabyVO[2].babyBirthday" readonly="readonly" type="text">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                      		</div>
+                       		</div>
+                       		</div>
+                            
+                            <div class="col-md-4 info_bg3_before" style="height: 450px;">
+                            <div class="register-card" style="margin-bottom:20px height:400px; width:350px;background-color: rgba(255,255,255,0.5);">
+                            	<a class="btn btn-fill btn-warning" onclick="addInfoBg3()" style="margin-top: 50%;margin-left: 40%; width: 66px;">
+                            	<i class="fa fa-plus fa-3x" style="margin-left: -13px;margin-top: 2px"></i>
+                            	</a>
+                       		 </div>
+                            </div>
+                        		
+		</c:if>
+		<c:if test="${listSize==2}">
+			<div class="col-md-4" style="height: 450px; ">
+                            	<div class="register-card" style="margin-bottom:20px">
+                                	<h3 class="title">첫째 아이 정보입력</h3>
+                               		<form class="register-form" action="member_updateBabyInfo.do" method="post" id="babyInfoForm" method="post" name="babyInfoInsertForm" enctype="multipart/form-data">
+		                        	<div style="height: 108px">
+        			                	<div class="fl">
+		                        		<label>
+        			                		<input type="file" class="babyPhoto" name="BlliBabyVO[0].babyPhoto" id="babyPhotoInput0" 
+        			                		style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(0)">
+	                			            <img src="${initParam.root}img/baby_foto.jpg" alt="Thumbnail Image" 
+	                			            class="img-thumbnail img-responsive" id="babyPhoto0" style="height: 100px;width: 100px;">
+                        				</label>
+                        				</div>
+                        				<div class="fl" style="margin-left: 20px">
+                        					
+	                         				<label class="radio checked BlliBaby1Gender">
+	                            			<span class="icons">
+	                            				<span class="first-icon fa fa-circle-o fa-base"></span>
+	                            				<span class="second-icon fa fa-dot-circle-o fa-base"></span>
+	                            			</span>
+	                            			<input name="BlliBabyVO[0].babySex" type="radio" value="남자" data-toggle="radio">
+	                            			<i></i>남자
+	                          				</label>
+	                          				<label class="radio BlliBaby1Gender">
+				                            <span class="icons">
+					                            <span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+				                            </span>
+				                            <input name="BlliBabyVO[0].babySex" type="radio" value="여자" data-toggle="radio">
+				                            <i></i>여자
+				                         	</label>
+				                          	<label class="radio BlliBaby1Gender">
+				                            <span class="icons">
+				                          		<span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+					                        </span>
+				                            <input name="BlliBabyVO[0].babySex" type="radio" value="쌍둥이" data-toggle="radio">
+				                            <i></i>쌍둥이
+				                         	</label>
+                           				</div>
+                      		  		</div> 
+		                      		<div style="text-align: left ;height: 150px;">
+		                      			<label>아이 이름</label>
+		                                <input type="text" class="form-control babyName" name="BlliBabyVO[0].babyName" placeholder="이름" value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyName}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                                <label>아이 생일</label>
+		                                <input type="text" class="form-control babyBirthday" style="background: white; cursor: pointer;"
+		                                id="datepicker1" name="BlliBabyVO[0].babyBirthday" readonly="readonly" value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyBirthday}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                      		</div>
+                        		</div>
+                            </div>
+                        
+                         <div class="col-md-4 info_bg2" style="display: block">
+                            <div class="register-card"  style="margin-bottom:20px">
+                            <span class="fr" style="margin-top: -20px;margin-right: -15px;">
+                            <a href="#" onclick="cancelInfoBg2()">
+                            	<i class="fa fa-times"></i>
+                            	</a>
+                            </span>
+                            <h3 class="title">둘째 아이 정보입력</h3>
+                        	<div style="height: 108px">
+        			                	<div class="fl">
+	                			            <label>
+        			                		<input type="file" class="babyPhoto" name="BlliBabyVO[1].babyPhoto" id="babyPhotoInput1" 
+        			                		style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(1)">
+	                			            <img src="${initParam.root}img/baby_foto.jpg" alt="Thumbnail Image" 
+	                			            class="img-thumbnail img-responsive" id="babyPhoto1" style="height: 100px;width: 100px;">
+                        				</label>
+                        				</div>
+                        				<div class="fl" style="margin-left: 20px">
+	                         				<label class="radio checked BlliBaby2Gender">
+	                            			<span class="icons">
+	                            				<span class="first-icon fa fa-circle-o fa-base"></span>
+	                            				<span class="second-icon fa fa-dot-circle-o fa-base"></span>
+	                            			</span>
+	                            			<input name="BlliBabyVO[1].babySex" type="radio" value="남자" data-toggle="radio">
+	                            			<i></i>남자
+	                          				</label>
+	                          				<label class="radio BlliBaby2Gender">
+				                            <span class="icons">
+					                            <span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+				                            </span>
+				                            <input name="BlliBabyVO[1].babySex" type="radio" value="여자" data-toggle="radio">
+				                            <i></i>여자
+				                         	</label>
+				                          	<label class="radio BlliBaby2Gender">
+				                            <span class="icons">
+				                          		<span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+					                        </span>
+				                            <input name="BlliBabyVO[1].babySex" type="radio" value="쌍둥이" data-toggle="radio">
+				                            <i></i>쌍둥이
+				                         	</label>
+                           				</div>
+                      		  		</div> 
+		                      		<div style="text-align: left ;height: 150px;">
+		                      			<label>아이 이름</label>
+		                                <input type="text" class="form-control babyName" name="BlliBabyVO[1].babyName" placeholder="이름" value="${requestScope.blliMemberVO.blliBabyVOList.get(1).babyName}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                                <label>아이 생일</label>
+		                                <input class="form-control babyBirthday" id ="datepicker2" style="background: white; cursor: pointer;"
+		                                name="BlliBabyVO[1].babyBirthday" readonly="readonly" type="text" value="${requestScope.blliMemberVO.blliBabyVOList.get(1).babyBirthday}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                      		</div>
+                        		</div>
+                            </div>
+                            
+                            
+                            <div class="col-md-4 info_bg2_before" style="height: 450px; display:none;" >
+                            <div class="register-card" style="margin-bottom:20px height:400px; width:350px;background-color: rgba(255,255,255,0.5);">
+                            	<a class="btn btn-fill btn-warning" onclick="addInfoBg2()" style="margin-top: 50%;margin-left: 40%; width: 66px;">
+                            	<i class="fa fa-plus fa-3x" style="margin-left: -13px;margin-top: 2px"></i>
+                            	</a>
+                       		 </div>
+                            </div>
+                        	
+                         <div class="col-md-4 info_bg3" style="display: none">
+                            <div class="register-card" style="margin-bottom:30px">
+                            <span class="fr" style="margin-top: -20px;margin-right: -15px;">
+                            <a href="#" onclick="cancelInfoBg3()">
+                            	<i class="fa fa-times"></i>
+                            	</a>
+                            </span>
+                                <h3 class="title">셋째 아이정보입력</h3>
+                        	<div style="height: 108px">
+        			                	<div class="fl">
+	                			            <label>
+        			                		<input type="file" class="babyPhoto" name="BlliBabyVO[2].babyPhoto" id="babyPhotoInput2" 
+        			                		style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(2)">
+	                			            <img src="${initParam.root}img/baby_foto.jpg" alt="Thumbnail Image" 
+	                			            class="img-thumbnail img-responsive" id="babyPhoto2" style="height: 100px;width: 100px;">
+                        				</div>
+                        				<div class="fl" style="margin-left: 20px">
+	                         				<label class="radio checked BlliBaby3Gender">
+	                            			<span class="icons">
+	                            				<span class="first-icon fa fa-circle-o fa-base"></span>
+	                            				<span class="second-icon fa fa-dot-circle-o fa-base"></span>
+	                            			</span>
+	                            			<input name="BlliBabyVO[2].babySex" type="radio" value="남자" data-toggle="radio">
+	                            			<i></i>남자
+	                          				</label>
+	                          				<label class="radio BlliBaby1Gender">
+				                            <span class="icons">
+					                            <span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+				                            </span>
+				                            <input name="BlliBabyVO[2].babySex" type="radio" value="여자" data-toggle="radio">
+				                            <i></i>여자
+				                         	</label>
+				                          	<label class="radio BlliBaby3Gender">
+				                            <span class="icons">
+				                          		<span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+					                        </span>
+				                            <input name="BlliBabyVO[2].babySex" type="radio" value="쌍둥이" data-toggle="radio">
+				                            <i></i>쌍둥이
+				                         	</label>
+                           				</div>
+                      		  		</div> 
+		                      		<div style="text-align: left ;height: 150px;">
+		                      			<label>아이 이름</label>
+		                                <input type="text" class="form-control babyName" name="BlliBabyVO[2].babyName" placeholder="이름">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                                <label>아이 생일</label>
+		                                <input class="form-control babyBirthday"  id ="datepicker3" style="background: white; cursor: pointer;"
+		                                 name="BlliBabyVO[2].babyBirthday" readonly="readonly" type="text">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                      		</div>
+                       		</div>
+                       		</div>
+                            
+                            <div class="col-md-4 info_bg3_before" style="height: 450px;">
+                            <div class="register-card" style="margin-bottom:20px height:400px; width:350px;background-color: rgba(255,255,255,0.5);">
+                            	<a class="btn btn-fill btn-warning" onclick="addInfoBg3()" style="margin-top: 50%;margin-left: 40%; width: 66px;">
+                            	<i class="fa fa-plus fa-3x" style="margin-left: -13px;margin-top: 2px"></i>
+                            	</a>
+                       		 </div>
+                            </div>
+		</c:if>
+		<c:if test="${listSize==3}">
+			<div class="col-md-4" style="height: 450px; ">
+                            	<div class="register-card" style="margin-bottom:20px">
+                                	<h3 class="title">첫째 아이 정보입력</h3>
+                               		<form class="register-form" action="member_updateBabyInfo.do" method="post" id="babyInfoForm" method="post" name="babyInfoInsertForm" enctype="multipart/form-data">
+		                        	<div style="height: 108px">
+        			                	<div class="fl">
+		                        		<label>
+        			                		<input type="file" class="babyPhoto" name="BlliBabyVO[0].babyPhoto" id="babyPhotoInput0" 
+        			                		style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(0)">
+	                			            <img src="${initParam.root}img/baby_foto.jpg" alt="Thumbnail Image" 
+	                			            class="img-thumbnail img-responsive" id="babyPhoto0" style="height: 100px;width: 100px;">
+                        				</label>
+                        				</div>
+                        				<div class="fl" style="margin-left: 20px">
+                        					
+	                         				<label class="radio checked BlliBaby1Gender">
+	                            			<span class="icons">
+	                            				<span class="first-icon fa fa-circle-o fa-base"></span>
+	                            				<span class="second-icon fa fa-dot-circle-o fa-base"></span>
+	                            			</span>
+	                            			<input name="BlliBabyVO[0].babySex" type="radio" value="남자" data-toggle="radio">
+	                            			<i></i>남자
+	                          				</label>
+	                          				<label class="radio BlliBaby1Gender">
+				                            <span class="icons">
+					                            <span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+				                            </span>
+				                            <input name="BlliBabyVO[0].babySex" type="radio" value="여자" data-toggle="radio">
+				                            <i></i>여자
+				                         	</label>
+				                          	<label class="radio BlliBaby1Gender">
+				                            <span class="icons">
+				                          		<span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+					                        </span>
+				                            <input name="BlliBabyVO[0].babySex" type="radio" value="쌍둥이" data-toggle="radio">
+				                            <i></i>쌍둥이
+				                         	</label>
+                           				</div>
+                      		  		</div> 
+		                      		<div style="text-align: left ;height: 150px;">
+		                      			<label>아이 이름</label>
+		                                <input type="text" class="form-control babyName" name="BlliBabyVO[0].babyName" placeholder="이름" value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyName}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                                <label>아이 생일</label>
+		                                <input type="text" class="form-control babyBirthday" style="background: white; cursor: pointer;"
+		                                id="datepicker1" name="BlliBabyVO[0].babyBirthday" readonly="readonly" value="${requestScope.blliMemberVO.blliBabyVOList.get(0).babyBirthday}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                      		</div>
+                        		</div>
+                            </div>
+                        
+                         <div class="col-md-4 info_bg2" style="display: block">
+                            <div class="register-card"  style="margin-bottom:20px">
+                            <span class="fr" style="margin-top: -20px;margin-right: -15px;">
+                            <a href="#" onclick="cancelInfoBg2()">
+                            	<i class="fa fa-times"></i>
+                            	</a>
+                            </span>
+                            <h3 class="title">둘째 아이 정보입력</h3>
+                        	<div style="height: 108px">
+        			                	<div class="fl">
+	                			            <label>
+        			                		<input type="file" class="babyPhoto" name="BlliBabyVO[1].babyPhoto" id="babyPhotoInput1" 
+        			                		style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(1)">
+	                			            <img src="${initParam.root}img/baby_foto.jpg" alt="Thumbnail Image" 
+	                			            class="img-thumbnail img-responsive" id="babyPhoto1" style="height: 100px;width: 100px;">
+                        				</label>
+                        				</div>
+                        				<div class="fl" style="margin-left: 20px">
+	                         				<label class="radio checked BlliBaby2Gender">
+	                            			<span class="icons">
+	                            				<span class="first-icon fa fa-circle-o fa-base"></span>
+	                            				<span class="second-icon fa fa-dot-circle-o fa-base"></span>
+	                            			</span>
+	                            			<input name="BlliBabyVO[1].babySex" type="radio" value="남자" data-toggle="radio">
+	                            			<i></i>남자
+	                          				</label>
+	                          				<label class="radio BlliBaby2Gender">
+				                            <span class="icons">
+					                            <span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+				                            </span>
+				                            <input name="BlliBabyVO[1].babySex" type="radio" value="여자" data-toggle="radio">
+				                            <i></i>여자
+				                         	</label>
+				                          	<label class="radio BlliBaby2Gender">
+				                            <span class="icons">
+				                          		<span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+					                        </span>
+				                            <input name="BlliBabyVO[1].babySex" type="radio" value="쌍둥이" data-toggle="radio">
+				                            <i></i>쌍둥이
+				                         	</label>
+                           				</div>
+                      		  		</div> 
+		                      		<div style="text-align: left ;height: 150px;">
+		                      			<label>아이 이름</label>
+		                                <input type="text" class="form-control babyName" name="BlliBabyVO[1].babyName" placeholder="이름" value="${requestScope.blliMemberVO.blliBabyVOList.get(1).babyName}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                                <label>아이 생일</label>
+		                                <input class="form-control babyBirthday" id ="datepicker2" style="background: white; cursor: pointer;"
+		                                name="BlliBabyVO[1].babyBirthday" readonly="readonly" type="text" value="${requestScope.blliMemberVO.blliBabyVOList.get(1).babyBirthday}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                      		</div>
+                        		</div>
+                            </div>
+                            
+                            
+                            <div class="col-md-4 info_bg2_before" style="height: 450px; display:none;" >
+                            <div class="register-card" style="margin-bottom:20px height:400px; width:350px;background-color: rgba(255,255,255,0.5);">
+                            	<a class="btn btn-fill btn-warning" onclick="addInfoBg2()" style="margin-top: 50%;margin-left: 40%; width: 66px;">
+                            	<i class="fa fa-plus fa-3x" style="margin-left: -13px;margin-top: 2px"></i>
+                            	</a>
+                       		 </div>
+                            </div>
+                        	
+                         <div class="col-md-4 info_bg3" style="display: block">
+                            <div class="register-card" style="margin-bottom:30px">
+                            <span class="fr" style="margin-top: -20px;margin-right: -15px;">
+                            <a href="#" onclick="cancelInfoBg3()">
+                            	<i class="fa fa-times"></i>
+                            	</a>
+                            </span>
+                                <h3 class="title">셋째 아이정보입력</h3>
+                        	<div style="height: 108px">
+        			                	<div class="fl">
+	                			            <label>
+        			                		<input type="file" class="babyPhoto" name="BlliBabyVO[2].babyPhoto" id="babyPhotoInput2" 
+        			                		style="display: none;" accept="image/*" onchange="setUpdateBabyPhotoNum(2)">
+	                			            <img src="${initParam.root}img/baby_foto.jpg" alt="Thumbnail Image" 
+	                			            class="img-thumbnail img-responsive" id="babyPhoto2" style="height: 100px;width: 100px;">
+                        				</div>
+                        				<div class="fl" style="margin-left: 20px">
+	                         				<label class="radio checked BlliBaby3Gender">
+	                            			<span class="icons">
+	                            				<span class="first-icon fa fa-circle-o fa-base"></span>
+	                            				<span class="second-icon fa fa-dot-circle-o fa-base"></span>
+	                            			</span>
+	                            			<input name="BlliBabyVO[2].babySex" type="radio" value="남자" data-toggle="radio">
+	                            			<i></i>남자
+	                          				</label>
+	                          				<label class="radio BlliBaby1Gender">
+				                            <span class="icons">
+					                            <span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+				                            </span>
+				                            <input name="BlliBabyVO[2].babySex" type="radio" value="여자" data-toggle="radio">
+				                            <i></i>여자
+				                         	</label>
+				                          	<label class="radio BlliBaby3Gender">
+				                            <span class="icons">
+				                          		<span class="first-icon fa fa-circle-o fa-base"></span>
+					                            <span class="second-icon fa fa-dot-circle-o fa-base"></span>
+					                        </span>
+				                            <input name="BlliBabyVO[2].babySex" type="radio" value="쌍둥이" data-toggle="radio">
+				                            <i></i>쌍둥이
+				                         	</label>
+                           				</div>
+                      		  		</div> 
+		                      		<div style="text-align: left ;height: 150px;">
+		                      			<label>아이 이름</label>
+		                                <input type="text" class="form-control babyName" name="BlliBabyVO[2].babyName" placeholder="이름" value="${requestScope.blliMemberVO.blliBabyVOList.get(1).babyName}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                                <label>아이 생일</label>
+		                                <input class="form-control babyBirthday"  id ="datepicker3" style="background: white; cursor: pointer;"
+		                                 name="BlliBabyVO[2].babyBirthday" readonly="readonly" type="text" value="${requestScope.blliMemberVO.blliBabyVOList.get(1).babyBirthday}">
+		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
+		                      		</div>
+                       		</div>
+                       		</div>
+                            
+                            <div class="col-md-4 info_bg3_before" style="height: 450px; display: none;">
+                            <div class="register-card" style="margin-bottom:20px height:400px; width:350px;background-color: rgba(255,255,255,0.5);">
+                            	<a class="btn btn-fill btn-warning" onclick="addInfoBg3()" style="margin-top: 50%;margin-left: 40%; width: 66px;">
+                            	<i class="fa fa-plus fa-3x" style="margin-left: -13px;margin-top: 2px"></i>
+                            	</a>
+                       		 </div>
+                            </div>
+		</c:if>
                             
                         		<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1">
                                 <a class="btn btn-fill btn-success btn-block" onclick="insertBabyInfo()" style="margin-top:30px;">등록</a>
@@ -593,4 +1003,5 @@
 	
 	<input type="text" name="targetAmount" style="display: none">
 	<input type="text" name="memberId" style="display: none" value="${sessionScope.blliMemberVO.memberId}">
+	<input type="text" name="memberEmail" style="display: none" value="${sessionScope.blliMemberVO.memberEmail}">
   </form>

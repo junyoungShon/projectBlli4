@@ -97,51 +97,16 @@ text-decoration:none;
 clear:left;
 }
 </style>
-<c:if test="${requestScope['javax.servlet.forward.request_uri']!='/projectBlli4/member_goMain.do'}">
-	<form action="${initParam.root}searchSmallProduct.do" method="get">
-		<div class="jbMenu">
-		    <div class="in_fr">
-				<a href="${initParam.root}member_goMain.do"><img src="${initParam.root}img/top_logo.png" alt="탑로고" class="logo" style="margin-top:-6px"></a>
-				<div class="top_search">
-					<input type="text" class="search_text" placeholder="검색어를 입력하세요" name="searchWord">
-					<a href="#" onclick="$(this).closest('form').submit()"><img src="${initParam.root}img/search.png" alt="검색"></a>
-				</div>
-				<div class="top_nav">
-					<div class="menubar">
-					<ul>
-					 <li><a href="${initParam.root}member_goMain.do">Main</a></li>
-					 <li><a href="#">알림</a></li>
-					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>
-					 <li><a href="#" id="current">마이페이지</a>
-						<ul>
-					     <li><a href="${initParam.root}member_goDibPage.do">찜 제품 확인</a></li>
-					     <li><a href="${initParam.root}member_goScrapePage.do">스크랩 포스팅확인</a></li>
-					     <li><a href="#">추천 제품확인</a></li>
-					     <li><a href="${initParam.root}member_goModifyMemberInfoPage.do">회원 정보 수정</a></li>
-					     <li><a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보 확인</a></li>
-					    
-					    </ul>
-					 </li>
-					  <li><a href="${initParam.root}logout.do">로그아웃</a></li>
-					</ul>
-					</div>
-					<%-- <a href="${initParam.root}member_goModifyMemberInfoPage.do">회원정보수정</a>   ㅣ   
-						<a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보수정</a>   ㅣ  
-					 <a href="#">스크랩</a>
-					ㅣ <a href="#">알림</a> ㅣ <a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이일정</a> ㅣ <a href="${initParam.root}logout.do">로그아웃</a> --%>
-				</div>
-			</div>
-		</div>
-	</form>
-</c:if>
-<c:if test="${requestScope['javax.servlet.forward.request_uri']=='/projectBlli4/member_goMain.do'}">
+<c:set value="${requestScope['javax.servlet.forward.request_uri']}" var="currentUri"/>
+<c:choose>
+<c:when test="${fn:containsIgnoreCase(currentUri,'member_goMain.do') }">
 	<form action="${initParam.root}searchSmallProduct.do" method="get">
 		<div class="main_top">
 			<div class="in_fr">
 				<div class="top_nav">
 					<div class="menubar">
 					<ul>
-					 <li><a href="${initParam.root}member_goMain.do">Main</a></li>
+					 <%-- <li><a href="${initParam.root}member_goMain.do">Main</a></li> --%>
 					 <li><a href="#">알림</a></li>
 					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>
 					 <li><a href="#" id="current">마이페이지</a>
@@ -186,7 +151,7 @@ clear:left;
 				<div class="top_nav">
 					<div class="menubar">
 					<ul>
-					 <li><a href="${initParam.root}member_goMain.do">Main</a></li>
+					<%--  <li><a href="${initParam.root}member_goMain.do">Main</a></li> --%>
 					 <li><a href="#">알림</a></li>
 					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>
 					 <li><a href="#" id="current">마이페이지</a>
@@ -205,4 +170,43 @@ clear:left;
 			</div>
 		</div>
 	</form>
-</c:if>
+</c:when>
+<c:otherwise>
+<form action="${initParam.root}searchSmallProduct.do" method="get">
+		<div class="jbMenu">
+		    <div class="in_fr">
+				<a href="${initParam.root}member_goMain.do"><img src="${initParam.root}img/top_logo.png" alt="탑로고" class="logo" style="margin-top:-6px"></a>
+				<div class="top_search">
+					<input type="text" class="search_text" placeholder="검색어를 입력하세요" name="searchWord">
+					<a href="#" onclick="$(this).closest('form').submit()"><img src="${initParam.root}img/search.png" alt="검색"></a>
+				</div>
+				<div class="top_nav">
+					<div class="menubar">
+					<ul>
+					 <%-- <li><a href="${initParam.root}member_goMain.do">Main</a></li> --%>
+					 <li><a href="#">알림</a></li>
+					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>
+					 <li><a href="#" id="current">마이페이지</a>
+						<ul>
+					     <li><a href="${initParam.root}member_goDibPage.do">찜 제품 확인</a></li>
+					     <li><a href="${initParam.root}member_goScrapePage.do">스크랩 포스팅확인</a></li>
+					     <li><a href="#">추천 제품확인</a></li>
+					     <li><a href="${initParam.root}member_goModifyMemberInfoPage.do">회원 정보 수정</a></li>
+					     <li><a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보 확인</a></li>
+					    
+					    </ul>
+					 </li>
+					  <li><a href="${initParam.root}logout.do">로그아웃</a></li>
+					</ul>
+					</div>
+					<%-- <a href="${initParam.root}member_goModifyMemberInfoPage.do">회원정보수정</a>   ㅣ   
+						<a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보수정</a>   ㅣ  
+					 <a href="#">스크랩</a>
+					ㅣ <a href="#">알림</a> ㅣ <a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이일정</a> ㅣ <a href="${initParam.root}logout.do">로그아웃</a> --%>
+				</div>
+			</div>
+		</div>
+	</form>
+	
+</c:otherwise>
+</c:choose>

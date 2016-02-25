@@ -134,7 +134,9 @@ public class AdminController {
 	 */
 	@RequestMapping("admin_makingWordCloud.do")
 	public void makingWordCloud(BlliPostingVO blliPostingVO){
-		adminService.makingWordCloud(blliPostingVO);
+		ArrayList<BlliPostingVO> list = (ArrayList<BlliPostingVO>)adminService.selectConfirmedPosting();
+		System.out.println(list.toString());
+		adminService.insertAndUpdateWordCloud(list);
 	}
 	/**
 	 * 

@@ -1,5 +1,6 @@
 package kr.co.blli.model.admin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -193,5 +194,9 @@ public class AdminDAOImpl implements AdminDAO{
 	public void updateSmallProductMainPhotoLink(
 			BlliSmallProductVO blliSmallProductVO) {
 		sqlSessionTemplate.update("admin.updateSmallProductMainPhotoLink", blliSmallProductVO);
+	}
+	@Override
+	public List<BlliPostingVO> selectConfirmedPostingUrlAndSmallProductId() {
+		return sqlSessionTemplate.selectList("admin.selectConfirmedPostingUrlAndSmallProductId");
 	}
 }

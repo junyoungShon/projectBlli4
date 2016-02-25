@@ -281,6 +281,13 @@ CREATE TABLE BLLI_BREAK_AWAY(
 	break_away_reason varchar2(500) not null,
 	break_away_date date not null
 )
+drop table blli_permanent_dead_posting cascade constraint;
+CREATE TABLE blli_permanent_dead_posting (
+	posting_url     VARCHAR2(300) NOT NULL,
+	posting_title   VARCHAR2(450) NOT NULL,
+	constraint pk_permanent_dead_posting primary key(posting_url, posting_title)
+);
+
 
 ------------------------------------------------------------------------------------------------------------
 

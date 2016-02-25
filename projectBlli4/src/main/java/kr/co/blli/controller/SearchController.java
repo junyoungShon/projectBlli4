@@ -86,6 +86,10 @@ public class SearchController {
 			}else{
 				smallProductList = productService.searchSmallProductList(pageNo, searchWord);
 				viewName = "blli_midCategoryDetailPage";
+				for(int i = 0;i<smallProductList.size();i++){
+					List<BlliWordCloudVO> list = productService.selectWordCloudList(smallProductList.get(i).getSmallProductId());
+					smallProductList.get(i).setBlliWordCloudVOList(list);
+				}
 				mav.addObject("resultList", smallProductList);
 				mav.addObject("totalPage", productService.totalPageOfSmallProductRelatedSearchWord(searchWord));
 				mav.addObject("searchWord", searchWord);
@@ -94,8 +98,7 @@ public class SearchController {
 		}else{
 			viewName = "blli_midCategoryDetailPage";
 			for(int i = 0;i<smallProductList.size();i++){
-				List<BlliWordCloudVO> list = productService.selectWordCloudList
-						(smallProductList.get(i).getSmallProductId());
+				List<BlliWordCloudVO> list = productService.selectWordCloudList(smallProductList.get(i).getSmallProductId());
 				smallProductList.get(i).setBlliWordCloudVOList(list);
 			}
 			mav.addObject("resultList", smallProductList);

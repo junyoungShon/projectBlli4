@@ -17,7 +17,7 @@ public class BlliFileDownLoader {
 			localPath = "C:\\Users\\"+System.getProperty("user.name")+"\\git\\blli\\blli\\src\\main\\webapp\\scrawlImage\\";
 		}else{
 			//서버 환경일 경우 path
-			localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/blli/scrawlImage";
+			localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/ROOT/scrawlImage/";
 		}
 		String fileEXT = url.substring(url.lastIndexOf(".")+1, url.lastIndexOf(".")+4).toLowerCase();
 		if(!fileEXT.equals("jpeg")){

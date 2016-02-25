@@ -79,4 +79,5 @@ update blli_member set authority = 'ROLE_ADMIN' where member_id = 'gonipal@naver
 update blli_member set authority = 'ROLE_USER' where member_id = 'gonipal@naver.com';
 select * from blli_baby where member_id = 'rhslvkf@gmail.com';
 
-
+select count(*) from blli_mid_category where  mid_category_whentouse_min = -2
+select count(*) from blli_mid_category where mid_category_whentouse_min != 0 and mid_category_whentouse_max != 36 and 30 > mid_category_whentouse_min and mid_category_whentouse_max < 30;

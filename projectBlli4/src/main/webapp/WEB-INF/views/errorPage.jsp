@@ -179,7 +179,11 @@ body {
     </div>
        <small></small>
     <div class="circles">
-      <p>404<br>
+      <p>
+      <c:if test="${pageContext.request.queryString eq 'errorNumber=404'}">404</c:if>
+      <c:if test="${pageContext.request.queryString eq 'errorNumber=400'}">400</c:if>
+      <c:if test="${pageContext.request.queryString eq 'errorNumber=500'}">500</c:if>
+      <br>
       </p>
       <span class="circle big"></span>
       <span class="circle med"></span>
