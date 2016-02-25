@@ -25,6 +25,7 @@ import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
+import kr.co.blli.model.vo.BlliNoticeVO;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
 import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
@@ -550,10 +551,22 @@ public class MemberController {
 		return memberService.selectSchedule(bsvo);
 	}
 	
-	@RequestMapping("member_getSchduleInfoByScheduleId.do")
+	@RequestMapping("member_deleteSchedule.do")
 	@ResponseBody
-	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId) {
-		return memberService.getSchduleInfoByScheduleId(scheduleId);
+	public void updateSchedule(String scheduleId) {
+		memberService.deleteSchedule(scheduleId);
+	}
+	
+	@RequestMapping("member_getScheduleInfoByScheduleId.do")
+	@ResponseBody
+	public BlliScheduleVO getScheduleInfoByScheduleId(String scheduleId) {
+		return memberService.getScheduleInfoByScheduleId(scheduleId);
+	}
+	
+	@RequestMapping("member_getNoticeList.do")
+	@ResponseBody
+	public List<BlliNoticeVO> getNoticeList() {
+		return memberService.getNoticeList();
 	}
 	
 

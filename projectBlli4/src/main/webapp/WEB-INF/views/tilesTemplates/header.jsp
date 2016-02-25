@@ -97,6 +97,33 @@ text-decoration:none;
 clear:left;
 }
 </style>
+
+<script type="text/javascript">
+
+	$(document).ready(function() {
+		
+		$.ajax({
+			type: "POST",
+			url: "${initParam.root}member_getNoticeList.do",
+			cache: false,
+			success: function(nvoList){
+				
+				$(".badge").text(nvoList.length);
+				
+				var noticeListText; 
+				
+				$(".noticeList").html(noticeListText);
+			}
+	    });
+		
+		if($(".badge").text()!="") {
+			$(".badge").show();
+		}
+	});
+
+
+</script>
+
 <c:if test="${requestScope['javax.servlet.forward.request_uri']!='/projectBlli4/member_goMain.do'}">
 	<form action="${initParam.root}searchSmallProduct.do" method="get">
 		<div class="jbMenu">
@@ -110,7 +137,7 @@ clear:left;
 					<div class="menubar">
 					<ul>
 					 <li><a href="${initParam.root}member_goMain.do">Main</a></li>
-					 <li><a href="#">알림</a></li>
+					 <li><a href="#">알림&nbsp<span class="badge"></span></a></li>
 					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>
 					 <li><a href="#" id="current">마이페이지</a>
 						<ul>
@@ -119,7 +146,6 @@ clear:left;
 					     <li><a href="#">추천 제품확인</a></li>
 					     <li><a href="${initParam.root}member_goModifyMemberInfoPage.do">회원 정보 수정</a></li>
 					     <li><a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보 확인</a></li>
-					    
 					    </ul>
 					 </li>
 					  <li><a href="${initParam.root}logout.do">로그아웃</a></li>
@@ -142,7 +168,25 @@ clear:left;
 					<div class="menubar">
 					<ul>
 					 <li><a href="${initParam.root}member_goMain.do">Main</a></li>
-					 <li><a href="#">알림</a></li>
+					 <li><a href="#" onclick="$('.noticeList').toggle();">알림&nbsp<span class="badge" style="background:#ff8000;"></span></a>
+					 	<div class="noticeList">
+					 	
+					 	
+					 	
+					 	
+					 	
+					 	
+					 	
+					 	
+					 	
+					 	
+					 	
+					 	
+					 	
+					 	
+					 	
+					 	</div>
+					 </li>
 					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>
 					 <li><a href="#" id="current">마이페이지</a>
 						<ul>
@@ -151,7 +195,6 @@ clear:left;
 					     <li><a href="#">추천 제품확인</a></li>
 					     <li><a href="${initParam.root}member_goModifyMemberInfoPage.do">회원 정보 수정</a></li>
 					     <li><a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보 확인</a></li>
-					    
 					    </ul>
 					 </li>
 					  <li><a href="${initParam.root}logout.do">로그아웃</a></li>
@@ -187,15 +230,15 @@ clear:left;
 					<div class="menubar">
 					<ul>
 					 <li><a href="${initParam.root}member_goMain.do">Main</a></li>
-					 <li><a href="#">알림</a></li>
+					 <li><a href="#">알림&nbsp<span class="badge"></span></a></li>
 					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>
 					 <li><a href="#" id="current">마이페이지</a>
 						<ul>
-					     <li><a href="${initParam.root}member_goDibPage.do">찜 제품 확인</a></li>
-					     <li><a href="${initParam.root}member_goScrapePage.do">스크랩 포스팅확인</a></li>
-					     <li><a href="#">추천 제품확인</a></li>
-					     <li><a href="${initParam.root}member_goModifyMemberInfoPage.do">회원 정보 수정</a></li>
-					     <li><a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보 확인</a></li>
+						    <li><a href="${initParam.root}member_goDibPage.do">찜 제품 확인</a></li>
+						    <li><a href="${initParam.root}member_goScrapePage.do">스크랩 포스팅확인</a></li>
+						    <li><a href="#">추천 제품확인</a></li>
+						    <li><a href="${initParam.root}member_goModifyMemberInfoPage.do">회원 정보 수정</a></li>
+						    <li><a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보 확인</a></li>
 					    </ul>
 					 </li>
 					  <li><a href="${initParam.root}logout.do">로그아웃</a></li>

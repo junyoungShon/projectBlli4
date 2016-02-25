@@ -21,8 +21,8 @@ import kr.co.blli.model.security.BlliUserDetails;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBreakAwayVO;
 import kr.co.blli.model.vo.BlliMailVO;
-import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliNoticeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliScheduleVO;
 import kr.co.blli.utility.BlliFileUtils;
@@ -458,9 +458,39 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
-	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId) {
-		return memberDAO.getSchduleInfoByScheduleId(scheduleId);
+	public void deleteSchedule(String scheduleId) {
+		memberDAO.deleteSchedule(scheduleId);
 	}
+	
+	@Override
+	public BlliScheduleVO getScheduleInfoByScheduleId(String scheduleId) {
+		BlliScheduleVO bsvo = memberDAO.getScheduleInfoByScheduleId(scheduleId);
+		String[] splitedScheduleDate = bsvo.getScheduleDate().split("/");
+		String scheduleDateWithoutSlash = "20";
+		for(int i=0;i<splitedScheduleDate.length;i++) {
+			scheduleDateWithoutSlash += splitedScheduleDate[i];
+		}
+		bsvo.setScheduleDate(scheduleDateWithoutSlash);
+		return bsvo;
+	}
+	
+	@Override
+	public List<BlliScheduleVO> getMemberScheduleList(String memberId) {
+		return memberDAO.getMemberScheduleList(memberId);
+	}
+	
+	@Override
+	public List<BlliScheduleVO> getScheduleIdAndDateByMemberId(String memberId) {
+		return memberDAO.getScheduleIdAndDateByMemberId(memberId);
+	}
+	
+	@Override
+	public List<BlliNoticeVO> getNoticeList() {
+		return memberDAO.getNoticeList();
+	}
+	
+	
+	
 	
 	
 	@Override
@@ -475,24 +505,15 @@ public class MemberServiceImpl implements MemberService {
 	public ArrayList<BlliPostingVO> getScrapeInfoByMemberId(BlliMemberVO memberVO) {
 		return (ArrayList<BlliPostingVO>)memberDAO.getScrapeInfoByMemberId(memberVO);
 	}
-
-	@Override
-	public List<BlliScheduleVO> getMemberScheduleList(String memberId) {
-		return memberDAO.getMemberScheduleList(memberId);
-	}
-	
-
 	@Override
 	public int selectMailAgreeByMemberId(String memberId) {
 		return memberDAO.selectMailAgreeByMemberId(memberId);
 	}
-
 	@Override
 	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO) {
 		memberDAO.breakAwayFromBlli(blliBreakAwayVO);
 		memberDAO.updateMemberStatusByMemberId(blliBreakAwayVO);
 	}
 
-	
 
 }

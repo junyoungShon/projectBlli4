@@ -89,3 +89,26 @@ update blli_small_product set small_product_whentouse_max='8' where small_produc
 
 
 update blli_schedule set schedule_location = '0000000000000000', schedule_title = '00000000000000', schedule_content = '000000000000' where schedule_id = '266';
+
+
+
+select bs.baby_name, to_char(bs.schedule_date) as schedule_date, bs.schedule_title, bs.schedule_check_state, bb.baby_photo
+from blli_schedule bs, blli_baby bb
+where bs.baby_name = bb.baby_name;
+
+
+select frombs.baby_name, frombs.schedule_date, frombs.schedule_title, frombs.schedule_check_state, frombsbb.baby_photo
+from (select baby_name, to_char(schedule_date) as schedule_date, schedule_title, schedule_check_state 
+from blli_schedule where member_id = 'sk1597530@gmail.com') frombs, 
+(select bb.baby_photo from blli_baby bb, blli_schedule bs where bs.baby_name = bb.baby_name) frombsbb;
+
+select frombs.baby_name, frombs.schedule_date, frombs.schedule_title, frombs.schedule_check_state, frombsbb.baby_photo
+		from (select baby_name, schedule_date, schedule_title, schedule_check_state
+		from blli_schedule where member_id = 'sk1597530@gmail.com') frombs,
+		(select bb.baby_photo from blli_baby bb, blli_schedule bs where bs.baby_name = bb.baby_name) frombsbb;
+
+		select frombs.baby_name, frombs.schedule_date, frombs.schedule_title, frombsbb.baby_photo
+		from (select baby_name, schedule_date, schedule_title
+		from blli_schedule where schedule_check_state = '1') frombs,
+		(select bb.baby_photo from blli_baby bb, blli_schedule bs where bs.baby_name = bb.baby_name) frombsbb;
+

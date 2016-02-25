@@ -1,12 +1,13 @@
 package kr.co.blli.model.member;
 
+import java.util.HashMap;
 import java.util.List;
 
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBreakAwayVO;
 import kr.co.blli.model.vo.BlliMailVO;
-import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliNoticeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliScheduleVO;
 
@@ -43,7 +44,11 @@ public interface MemberDAO {
 	public void updateSchedule(BlliScheduleVO bsvo);
 	public void deleteSchedule(BlliScheduleVO bsvo);
 	public List<BlliScheduleVO> getMemberScheduleList(String memberId);
-	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId);
+	public BlliScheduleVO getScheduleInfoByScheduleId(String scheduleId);
+	public void deleteSchedule(String scheduleId);
+	public List<BlliScheduleVO> getScheduleIdAndDateByMemberId(String memberId);
+	public void updateCheckState(HashMap<String, Integer> updateWithThis);
+	public List<BlliNoticeVO> getNoticeList();
 
 	
 	
@@ -58,6 +63,11 @@ public interface MemberDAO {
 	public void updateMemberStatusByMemberId(BlliBreakAwayVO blliBreakAwayVO);
 
 	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO);
+
+
+	
+
+
 
 
 

@@ -48,6 +48,7 @@
 <script src="${initParam.root}js/jquery-ui.min.js"></script>
  <!-- 슬라이드 쇼를 위한 flickity api -->
 <script src="${initParam.root}js/flickity.pkgd.min.js"></script>
+
 <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
 <%-- <script src="${initParam.root}js/bootstrap.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->

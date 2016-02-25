@@ -431,6 +431,7 @@ img {
 }
 
 .top_nav{
+	width:475px;
 	color:#fff;
 	font-size:100%;
 	float:right;
@@ -441,6 +442,7 @@ img {
 .top_nav a{
 	text-decoration:none;
 	color:#fff;
+	padding:0px 20px 0px 20px !important;
 }
 
 .top_nav a:hover{
@@ -959,7 +961,7 @@ img {
 	margin-right:10px;
 }
 
-/* calpendar */
+/* calendar */
 
 .cal_year{
 	font-size:16px;
@@ -979,9 +981,10 @@ img {
 	 margin-left:450px;
 }
 
+
 .calendar{
 	clear:both;
-	padding-top:50px;
+	padding-top:30px;
 }
 
 .calendar table{
@@ -999,53 +1002,53 @@ img {
 
 .calendar td{
 	width:128px;
-	height:100px;
+	height:110px;
 	border:1px solid #cacaca;
-	padding:10px;
+	padding:3px;
 	font-family:'Nanum Barun Gothic';
 	vertical-align:top;
 	background:rgba(0,128,192,0.05);
 	cursor:pointer;
 }
 
-.cal_day{
-	font-size:20px !important;
-	text-align:right;
-}
-	
 .calendar p{
-	height:19px;
+	width:125px;
 	font-family:'Nanum Barun Gothic';
 	font-size:12px;
-	padding-top:5px;
+	padding-top:3px;
 	cursor:pointer;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
 }
 
-.cal_bg1{
-	background:#fee04a;
+.cal_day{
+	font-size:20px !important;
+	text-align:left;
+	margin-left:5px;
+	margin-bottom:9px;
+}
+
+
+.cal_bg {
+	background:#ffffcc;
+	height:18px;
 	vertical-align:middle;
 	cursor:pointer;
+	border-radius: 5px;
+	margin-top:1px;
+	border:1px solid #cacaca;
+	padding-left: 7px;
+	padding-right: 7px;
+	align: left;
 }
 
-.cal_bg2{
-	background:#fe704a;
-	vertical-align:middle;
-	cursor:pointer;
-}
-
-.cal_bg3{
-	background:#9f4afe;
-	vertical-align:middle;
-	cursor:pointer;
-}
-
-/* calpendar_plus */
+/* calendar_plus */
 
 .cal_plus_form {
 	border:1px solid #ff8040;
 	width:280px;
 	height:90.5%;
-	background:#ffffcc;
 	right:0;
 	font-family:'Nanum Barun Gothic';
 	padding:20px;
@@ -1090,87 +1093,20 @@ img {
 }
 
 
-/* calpendar2 */
+/* scheduleDetailInfoTable (줄바꿈) */
 
-.cal_plus_form2{
-	position:fixed;
-	width:280px;
-	height:100%;
-	background:#fe704a;
-	right:0;
-	font-family:'Nanum Barun Gothic';
-	padding:20px;
-	color:#fff;
+.scheduleDetailInfoTable {
+	table-layout: fixed;
 }
 
-.cal_plus_form2 th{
-	height:30px;
-	background:url(../img/dot_black.jpg) no-repeat;
-	font-size:16px;
-	padding-left:15px;
-	text-align:left;
-	font-weight:bold;
+.scheduleDetailInfoTable td{
+	text-align: justify;
+	word-wrap : break-word;
+	word-break: break-all;
 }
 
-.cal_plus_form2 td{
-	height:50px;
-	font-size:14px;
-	margin-bottom:20px;
-	text-align:left;
-	padding:5px;
-}
-
-.cal_plus_form2 input{
-	border:1px solid #fff;
-	height:30px;
-}
-
-.cal_plus_form2 textarea{
-	width:100%;
-	border:1px solid #fff;
-	height:200px;
-}
-
-/* calpendar3 */
-
-.cal_plus_form3{
-	position:fixed;
-	width:280px;
-	height:100%;
-	background:#9f4afe;
-	right:0;
-	font-family:'Nanum Barun Gothic';
-	padding:20px;
-	color:#fff;
-}
-
-.cal_plus_form3 th{
-	height:30px;
-	background:url(../img/dot_black.jpg) no-repeat;
-	font-size:16px;
-	padding-left:15px;
-	text-align:left;
-	font-weight:bold;
-}
-
-.cal_plus_form3 td{
-	height:50px;
-	font-size:14px;
-	margin-bottom:20px;
-	text-align:left;
-	padding:5px;
-}
-
-.cal_plus_form3 input{
-	border:1px solid #fff;
-	height:30px;
-}
-
-.cal_plus_form3 textarea{
-	width:100%;
-	border:1px solid #fff;
-	height:200px;
-	font-family:'Nanum Barun Gothic';
+#addScheduleForm img {
+	height: 35px;
 }
 
 
@@ -1258,6 +1194,49 @@ img {
 	color:#ffbb78;
 	line-height:5px;
 }
+
+/* 알림 기능  */
+
+.badge {
+	display: none;
+	min-width: 10px;
+	padding: 3px 7px;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 1;
+	color: #fff;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: baseline;
+	background-color: #800000;
+	border-radius: 10px;
+}
+
+.noticeList {
+	display: none;
+	background: #fff;
+	color: black;
+	position:absolute; /* z-index와 함께 필요 */
+	z-index:9999;
+	overflow:auto;
+	border-top: 1px solid #b3b3b3;
+	border-bottom: 0px;
+	border-right: 1px solid #b3b3b3;
+	border-left: 1px solid #b3b3b3;
+}
+
+.noticeList div{
+	height: 40px;
+	width: 180px;
+	border-top: 0px;
+	border-bottom: 1px solid #b3b3b3;
+	border-right: 0px;
+	border-left: 0px;
+	valign: middle;
+}
+
+
+
 
 /*툴팁을 위한 css*/
 [data-tooltip-text]:hover {
