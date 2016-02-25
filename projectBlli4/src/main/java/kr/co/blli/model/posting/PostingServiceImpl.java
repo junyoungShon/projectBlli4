@@ -9,10 +9,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
-import kr.co.blli.model.vo.BlliPostingDisLikeVO;
-import kr.co.blli.model.vo.BlliPostingLikeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
@@ -166,6 +163,22 @@ public class PostingServiceImpl implements PostingService {
 	@Override
 	public ArrayList<BlliPostingVO> getPostingSlideListInfo(String smallProductId) {
 		return (ArrayList<BlliPostingVO>)postingDAO.getPostingSlideListInfo(smallProductId);
+	}
+
+	@Override
+	public ArrayList<BlliPostingVO> getPostingList(String pageNo, String searchWord) {
+		if(pageNo == null || pageNo.equals("")){
+			pageNo = "1";
+		}
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("pageNo", pageNo);
+		map.put("searchWord", searchWord);
+		return (ArrayList<BlliPostingVO>)postingDAO.getPostingList(map);
+	}
+
+	@Override
+	public int totalPosting(String searchWord) {
+		return postingDAO.totalPosting(searchWord);
 	}
 
 }

@@ -1,7 +1,6 @@
 package kr.co.blli.controller;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,11 +18,9 @@ import kr.co.blli.model.scheduler.PostingScheduler;
 import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
-import kr.co.blli.model.vo.BlliPagingBean;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 import kr.co.blli.model.vo.BlliWordCloudVO;
-import kr.co.blli.model.vo.ListVO;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,12 +77,10 @@ public class SearchController {
 			searchWord = "";
 		}
 		ArrayList<BlliSmallProductVO> smallProductList = productService.searchBigCategory(pageNo, searchWord);
-		String viewName = "";
-		
+		String viewName = "blli_searchResultPage";
 		if(smallProductList.isEmpty()){
 			smallProductList = productService.searchMidCategory(pageNo, searchWord);
 			if(!smallProductList.isEmpty()){ // 검색 페이지(중분류명을 기준으로)로 go!
-				viewName = "blli_midCategoryDetailPage";
 				for(int i = 0;i<smallProductList.size();i++){
 					List<BlliWordCloudVO> list = productService.selectWordCloudList
 							(smallProductList.get(i).getSmallProductId());
@@ -112,27 +107,39 @@ public class SearchController {
 					mav.addObject("blliPostingVOList", postingList);
 				}else{ // 검색 페이지(제품명을 기준으로)로 go!
 					smallProductList = productService.searchSmallProductList(pageNo, searchWord);
-					viewName = "blli_midCategoryDetailPage";
-					for(int i = 0;i<smallProductList.size();i++){
-						List<BlliWordCloudVO> list = productService.selectWordCloudList
-								(smallProductList.get(i).getSmallProductId());
-						smallProductList.get(i).setBlliWordCloudVOList(list);
-						smallProductList.get(i).setPostingList(postingService.getPostingSlideListInfo(smallProductList.get(i).getSmallProductId()));
-						if(session!=null){
-							BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
-							BlliSmallProductVO blliSmallProductVO = productService.productDibChecker(blliMemberVO.getMemberId(),smallProductList.get(i));
-							smallProductList.get(i).setIsDib(blliSmallProductVO.getIsDib());
+					if(!smallProductList.isEmpty()){
+						for(int i = 0;i<smallProductList.size();i++){
+							List<BlliWordCloudVO> list = productService.selectWordCloudList
+									(smallProductList.get(i).getSmallProductId());
+							smallProductList.get(i).setBlliWordCloudVOList(list);
+							smallProductList.get(i).setPostingList(postingService.getPostingSlideListInfo(smallProductList.get(i).getSmallProductId()));
+							if(session!=null){
+								BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
+								BlliSmallProductVO blliSmallProductVO = productService.productDibChecker(blliMemberVO.getMemberId(),smallProductList.get(i));
+								smallProductList.get(i).setIsDib(blliSmallProductVO.getIsDib());
+							}
 						}
+						mav.addObject("resultList", smallProductList);
+						int totalSmallProduct = productService.totalSmallProductRelatedSearchWord(searchWord);
+						mav.addObject("totalPage", (int)Math.ceil(totalSmallProduct/5.0));
+						mav.addObject("totalSmallProduct", totalSmallProduct);
+						mav.addObject("searchWord", searchWord);
+					}else{ // 검색 페이지(포스팅 제목과 내용을 기준으로)로 go!
+						ArrayList<BlliPostingVO> postingList = postingService.getPostingList(pageNo, searchWord);
+						for(int i=0;i<postingList.size();i++){
+							BlliSmallProductVO smallProductVO = productService.getSmallProductBySmallProductId(postingList.get(i).getSmallProductId());
+							smallProductVO.setPostingVO(postingList.get(i));
+							smallProductList.add(smallProductVO);
+						}
+						mav.addObject("resultList", smallProductList);
+						int totalPosting = postingService.totalPosting(searchWord);
+						mav.addObject("totalPage", (int)Math.ceil(totalPosting/5.0));
+						mav.addObject("totalPosting", totalPosting);
+						mav.addObject("searchWord", searchWord);
 					}
-					mav.addObject("resultList", smallProductList);
-					int totalSmallProduct = productService.totalSmallProductRelatedSearchWord(searchWord);
-					mav.addObject("totalPage", (int)Math.ceil(totalSmallProduct/5.0));
-					mav.addObject("totalSmallProduct", totalSmallProduct);
-					mav.addObject("searchWord", searchWord);
 				}
 			}
 		}else{ // 검색 페이지(대분류명을 기준으로)로 go!
-			viewName = "blli_midCategoryDetailPage";
 			for(int i=0;i<smallProductList.size();i++){
 				List<BlliWordCloudVO> list = productService.selectWordCloudList
 						(smallProductList.get(i).getSmallProductId());

@@ -68,5 +68,7 @@ public interface ProductService {
 
 	public int totalSmallProductOfBigCategory(String searchWord);
 
+	public BlliSmallProductVO getSmallProductBySmallProductId(String smallProductId);
+
 
 }

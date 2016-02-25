@@ -40,44 +40,10 @@ public class BlliSmallProductVO {
 	private List<BlliSmallProductVO> otherSmallProductList;
 	//16.02.22 추가
 	private List<BlliPostingVO> postingList;
+	//16.02.25 추가
+	private BlliPostingVO postingVO;
 	public BlliSmallProductVO() {
 		super();
-	}
-	public BlliSmallProductVO(String smallProduct, String midCategory,
-			String midCategoryId, String smallProductMaker,
-			int smallProductWhenToUseMin, int smallProductWhenToUseMax,
-			int smallProductDibsCount, String smallProductMainPhotoLink,
-			int smallProductScore, String naverShoppingLink,
-			int naverShoppingRank, int smallProductPostingCount,
-			String productRegisterDay, String smallProductId,
-			int smallProductRanking, int isDib, String minPrice,
-			String searchTime, int detailViewCount, String productDbInsertDate,
-			int dbInsertPostingCount,
-			List<BlliWordCloudVO> blliWordCloudVOList, int snsShareCount) {
-		super();
-		this.smallProduct = smallProduct;
-		this.midCategory = midCategory;
-		this.midCategoryId = midCategoryId;
-		this.smallProductMaker = smallProductMaker;
-		this.smallProductWhenToUseMin = smallProductWhenToUseMin;
-		this.smallProductWhenToUseMax = smallProductWhenToUseMax;
-		this.smallProductDibsCount = smallProductDibsCount;
-		this.smallProductMainPhotoLink = smallProductMainPhotoLink;
-		this.smallProductScore = smallProductScore;
-		this.naverShoppingLink = naverShoppingLink;
-		this.naverShoppingRank = naverShoppingRank;
-		this.smallProductPostingCount = smallProductPostingCount;
-		this.productRegisterDay = productRegisterDay;
-		this.smallProductId = smallProductId;
-		this.smallProductRanking = smallProductRanking;
-		this.isDib = isDib;
-		this.minPrice = minPrice;
-		this.searchTime = searchTime;
-		this.detailViewCount = detailViewCount;
-		this.productDbInsertDate = productDbInsertDate;
-		this.dbInsertPostingCount = dbInsertPostingCount;
-		this.blliWordCloudVOList = blliWordCloudVOList;
-		this.snsShareCount = snsShareCount;
 	}
 	public String getSmallProduct() {
 		return smallProduct;
@@ -237,6 +203,12 @@ public class BlliSmallProductVO {
 	public void setPostingList(List<BlliPostingVO> postingList) {
 		this.postingList = postingList;
 	}
+	public BlliPostingVO getPostingVO() {
+		return postingVO;
+	}
+	public void setPostingVO(BlliPostingVO postingVO) {
+		this.postingVO = postingVO;
+	}
 	@Override
 	public String toString() {
 		return "BlliSmallProductVO [smallProduct=" + smallProduct
@@ -261,6 +233,7 @@ public class BlliSmallProductVO {
 				+ ", snsShareCount=" + snsShareCount
 				+ ", blliSmallProductBuyLinkVOList="
 				+ blliSmallProductBuyLinkVOList + ", otherSmallProductList="
-				+ otherSmallProductList + ", postingList=" + postingList + "]";
+				+ otherSmallProductList + ", postingList=" + postingList
+				+ ", postingVO=" + postingVO + "]";
 	}
 }

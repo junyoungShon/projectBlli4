@@ -434,11 +434,14 @@ $(document).ready(function(){
 </script>
 <div id="body">
 <c:if test="${fn:length(requestScope.resultList) == 0}">
-	<div style="margin-top: 65px; width: 100%; position: absolute; top: 0px; bottom: 79px; line-height: 500px; text-align: center;">
-		<div style="font-size: x-large; height: 10%;">
+	<div style="margin-top: 65px; width: 100%; position: absolute; top: 0px; bottom: 79px; text-align: center;">
+		<div style="height: 40%; padding-top: 5%;">
+			<img src="${initParam.root}img/notFoundImg.PNG" style="height: 100%;">
+		</div>
+		<div style="font-size: x-large; height: 10%; line-height: 100px;">
 			<font color="red">'${requestScope.searchWord}'</font>에 대한 검색 결과가 없습니다.
 		</div>
-		<div style="color: gray;">
+		<div style="color: gray; line-height: 30px;">
 			정확한 검색어 인지 확인하시고 다시 검색해 주세요.
 		</div>
 	</div>

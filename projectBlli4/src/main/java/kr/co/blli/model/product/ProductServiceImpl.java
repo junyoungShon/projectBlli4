@@ -529,5 +529,9 @@ public class ProductServiceImpl implements ProductService{
 	public int totalSmallProductOfBigCategory(String searchWord) {
 		return productDAO.totalSmallProductOfBigCategory(searchWord);
 	}
+	@Override
+	public BlliSmallProductVO getSmallProductBySmallProductId(String smallProductId) {
+		return productDAO.getSmallProductBySmallProductId(smallProductId);
+	}
 
 }

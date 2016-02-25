@@ -70,6 +70,7 @@ select * from blli_member;
 
 select count(*) from blli_small_product where small_product_status = 'confirmedbyadmin' or small_product_status = 'confirmed';
 select count(*) from blli_small_product where small_product_status = 'confirmedbyadmin';
+select count(*) from blli_small_product where small_product_status = 'confirmed';
 
 select count(*) from blli_posting where posting_status = 'unconfirmed';
 
@@ -124,3 +125,28 @@ select ceil(count(*)/10) from(
 select * from blli_small_product where small_product_status = 'confirmed';
 
 select * from blli_posting where posting_content like '%' || '분유' || '%';
+
+select * from(
+			select ceil(rownum/5) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_ranking,
+			sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
+				select b.small_product_id, min(b.buy_link_price) as min_price from (
+					select bsp.small_product_id from (
+						select mid_category_id from blli_mid_category where big_category like '%' || '' || '%'
+			)bmc, blli_small_product bsp where bmc.mid_category_id = bsp.mid_category_id and bsp.small_product_status = 'confirmed'
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
+) where page = '1' order by small_product_id
+
+select small_product_id, posting_url, posting_title, posting_content, posting_score, posting_like_count, posting_dislike_count, posting_photo_link, posting_author, posting_date, posting_rank from(
+	select ceil(rownum/5) as page, small_product_id, posting_url, posting_title, posting_content, posting_score, posting_like_count, posting_dislike_count, posting_photo_link, posting_author, posting_date, posting_rank from(
+		select bp.small_product_id, bp.posting_url, bp.posting_title, bp.posting_content, bp.posting_score, bp.posting_like_count, bp.posting_dislike_count, bp.posting_photo_link, bp.posting_author, bp.posting_date, bp.posting_rank from(
+			select small_product_id, posting_url, posting_title, posting_content, posting_score, posting_like_count, posting_dislike_count, posting_photo_link, posting_author, posting_date, posting_rank
+			from blli_posting where posting_title like '%' || '리틀미미' || '%' or posting_content like '%' || '리틀미미' || '%' and posting_status = 'confirmed' order by posting_score desc
+		)bp, blli_small_product bsp where bp.small_product_id = bsp.small_product_id and bsp.small_product_status = 'confirmed' order by posting_url desc
+	)
+) where page = '17'
+
+select count(*) from(
+	select small_product_id from blli_posting 
+	where posting_title like '%' || '리틀미미' || '%' or posting_content like '%' || '리틀미미' || '%' and posting_status = 'confirmed'
+)bp, blli_small_product bsp where bp.small_product_id = bsp.small_product_id and bsp.small_product_status = 'confirmed'
