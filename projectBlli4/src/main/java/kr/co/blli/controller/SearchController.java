@@ -73,46 +73,93 @@ public class SearchController {
 			}
 		}
 		ModelAndView mav = new ModelAndView();
-		ArrayList<BlliSmallProductVO> smallProductList = productService.searchMidCategory(pageNo, searchWord);
-		String viewName = "";
+		if(searchWord == null){
+			searchWord = "";
+		}
+		ArrayList<BlliSmallProductVO> smallProductList = productService.searchBigCategory(pageNo, searchWord);
+		String viewName = "blli_searchResultPage";
 		if(smallProductList.isEmpty()){
-			HashMap<String, Object> smallProductInfo = productService.searchSmallProduct(searchWord);
-			if(smallProductInfo.get("smallProduct") != null){
-				ArrayList<BlliPostingVO> postingList = 
-						postingService.searchPostingListInProductDetail(((BlliSmallProductVO)smallProductInfo.get("smallProduct")).getSmallProductId(),memberId,"1");
-				viewName = "blli_smallProductDetailPage";
-				mav.addObject("smallProductInfo", smallProductInfo);
-				mav.addObject("blliPostingVOList", postingList);
-			}else{
-				smallProductList = productService.searchSmallProductList(pageNo, searchWord);
-				viewName = "blli_midCategoryDetailPage";
+			smallProductList = productService.searchMidCategory(pageNo, searchWord);
+			if(!smallProductList.isEmpty()){ // 검색 페이지(중분류명을 기준으로)로 go!
+				for(int i = 0;i<smallProductList.size();i++){
+					List<BlliWordCloudVO> list = productService.selectWordCloudList
+							(smallProductList.get(i).getSmallProductId());
+					smallProductList.get(i).setBlliWordCloudVOList(list);
+					smallProductList.get(i).setPostingList(postingService.getPostingSlideListInfo(smallProductList.get(i).getSmallProductId()));
+					if(session!=null){
+						BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
+						BlliSmallProductVO blliSmallProductVO = productService.productDibChecker(blliMemberVO.getMemberId(),smallProductList.get(i));
+						smallProductList.get(i).setIsDib(blliSmallProductVO.getIsDib());
+					}
+				}
 				mav.addObject("resultList", smallProductList);
-				mav.addObject("totalPage", productService.totalPageOfSmallProductRelatedSearchWord(searchWord));
+				int totalSmallProduct = productService.totalSmallProductOfMidCategory(searchWord);
+				mav.addObject("totalPage", (int)Math.ceil(totalSmallProduct/5.0));
+				mav.addObject("totalSmallProduct", totalSmallProduct);
 				mav.addObject("searchWord", searchWord);
+			}else{
+				HashMap<String, Object> smallProductInfo = productService.searchSmallProduct(searchWord);
+				if(smallProductInfo.get("smallProduct") != null){ // 소제품 상세 페이지로 go!
+					ArrayList<BlliPostingVO> postingList = 
+							postingService.searchPostingListInProductDetail(((BlliSmallProductVO)smallProductInfo.get("smallProduct")).getSmallProductId(),memberId,"1");
+					viewName = "blli_smallProductDetailPage";
+					mav.addObject("smallProductInfo", smallProductInfo);
+					mav.addObject("blliPostingVOList", postingList);
+				}else{ // 검색 페이지(제품명을 기준으로)로 go!
+					smallProductList = productService.searchSmallProductList(pageNo, searchWord);
+					if(!smallProductList.isEmpty()){
+						for(int i = 0;i<smallProductList.size();i++){
+							List<BlliWordCloudVO> list = productService.selectWordCloudList
+									(smallProductList.get(i).getSmallProductId());
+							smallProductList.get(i).setBlliWordCloudVOList(list);
+							smallProductList.get(i).setPostingList(postingService.getPostingSlideListInfo(smallProductList.get(i).getSmallProductId()));
+							if(session!=null){
+								BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
+								BlliSmallProductVO blliSmallProductVO = productService.productDibChecker(blliMemberVO.getMemberId(),smallProductList.get(i));
+								smallProductList.get(i).setIsDib(blliSmallProductVO.getIsDib());
+							}
+						}
+						mav.addObject("resultList", smallProductList);
+						int totalSmallProduct = productService.totalSmallProductRelatedSearchWord(searchWord);
+						mav.addObject("totalPage", (int)Math.ceil(totalSmallProduct/5.0));
+						mav.addObject("totalSmallProduct", totalSmallProduct);
+						mav.addObject("searchWord", searchWord);
+					}else{ // 검색 페이지(포스팅 제목과 내용을 기준으로)로 go!
+						ArrayList<BlliPostingVO> postingList = postingService.getPostingList(pageNo, searchWord);
+						for(int i=0;i<postingList.size();i++){
+							BlliSmallProductVO smallProductVO = productService.getSmallProductBySmallProductId(postingList.get(i).getSmallProductId());
+							smallProductVO.setPostingVO(postingList.get(i));
+							smallProductList.add(smallProductVO);
+						}
+						mav.addObject("resultList", smallProductList);
+						int totalPosting = postingService.totalPosting(searchWord);
+						mav.addObject("totalPage", (int)Math.ceil(totalPosting/5.0));
+						mav.addObject("totalPosting", totalPosting);
+						mav.addObject("searchWord", searchWord);
+					}
+				}
 			}
-			//ArrayList<BlliPostingVO> postingList = postingService.searchPosting(pageNo, searchWord);
-		}else{
-			viewName = "blli_midCategoryDetailPage";
-			for(int i = 0;i<smallProductList.size();i++){
+		}else{ // 검색 페이지(대분류명을 기준으로)로 go!
+			for(int i=0;i<smallProductList.size();i++){
 				List<BlliWordCloudVO> list = productService.selectWordCloudList
 						(smallProductList.get(i).getSmallProductId());
 				smallProductList.get(i).setBlliWordCloudVOList(list);
-			}
-			mav.addObject("resultList", smallProductList);
-			mav.addObject("totalPage", productService.totalPageOfSmallProductOfMidCategory(searchWord));
-			mav.addObject("searchWord", searchWord);
-			//소제품 찜 여부 체크
-			if(session!=null){
-				BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
-				for(int i=0;i<smallProductList.size();i++){
+				smallProductList.get(i).setPostingList(postingService.getPostingSlideListInfo(smallProductList.get(i).getSmallProductId()));
+				//소제품 찜 여부 체크
+				if(session!=null){
+					BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
 					BlliSmallProductVO blliSmallProductVO = productService.productDibChecker(blliMemberVO.getMemberId(),smallProductList.get(i));
 					smallProductList.get(i).setIsDib(blliSmallProductVO.getIsDib());
 				}
 			}
+			mav.addObject("resultList", smallProductList);
+			int totalSmallProduct = productService.totalSmallProductOfBigCategory(searchWord);
+			mav.addObject("totalPage", (int)Math.ceil(totalSmallProduct/5.0));
+			mav.addObject("totalSmallProduct", totalSmallProduct);
+			mav.addObject("searchWord", searchWord);
 		}
+		
 		mav.setViewName(viewName);
-		//mav.addObject("searchWord", searchWord);
-		//mav.addObject("totalPage", postingService.totalPageOfPosting(searchWord));
 		return mav;
 	}
 	/**
@@ -231,13 +278,24 @@ public class SearchController {
 	 */
 	@ResponseBody
 	@RequestMapping("member_getSmallProductList.do")
-	public ArrayList<BlliSmallProductVO> getSmallProductList(String pageNo, String searchWord){
-		ArrayList<BlliSmallProductVO> smallProductList = productService.searchMidCategory(pageNo, searchWord);
+	public ArrayList<BlliSmallProductVO> getSmallProductList(String pageNo, String searchWord, HttpServletRequest request){
+		HttpSession session = request.getSession();
+		ArrayList<BlliSmallProductVO> smallProductList = productService.searchBigCategory(pageNo, searchWord);
 		if(smallProductList.isEmpty()){
-			smallProductList = productService.searchSmallProductList(pageNo, searchWord);
+			smallProductList = productService.searchMidCategory(pageNo, searchWord);
+			if(smallProductList.isEmpty()){
+				smallProductList = productService.searchSmallProductList(pageNo, searchWord);
+			}
 		}
 		for(int i=0;i<smallProductList.size();i++){
 			smallProductList.get(i).setBlliWordCloudVOList(productService.selectWordCloudList(smallProductList.get(i).getSmallProductId()));
+			//소제품 찜 여부 체크
+			if(session!=null){
+				BlliMemberVO blliMemberVO = (BlliMemberVO) session.getAttribute("blliMemberVO");
+				BlliSmallProductVO blliSmallProductVO = productService.productDibChecker(blliMemberVO.getMemberId(),smallProductList.get(i));
+				smallProductList.get(i).setIsDib(blliSmallProductVO.getIsDib());
+			}
+			smallProductList.get(i).setPostingList(postingService.getPostingSlideListInfo(smallProductList.get(i).getSmallProductId()));
 		}
 		return smallProductList;
 	}

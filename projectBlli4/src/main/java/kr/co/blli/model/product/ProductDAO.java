@@ -109,9 +109,9 @@ public interface ProductDAO {
 
 	int totalOtherSmallProduct(String midCategory);
 
-	int totalPageOfSmallProductOfMidCategory(String searchWord);
+	int totalSmallProductOfMidCategory(String searchWord);
 
-	int totalPageOfSmallProductRelatedSearchWord(String searchWord);
+	int totalSmallProductRelatedSearchWord(String searchWord);
 	
 	List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId);
 
@@ -181,12 +181,16 @@ public interface ProductDAO {
 
 	BlliSmallProductVO getDibSmallProduct(String smallProductId);
 
-	List<BlliSmallProductBuyLinkVO> getDibSmallProductBuyLink(String smallProductId);
-
 	String selectMinPriceBySmallProductId(String smallProductId);
 
 	List<String> getDibMidCategoryId(String memberId);
 
 	List<String> getDibSmallProductIdByMidCategory(HashMap<String, String> map);
+
+	List<BlliSmallProductVO> searchBigCategory(HashMap<String, String> map);
+
+	int totalSmallProductOfBigCategory(String searchWord);
+
+	BlliSmallProductVO getSmallProductBySmallProductId(String smallProductId);
 
 }

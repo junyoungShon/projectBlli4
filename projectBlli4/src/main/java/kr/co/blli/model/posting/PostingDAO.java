@@ -67,4 +67,8 @@ public interface PostingDAO {
 	List<BlliPostingVO> selectPostingBySmallProductList(
 			HashMap<String, String> paraMap);
 
+	List<BlliPostingVO> getPostingList(HashMap<String, String> map);
+
+	int totalPosting(String searchWord);
+
 }
