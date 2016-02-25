@@ -250,6 +250,11 @@ public class ProductServiceImpl implements ProductService{
 		for(int i=0;i<smallProductList.size();i++){
 			DecimalFormat df = new DecimalFormat("#,##0");
 			smallProductList.get(i).setMinPrice(df.format(Integer.parseInt(smallProductList.get(i).getMinPrice())));
+			smallProductList.get(i).setBlliSmallProductBuyLinkVOList(productDAO.getSmallProductBuyLink(smallProductList.get(i).getSmallProductId()));
+			ArrayList<BlliSmallProductBuyLinkVO> smallProductBuyLinkVO = (ArrayList<BlliSmallProductBuyLinkVO>) smallProductList.get(i).getBlliSmallProductBuyLinkVOList();
+			for(int j=0;j<smallProductBuyLinkVO.size();j++){
+				smallProductBuyLinkVO.get(j).setBuyLinkPrice(df.format(Integer.parseInt(smallProductBuyLinkVO.get(j).getBuyLinkPrice())));
+			}
 		}
 		return smallProductList;
 	}
@@ -311,6 +316,10 @@ public class ProductServiceImpl implements ProductService{
 			DecimalFormat df = new DecimalFormat("#,##0");
 			smallProductList.get(i).setMinPrice(df.format(Integer.parseInt(smallProductList.get(i).getMinPrice())));
 			smallProductList.get(i).setBlliSmallProductBuyLinkVOList(productDAO.getSmallProductBuyLink(smallProductList.get(i).getSmallProductId()));
+			ArrayList<BlliSmallProductBuyLinkVO> smallProductBuyLinkVO = (ArrayList<BlliSmallProductBuyLinkVO>) smallProductList.get(i).getBlliSmallProductBuyLinkVOList();
+			for(int j=0;j<smallProductBuyLinkVO.size();j++){
+				smallProductBuyLinkVO.get(j).setBuyLinkPrice(df.format(Integer.parseInt(smallProductBuyLinkVO.get(j).getBuyLinkPrice())));
+			}
 		}
 		return smallProductList;
 	}
@@ -338,28 +347,28 @@ public class ProductServiceImpl implements ProductService{
 	/**
 	 * 
 	 * @Method Name : totalPageOfSmallProductOfMidCategory
-	 * @Method 설명 : 중분류 상세페이지의 총 페이지 수를 반환해주는 메서드
+	 * @Method 설명 : 중분류 상세페이지의 총 소제품 개수를 반환해주는 메서드
 	 * @작성일 : 2016. 2. 3.
 	 * @작성자 : hyunseok
 	 * @param searchWord
 	 * @return
 	 */
 	@Override
-	public int totalPageOfSmallProductOfMidCategory(String searchWord) {
-		return productDAO.totalPageOfSmallProductOfMidCategory(searchWord);
+	public int totalSmallProductOfMidCategory(String searchWord) {
+		return productDAO.totalSmallProductOfMidCategory(searchWord);
 	}
 	/**
 	 * 
 	 * @Method Name : totalPageOfSmallProductRelatedSearchWord
-	 * @Method 설명 : 소제품 리스트 페이지(검색어가 중분류명, 소제품명과 일치하지 않는 경우)의 총 페이지 수를 반환해주는 메서드
+	 * @Method 설명 : 소제품 리스트 페이지(검색어가 중분류명, 소제품명과 일치하지 않는 경우)의 총 소제품 개수를 반환해주는 메서드
 	 * @작성일 : 2016. 2. 3.
 	 * @작성자 : hyunseok
 	 * @param searchWord
 	 * @return
 	 */
 	@Override
-	public int totalPageOfSmallProductRelatedSearchWord(String searchWord) {
-		return productDAO.totalPageOfSmallProductRelatedSearchWord(searchWord);
+	public int totalSmallProductRelatedSearchWord(String searchWord) {
+		return productDAO.totalSmallProductRelatedSearchWord(searchWord);
 	}
 	@Override
 	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId) {
@@ -494,6 +503,31 @@ public class ProductServiceImpl implements ProductService{
 			}
 		}
 		return dibMidCategoryList;
+	}
+	@Override
+	public ArrayList<BlliSmallProductVO> searchBigCategory(String pageNo, String searchWord) {
+		if(pageNo == null || pageNo == ""){
+			pageNo = "1";
+		}
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("pageNo", pageNo);
+		map.put("searchWord", searchWord);
+		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)productDAO.searchBigCategory(map);
+		//가격에 , 붙여서 다시 저장 후 반환
+		for(int i=0;i<smallProductList.size();i++){
+			DecimalFormat df = new DecimalFormat("#,##0");
+			smallProductList.get(i).setMinPrice(df.format(Integer.parseInt(smallProductList.get(i).getMinPrice())));
+			smallProductList.get(i).setBlliSmallProductBuyLinkVOList(productDAO.getSmallProductBuyLink(smallProductList.get(i).getSmallProductId()));
+			ArrayList<BlliSmallProductBuyLinkVO> smallProductBuyLinkVO = (ArrayList<BlliSmallProductBuyLinkVO>) smallProductList.get(i).getBlliSmallProductBuyLinkVOList();
+			for(int j=0;j<smallProductBuyLinkVO.size();j++){
+				smallProductBuyLinkVO.get(j).setBuyLinkPrice(df.format(Integer.parseInt(smallProductBuyLinkVO.get(j).getBuyLinkPrice())));
+			}
+		}
+		return smallProductList;
+	}
+	@Override
+	public int totalSmallProductOfBigCategory(String searchWord) {
+		return productDAO.totalSmallProductOfBigCategory(searchWord);
 	}
 
 }

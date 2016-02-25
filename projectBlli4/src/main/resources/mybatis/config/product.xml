@@ -139,12 +139,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update blli_small_product set search_time = sysdate where small_product_id = #{smallProductId}
 	</update>
 	
-	<select id="searchMidCategory" resultMap="bspvRM">
+	<select id="searchBigCategory" resultMap="bspvRM">
 		select * from(
-			select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_ranking,
+			select ceil(rownum/5) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_ranking,
 			sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
 				select b.small_product_id, min(b.buy_link_price) as min_price from (
-					select small_product_id from blli_small_product where mid_category = #{searchWord} and small_product_status = 'confirmed'
+					select bsp.small_product_id from (
+						select mid_category_id from blli_mid_category where big_category like '%' || #{searchWord} || '%'
+					)bmc, blli_small_product bsp where bmc.mid_category_id = bsp.mid_category_id and bsp.small_product_status = 'confirmed'
+				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+			)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
+		) where page = #{pageNo}
+	</select>
+	
+	<select id="searchMidCategory" resultMap="bspvRM">
+		select * from(
+			select ceil(rownum/5) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_ranking,
+			sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
+				select b.small_product_id, min(b.buy_link_price) as min_price from (
+					select small_product_id from blli_small_product where mid_category like '%' || #{searchWord} || '%' and small_product_status = 'confirmed'
 				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
 			)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
 		) where page = #{pageNo}
@@ -166,9 +179,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="searchSmallProductList" resultMap="bspvRM">
 		select small_product_id, min_price, small_product, small_product_main_photo_link, small_product_whentouse_min, small_product_ranking,
-			small_product_whentouse_max, db_insert_posting_count, small_product_score from(
-			select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, sp.small_product_ranking,
-			sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score from(
+			small_product_whentouse_max, db_insert_posting_count, small_product_score, small_product_dibs_count from(
+			select ceil(rownum/5) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, sp.small_product_ranking,
+			sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score, sp.small_product_dibs_count from(
 				select b.small_product_id, min(b.buy_link_price) as min_price from (
 					select small_product_id from blli_small_product where small_product like '%' || #{searchWord} || '%' and small_product_status = 'confirmed'
 				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
@@ -180,12 +193,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select count(*) from blli_small_product where mid_category = #{midCategory} and small_product_status = 'confirmed'
 	</select>
 	
-	<select id="totalPageOfSmallProductOfMidCategory" resultType="int">
-		select ceil(count(*)/10) from blli_small_product where mid_category = #{searchWord} and small_product_status = 'confirmed'
+	<select id="totalSmallProductOfBigCategory" resultType="int">
+		select count(*) from(
+			select mid_category_id from blli_mid_category where big_category like '%' || #{searchWord} || '%'
+		)bmc, blli_small_product bsp where bmc.mid_category_id = bsp.mid_category_id and bsp.small_product_status = 'confirmed'
 	</select>
 	
-	<select id="totalPageOfSmallProductRelatedSearchWord" resultType="int">
-		select ceil(count(*)/10) from blli_small_product where small_product like '%' || #{searchWord} || '%' and small_product_status = 'confirmed'
+	<select id="totalSmallProductOfMidCategory" resultType="int">
+		select count(*) from blli_small_product where mid_category like '%' || #{searchWord} || '%' and small_product_status = 'confirmed'
+	</select>
+	
+	<select id="totalSmallProductRelatedSearchWord" resultType="int">
+		select count(*) from blli_small_product where small_product like '%' || #{searchWord} || '%' and small_product_status = 'confirmed'
 	</select>
 	
 	<update id="subtractDbInsertPostingCount">

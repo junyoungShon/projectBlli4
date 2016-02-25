@@ -359,13 +359,13 @@ public class ProductDAOImpl implements ProductDAO{
 	}
 
 	@Override
-	public int totalPageOfSmallProductOfMidCategory(String searchWord) {
-		return sqlSessionTemplate.selectOne("product.totalPageOfSmallProductOfMidCategory", searchWord);
+	public int totalSmallProductOfMidCategory(String searchWord) {
+		return sqlSessionTemplate.selectOne("product.totalSmallProductOfMidCategory", searchWord);
 	}
 
 	@Override
-	public int totalPageOfSmallProductRelatedSearchWord(String searchWord) {
-		return sqlSessionTemplate.selectOne("product.totalPageOfSmallProductRelatedSearchWord", searchWord);
+	public int totalSmallProductRelatedSearchWord(String searchWord) {
+		return sqlSessionTemplate.selectOne("product.totalSmallProductRelatedSearchWord", searchWord);
 	}
 
 	@Override
@@ -534,8 +534,7 @@ public class ProductDAOImpl implements ProductDAO{
 	}
 	
 	@Override
-	public String selectMinPriceBySmallProductId(
-			String smallProductId) {
+	public String selectMinPriceBySmallProductId(String smallProductId) {
 		return sqlSessionTemplate.selectOne("product.selectMinPriceBySmallProductId", smallProductId);
 	}
 
@@ -547,6 +546,16 @@ public class ProductDAOImpl implements ProductDAO{
 	@Override
 	public List<String> getDibSmallProductIdByMidCategory(HashMap<String, String> map) {
 		return sqlSessionTemplate.selectList("product.getDibSmallProductIdByMidCategory", map);
+	}
+
+	@Override
+	public List<BlliSmallProductVO> searchBigCategory(HashMap<String, String> map) {
+		return sqlSessionTemplate.selectList("product.searchBigCategory", map);
+	}
+
+	@Override
+	public int totalSmallProductOfBigCategory(String searchWord) {
+		return sqlSessionTemplate.selectOne("product.totalSmallProductOfBigCategory", searchWord);
 	}
 
 }

@@ -46,9 +46,9 @@ public interface ProductService {
 
 	public ListVO getOtherProductList(String pageNo, String smallProduct);
 
-	public int totalPageOfSmallProductOfMidCategory(String searchWord);
+	public int totalSmallProductOfMidCategory(String searchWord);
 
-	public int totalPageOfSmallProductRelatedSearchWord(String searchWord);
+	public int totalSmallProductRelatedSearchWord(String searchWord);
 	
 	public List<BlliSmallProductVO> selectSmallProductRank(String midCategoryId);
 
@@ -63,6 +63,10 @@ public interface ProductService {
 	public ListVO getDibSmallProduct(String memberId, String pageNo, String midCategory);
 
 	public TreeMap<String, Integer> getDibMidCategoryList(String memberId);
+
+	public ArrayList<BlliSmallProductVO> searchBigCategory(String pageNo, String searchWord);
+
+	public int totalSmallProductOfBigCategory(String searchWord);
 
 
 }
