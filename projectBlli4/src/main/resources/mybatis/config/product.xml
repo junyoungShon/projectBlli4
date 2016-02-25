@@ -141,7 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="searchMidCategory" resultMap="bspvRM">
 		select * from(
-			select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, 
+			select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_ranking,
 			sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
 				select b.small_product_id, min(b.buy_link_price) as min_price from (
 					select small_product_id from blli_small_product where mid_category = #{searchWord} and small_product_status = 'confirmed'
@@ -159,19 +159,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id
 	</select>
 	
-	<select id="getSmallProductBuyLink" resultMap="bspblvRM">
-		select * from blli_small_prod_buy_link where small_product_id =  #{smallProductId} order by buy_link_price asc
-	</select>
-	
 	<select id="getOtherSmallProductList" resultMap="bspvRM">
 		select small_product_id, small_product, small_product_score, small_product_main_photo_link
 		from blli_small_product where mid_category_id = #{midCategoryId} and small_product_status = 'confirmed' and small_product_id != #{smallProductId} order by small_product_score desc
 	</select>
 	
 	<select id="searchSmallProductList" resultMap="bspvRM">
-		select small_product_id, min_price, small_product, small_product_main_photo_link, small_product_whentouse_min, 
+		select small_product_id, min_price, small_product, small_product_main_photo_link, small_product_whentouse_min, small_product_ranking,
 			small_product_whentouse_max, db_insert_posting_count, small_product_score from(
-			select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, 
+			select ceil(rownum/10) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_whentouse_min, sp.small_product_ranking,
 			sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score from(
 				select b.small_product_id, min(b.buy_link_price) as min_price from (
 					select small_product_id from blli_small_product where small_product like '%' || #{searchWord} || '%' and small_product_status = 'confirmed'
@@ -271,8 +267,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from blli_small_product where small_product_id = #{smallProductId} and small_product_status = 'confirmed'
 	</select>
 	
-	<select id="getDibSmallProductBuyLink" resultMap="bspblvRM">
-		select buy_link, buy_link_price, buy_link_delivery_cost, buy_link_option, seller from blli_small_prod_buy_link where small_product_id = #{smallProductId}
+	<select id="getSmallProductBuyLink" resultMap="bspblvRM">
+		select buy_link, buy_link_price, buy_link_delivery_cost, buy_link_option, seller from blli_small_prod_buy_link where small_product_id = #{smallProductId} order by buy_link_price asc
 	</select>
 	
 	<select id="getDibMidCategory" resultType="String">
