@@ -489,6 +489,10 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.getNoticeList();
 	}
 	
+	@Override
+	public List<String> getAllMemberIdList() {
+		return memberDAO.getAllMemberIdList();
+	}
 	
 	
 	
@@ -514,6 +518,8 @@ public class MemberServiceImpl implements MemberService {
 		memberDAO.breakAwayFromBlli(blliBreakAwayVO);
 		memberDAO.updateMemberStatusByMemberId(blliBreakAwayVO);
 	}
+
+	
 
 
 }

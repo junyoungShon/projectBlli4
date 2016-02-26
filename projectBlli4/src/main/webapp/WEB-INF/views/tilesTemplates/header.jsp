@@ -110,37 +110,35 @@ clear:left;
 				
 				$(".badge").text(nvoList.length);
 				
-				var noticeListText; 
+				if($(".badge").text()!="" || nvoList.length!=0) {
+					$(".badge").show();
+				}
+				
+				var noticeListText;
+				for(var i=0;i<nvoList.length;i++) {
+					noticeListText += '<div><img src="${initParam.root}img/search.png" '+nvoList.photo+'</div>';
+				}
 				
 				$(".noticeList").html(noticeListText);
 			}
 	    });
-		
-		if($(".badge").text()!="") {
-			$(".badge").show();
-		}
-		
-		
-		
+
 		
 		$(".searchBar").click(function(){
-		var searchWord = $.trim($(this).prev("input").val());
-		if(searchWord == ""){
-			return false;
-		}else{
-			location.href = "${initParam.root}searchSmallProduct.do?searchWord="+searchWord;
-		}
+			var searchWord = $.trim($(this).prev("input").val());
+			if(searchWord == ""){
+				return false;
+			}else{
+				location.href = "${initParam.root}searchSmallProduct.do?searchWord="+searchWord;
+			}
+		});
+		
+		$(".search_text").keydown(function (key) {
+	        if (key.keyCode == 13) {
+	        	$(this).next().click();
+	        }
+	    });
 	});
-	
-	$(".search_text").keydown(function (key) {
-        if (key.keyCode == 13) {
-        	$(this).next().click();
-        }
-    });
-    
-    
-	});
-
 
 </script>
 
@@ -183,21 +181,6 @@ clear:left;
 					 <li><a href="${initParam.root}member_goMain.do">Main</a></li>
 					 <li><a href="#" onclick="$('.noticeList').toggle();">알림&nbsp<span class="badge" style="background:#ff8000;"></span></a>
 					 	<div class="noticeList">
-					 	
-					 	
-					 	
-					 	
-					 	
-					 	
-					 	
-					 	
-					 	
-					 	
-					 	
-					 	
-					 	
-					 	
-					 	
 					 	</div>
 					 </li>
 					 <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>

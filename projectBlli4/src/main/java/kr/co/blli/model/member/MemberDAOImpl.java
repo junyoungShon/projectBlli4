@@ -134,14 +134,17 @@ public class MemberDAOImpl implements MemberDAO{
 		return sqlSessionTemplate.selectList("member.getScheduleIdAndDateByMemberId", memberId);
 	}
 	@Override
-	public void updateCheckState(HashMap<String, Integer> updateWithThis) {
-		sqlSessionTemplate.update("member.updateCheckState", updateWithThis);
+	public void updateCheckStateAndLeftDays(HashMap<String, Integer> updateWithThis) {
+		sqlSessionTemplate.update("member.updateCheckStateAndLeftDays", updateWithThis);
 	}
 	@Override
 	public List<BlliNoticeVO> getNoticeList() {
 		return sqlSessionTemplate.selectList("member.getNoticeList");
 	}
-	
+	@Override
+	public List<String> getAllMemberIdList() {
+		return sqlSessionTemplate.selectList("member.getAllMemberIdList");
+	}
 	
 	
 	//현석 작성 영역
@@ -174,6 +177,8 @@ public class MemberDAOImpl implements MemberDAO{
 	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO) {
 		sqlSessionTemplate.insert("member.breakAwayFromBlli",blliBreakAwayVO);
 	}
+
+	
 	
 
 	

@@ -107,8 +107,9 @@ select frombs.baby_name, frombs.schedule_date, frombs.schedule_title, frombs.sch
 		from blli_schedule where member_id = 'sk1597530@gmail.com') frombs,
 		(select bb.baby_photo from blli_baby bb, blli_schedule bs where bs.baby_name = bb.baby_name) frombsbb;
 
-		select frombs.baby_name, frombs.schedule_date, frombs.schedule_title, frombsbb.baby_photo
-		from (select baby_name, schedule_date, schedule_title
-		from blli_schedule where schedule_check_state = '1') frombs,
-		(select bb.baby_photo from blli_baby bb, blli_schedule bs where bs.baby_name = bb.baby_name) frombsbb;
+		select bs.baby_name, bs.schedule_date, bs.schedule_title, bb.baby_photo
+		from blli_schedule bs, blli_baby bb
+		where schedule_check_state = '1' and bs.baby_name = bb.baby_name
+		
 
+		

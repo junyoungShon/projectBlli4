@@ -77,6 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="scheduleDate" column="schedule_date"/>
  		<result property="scheduleTitle" column="schedule_title"/>
  		<result property="scheduleCheckState" column="schedule_check_state"/>
+ 		<result property="leftDays" column="left_days"/>
  	</resultMap>
  	
  	<!-- 준영 작성 쿼리 -->
@@ -201,25 +202,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from blli_schedule
 		where member_id = #{value}
 	</select>
+	
 	<select id="getScheduleInfoByScheduleId" resultMap="bsvRM">
 		select schedule_id, member_id, baby_name, baby_color, to_char(schedule_date) as schedule_date, schedule_title, schedule_content, schedule_location, schedule_check_state
 		from blli_schedule
 		where schedule_id = #{value}
 	</select>
+	
 	<select id="getScheduleIdAndDateByMemberId" resultMap="bsvRM">
 		select schedule_id, schedule_date
 		from blli_schedule
 		where member_id = #{value}
 	</select>
-	<update id="updateCheckState">
-		update blli_schedule set schedule_check_state = #{noticeOrNot}
+	
+	<update id="updateCheckStateAndLeftDays">
+		update blli_schedule set schedule_check_state = #{noticeOrNot} and left_days = #{leftDays}
 		where schedule_id = #{scheduleId}
 	</update>
+	
 	<select id="getNoticeList" resultMap="nvRM">
-		select frombs.baby_name, frombs.schedule_date, frombs.schedule_title, frombsbb.baby_photo
-		from (select baby_name, schedule_date, schedule_title
-		from blli_schedule where schedule_check_state = '1') frombs,
-		(select bb.baby_photo from blli_baby bb, blli_schedule bs where bs.baby_name = bb.baby_name) frombsbb
+		select bs.baby_name, bs.schedule_date, bs.schedule_title, bs.left_days, bb.baby_photo
+		from blli_schedule bs, blli_baby bb
+		where schedule_check_state = '1' and bs.baby_name = bb.baby_name
+	</select>
+	<!-- 모든 회원의 Id 목록을 불러온다 -->
+	<select id="getAllMemberIdList" resultType="java.lang.String">
+		select member_id
+		from blli_member
 	</select>
 	<!-- 용호 쿼리 끝 -->
 	
