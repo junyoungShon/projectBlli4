@@ -137,6 +137,7 @@ public class SearchController {
 						mav.addObject("searchWord", searchWord);*/
 				}
 			}
+
 		}else{ // 검색 페이지(대분류명을 기준으로)로 go!
 			for(int i=0;i<smallProductList.size();i++){
 				List<BlliWordCloudVO> list = productService.selectWordCloudList

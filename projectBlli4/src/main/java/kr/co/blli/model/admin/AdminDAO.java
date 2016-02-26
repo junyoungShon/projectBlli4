@@ -1,5 +1,6 @@
 package kr.co.blli.model.admin;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.blli.model.vo.BlliMailVO;
@@ -91,6 +92,8 @@ public interface AdminDAO {
 	BlliSmallProductVO selectMinMaxUseWhenByMidcategoryId(String midCategoryId);
 
 	void updateMinMaxUseWhenByMidcategoryId(BlliMidCategoryVO blliMidCategoryVO);
+
+	List<BlliPostingVO> selectConfirmedPostingUrlAndSmallProductId();
 
 }
  

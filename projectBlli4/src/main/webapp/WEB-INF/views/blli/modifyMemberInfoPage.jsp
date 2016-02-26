@@ -108,27 +108,27 @@
 		function emailReceiveStatusChanger(){
 			var emailStatus = $('#emailReceiveStatus').val();
 			if(emailStatus==0){
+				if(confirm('정말 이메일 수신동의를 해제하시겠습니까?')){
 					$.ajax({
 						type:"get",
 						url:"member_denySendEmail.do?memberEmail=${sessionScope.blliMemberVO.memberEmail}",
 						success:function(data){
-							$('#emailStatusDIV').text('이메일 수신 거부 해제');
+							$('#emailStatusDIV').text('이메일 수신 거부');
 							$('#emailReceiveStatus').val('1');
-							alert('이메일 수신이 동의되었습니다!');
-						}
-					});
-			}else{
-				if(confirm('정말 이메일 수신동의를 해제하시겠습니까?')){
-					$.ajax({
-						type:"get",
-						url:"member_acceptSendEmail.do?memberEmail=${sessionScope.blliMemberVO.memberEmail}",
-						success:function(data){
-							$('#emailStatusDIV').text('이메일 수신 동의 해제');
-							$('#emailReceiveStatus').val('0');
 							alert('이메일 수신이 거부되었습니다!');
 						}
 					});
 				}
+			}else{
+					$.ajax({
+						type:"get",
+						url:"member_acceptSendEmail.do?memberEmail=${sessionScope.blliMemberVO.memberEmail}",
+						success:function(data){
+							$('#emailStatusDIV').text('이메일 수신 동의');
+							$('#emailReceiveStatus').val('0');
+							alert('이메일 수신이 동의되었습니다!');
+						}
+					});
 			}
 		}
 		function breakAwayFromBlli(){
@@ -167,10 +167,10 @@
                                 </form>
                                 <div class="forgot">
                                 	<c:if test="${requestScope.blliMemberVO.mailAgree==0}">
-                                    	<a href="#" class="btn btn-simple btn-danger" onclick="emailReceiveStatusChanger()" id="emailStatusDIV">이메일 수신 동의 해제</a>
+                                    	<a href="#" class="btn btn-simple btn-danger" onclick="emailReceiveStatusChanger()" id="emailStatusDIV">이메일 수신 거부 하기</a>
                                 	</c:if>
                                 	<c:if test="${requestScope.blliMemberVO.mailAgree==1}">
-                                    	<a href="#" class="btn btn-simple btn-danger" onclick="emailReceiveStatusChanger()" id="emailStatusDIV">이메일 수신 거부 해제</a>
+                                    	<a href="#" class="btn btn-simple btn-danger" onclick="emailReceiveStatusChanger()" id="emailStatusDIV">이메일 수신 동의 하기</a>
                                 	</c:if>
                                 	<input type="hidden" value="${requestScope.blliMemberVO.mailAgree}" id="emailReceiveStatus">
                                     <a href="#" class="btn btn-simple btn-danger" data-toggle="modal" data-target="#breakAwayFromBlliModal">회원 탈퇴하기</a>

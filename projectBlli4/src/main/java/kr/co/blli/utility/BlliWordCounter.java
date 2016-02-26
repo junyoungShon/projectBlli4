@@ -1,5 +1,6 @@
 package kr.co.blli.utility;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,25 +34,29 @@ public class BlliWordCounter {
 	
 	public HashMap<String, Integer> wordCounting(StringBuffer sb){
 		long start = System.currentTimeMillis(); // 시작시간 
-		
+		Logger logger = Logger.getLogger(getClass());
+		logger.error("워드카운팅메서드 시작");
+		HashMap<String, Integer> wordAndCountMap = new HashMap<String, Integer>();
 		workflow.appendPlainTextProcessor(new SentenceSegmentor(), null);
 		workflow.appendPlainTextProcessor(new InformalSentenceFilter(), null);
 		workflow.setMorphAnalyzer(new ChartMorphAnalyzer(), "conf/plugin/MajorPlugin/MorphAnalyzer/ChartMorphAnalyzer.json");
 		workflow.appendMorphemeProcessor(new UnknownProcessor(), null);
 		workflow.setPosTagger(new HMMTagger(), "conf/plugin/MajorPlugin/PosTagger/HmmPosTagger.json");
+		try {
+			workflow.activateWorkflow(true);
+		
 		//워크 플로우 실행
 		//분석 텍스트
 		String document = sb.toString();
 		//분석
 		workflow.analyze(document);
+		logger.error("여기는본문가지고오냐 ?"+document);
 		//분석결과 문자로 출력
 		String result = workflow.getResultOfDocument();
 		//단어 및 카운트를 저장하기 위한 맵 객체
-		HashMap<String, Integer> wordAndCountMap = new HashMap<String, Integer>();
 		//개행문자로 품사태그를 기준으로 배열을 만든다.
 		String resultList [] = result.split("\n");
-		try {
-			workflow.activateWorkflow(true);
+			
 			for(int i=0;i<resultList.length;i++){
 				if(resultList[i].contains("/n")){
 					if(resultList[i].contains("/n")){
@@ -109,20 +115,24 @@ public class BlliWordCounter {
 			}
 			} catch (Exception e) {
 				e.printStackTrace();
+				logger.error("------------------Start------------------------");
+				logger.error("발생한에러 : "+e.toString());
+				logger.error("------------------End--------------------------");
 			}finally{
 				if(workflow!=null){
 					workflow.close();
 					workflow.clear();
 				}
 			}
-			wordAndCountMap = (HashMap<String, Integer>) sortByValue(wordAndCountMap);
+			/*wordAndCountMap = (HashMap<String, Integer>) sortByValue(wordAndCountMap);*/
 			Iterator<String> it = wordAndCountMap.keySet().iterator();
 			while(it.hasNext()){
 				String key = (String) it.next();
 				int value = wordAndCountMap.get(key);
 			}
 			long end = System.currentTimeMillis();  //종료시간
-			//종료-시작=실행시간		
+			//종료-시작=실행시간	
+			logger.error("워드클라우드 실행시간 : "+(end-start));
 			return wordAndCountMap;
 	}
 	/**

@@ -23,9 +23,9 @@
 	<context:component-scan base-package="kr.ac.kaist.swrc.jhannanum"/>
 	<bean class="kr.ac.kaist.swrc.jhannanum.hannanum.Workflow" autowire="default">
 		<!-- 서버용 -->
-		<!-- <constructor-arg name="baseDir" value="/usr/bin/apache-tomcat-7.0.64/webapps/blli/WEB-INF/classes/jhannanum"/> -->
+		<constructor-arg name="baseDir" value="/usr/bin/apache-tomcat-7.0.64/webapps/ROOT/jhannanum"/>
 		<!-- 로컬용 -->
-		<constructor-arg name="baseDir" value="C:\Users\Park\git\projectBlli4\projectBlli4\src\main\resources\jhannanum"/>
+		<!-- <constructor-arg name="baseDir" value="C:/Users/junyoung/git/projectBlli4/projectBlli4/src/main/resources/jhannanum"/> -->
 	</bean>
 	
 	<!-- model 계층 빈 설정 , AOP설정 비워둠 -->
@@ -37,19 +37,19 @@
 		</property>
 		<property name="url">
 			<!-- 서버용 -->
-			<!-- <value>jdbc:oracle:thin:@bllidb.crmhrt8hv6dt.ap-northeast-2.rds.amazonaws.com:1521:ORCL</value> -->
+			<value>jdbc:oracle:thin:@bllidb.crmhrt8hv6dt.ap-northeast-2.rds.amazonaws.com:1521:ORCL</value>
 			<!-- 로컬용 -->
-			<value>jdbc:oracle:thin:@127.0.0.1:1521:xe</value>
+			<!-- <value>jdbc:oracle:thin:@127.0.0.1:1521:xe</value> -->
 		</property>
 		<property name="username">
 			<!-- 서버용 -->
-		<!-- 	<value>bllidbadmin</value> -->
-			<value>scott</value>
+			<value>bllidbadmin</value>
+			<!-- <value>scott</value> -->
 		</property>
 		<property name="password">
 			<!-- 서버용 -->
-		<!-- 	<value>blliadmin890430</value> -->
-			<value>tiger</value>
+			<value>blliadmin890430</value>
+			<!-- <value>tiger</value> -->
 		</property>
 		<property name="maxActive">
 			<value>30</value>
@@ -83,8 +83,6 @@
 	<security:authentication-manager alias="authenticationManager">
 		<security:authentication-provider ref="blliAuthenticationProvider"/>
 	</security:authentication-manager>
-
- 
 	<!-- 스프링 시큐리트 설정 - 유알엘 패턴에 따른 접근 권한 제한 , 로그인 및 로그아웃 폼 커스터마이징 -->
 	<security:http use-expressions="true">
 		<security:intercept-url pattern="/admin_*" access="hasAuthority('ROLE_ADMIN')"/>

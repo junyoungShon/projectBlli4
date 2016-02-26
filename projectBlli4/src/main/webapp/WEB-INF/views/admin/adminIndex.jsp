@@ -29,10 +29,11 @@
 		<li><a href="${initParam.root}admin_checkPosting.do">싫어요</a></li>
 		<li><a href="${initParam.root}admin_checkMember.do">회원 목록</a></li>
 		<li><a href="${initParam.root}admin_checkLog.do">로그 조회</a></li>
-		<li><a href="${initParam.root}j_spring_security_logout">로그아웃</a></li>
+		<li><a href="${initParam.root}logout.do">로그아웃</a></li>
 		<li><a href="${initParam.root}admin_midCategoryUseWhenModifyBySmallProduct.do">중분류 제품 사용시기 수정 - 소분류 제품 사용시기를 기준으로</a></li>
 		<li><a href="${initParam.root}admin_allProductDownLoader.do">모든 제품 사진 다운로드</a></li>
 		<li><a href="${initParam.root}admin_checkUserExceptionLog.do">사용자에의한 익셉션 확인</a></li>
+		<li><a href="${initParam.root}admin_makingWordCloud.do">현재 confirmed인 포스팅을 대상으로 워드클라우드 생성</a></li>
 	</ul>
 	
 </form>

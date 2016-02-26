@@ -52,4 +52,6 @@ public interface AdminService {
 	public void midCategoryUseWhenModifyBySmallProduct();
 
 	ArrayList<BlliUserExceptionLogVO> checkUserExceptionLog() throws IOException;
+
+	public List<BlliPostingVO> selectConfirmedPosting();
 }
