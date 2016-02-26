@@ -136,4 +136,12 @@ public class PostingDAOImpl implements PostingDAO{
 	public List<BlliPostingVO> selectPostingBySmallProductList(HashMap<String, String> paraMap) {
 		return sqlSessionTemplate.selectList("posting.selectPostingBySmallProductList", paraMap);
 	}
+	@Override
+	public List<BlliPostingVO> getPostingList(HashMap<String, String> map) {
+		return sqlSessionTemplate.selectList("posting.getPostingList", map);
+	}
+	@Override
+	public int totalPosting(String searchWord) {
+		return sqlSessionTemplate.selectOne("posting.totalPosting", searchWord);
+	}
 }

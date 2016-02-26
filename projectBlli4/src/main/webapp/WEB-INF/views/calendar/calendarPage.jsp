@@ -14,6 +14,7 @@
 	var d = thisDay;
 	
 	$(document).ready(function(){
+		$("#addScheduleForm").hide();
 		showCalendar();
 	});
 	
@@ -63,12 +64,12 @@
 			    	var dayForDB = i+1-d1;
 			    	
 			    	
-			        if (i%7==0) {
+			        if (i>0 && i%7==0) {
 			        	calendarText += '</tr>\n<tr>';
 			        }
 			        
 			        if (i < d1 || i >= d1+numberOfDaysOfThisMonth) {
-			        	calendarText += '<td><p></p><p></p><p></p><p></p></td>';
+			        	calendarText += '<td></td>';
 			        } else {
 			        	var scheduleText = '';
 			        	
@@ -76,7 +77,7 @@
 			        	for(var j=0;j<memberScheduleList.length;j++) {
 			        		if(yearForDB<10) {
 						    	yearForDB = "0" + yearForDB;
-							}
+							} 
 			        		if(monthForDB<10) {
 			        			monthForDB = "0" + monthForDB;
 			        		}
@@ -87,10 +88,9 @@
 			        		var dateForDB = yearForDB + "/" + monthForDB + "/" + dayForDB;
 			        		
 				        	if(dateForDB==memberScheduleList[j].scheduleDate) {
-				        		scheduleText += '<p class="cal_bg1 schedule" align="center">' + memberScheduleList[j].scheduleTitle;
+				        		scheduleText += '<p class="cal_bg schedule" style="background:'+memberScheduleList[j].babyColor+';">' + memberScheduleList[j].scheduleTitle;
 				        		scheduleText += '<input type="hidden" value='+memberScheduleList[j].scheduleId+'></p>';
 				        	}
-				        	
 				        	
 				        	if(yearForDB<10) {
 						    	yearForDB = yearForDB.substring(1,2);
@@ -108,10 +108,12 @@
 			        	
 			        	//오늘 일자 표시
 			        	if(y==thisYear && m==thisMonth && (i+1-d1)==thisDay) {
-			        		calendarText += '<td class="calendarDateCell" bgcolor="orange"; ' + (i%7 ? '' : ' style="color:red;"') 
+			        		calendarText += '<td class="calendarDateCell" style="border: 2px solid red; margin:-3px;"' + (i%7 ? '' : ' style="color:red;"') 
+			        						+ ((i-6)%7 ? '' : ' style="color:blue;"')
 			        						+ '><p class="cal_day">' + (i+1-d1) + '</p>' + scheduleText +'</td>';
 				        } else {
-				        	calendarText += '<td class="calendarDateCell"' + (i%7 ? '' : ' style="color:red;"') + ((i-6)%7 ? '' : ' style="color:blue;"')
+				        	calendarText += '<td class="calendarDateCell"' + (i%7 ? '' : ' style="color:red;"') 
+				        					+ ((i-6)%7 ? '' : ' style="color:blue;"')
 				        					+ '><p class="cal_day">' + (i+1-d1) + '</p>' + scheduleText +'</td>';
 				        }
 			        }
@@ -123,26 +125,50 @@
 			    }//for
 			    
 			    $('#calendarTable').html(calendarText);
-			}//sucess
+			}//success
 	    });//ajax
 		
 	}
 	
+	
 	$(document).on('mouseenter', '.calendarDateCell',  function(){
-		$(this).css("background", "rgba(0,128,192,0.1)");
+		//오늘이 아닐때만
+		if($(this).children().text()!=thisDay){
+			$(this).css("background", "rgba(0,128,192,0.1)");
+		}
 	}).on('mouseleave', '.calendarDateCell', function() {
-		$(this).css("background", "rgba(0,128,192,0.05)");
+		if($(this).children().text()!=thisDay){
+			$(this).css("background", "rgba(0,128,192,0.05)");
+		}
 	});
 	
+	var isPointerInP;
+	
+	$(document).on('mouseenter', '.schedule',  function(){
+		isPointerInP = true;
+	}).on('mouseleave', '.schedule', function() {
+		isPointerInP = false;
+	});
 	
 	//일정을 추가하고자 하는 일자를 클릭시 해당 일자의 정보와 함께 일정 추가 양식 우측에 출력
 	$(document).on("click", ".calendarDateCell", function(){
 		
+		$(".cal_plus_form").css("background", "#ffffcc");
+		
+		if(isPointerInP==true) {
+			return;
+		}
+		
+		if($(this).children().length>=4) {
+			alert("일정은 3개까지 등록하실 수 있습니다.");
+			return;
+		}
+		
 		$(".calendarDateCell").css("background", "rgba(0,128,192,0.05)");
 		$(this).css("background", "rgba(0,128,192,0.2)"); //유지하게 하자 - if css 이용
-		  
+		
 		var year = $(".cal_year").text().substring(0,4);
-		var month = $(".cal_month").text().substring(0,$(".cal_month").text().length-1);
+		var month = $(".cal_month").text().substring(0, $(".cal_month").text().length-1);
 		var day = $(this).children().eq(0).text();
 		
 		showAddSchduleForm(year, month, day);
@@ -158,28 +184,37 @@
 			day = "0" + day;
 		}
 		
-		var date = year+"년 " + month+"월 "+day+"일"
+		var date = year+"년 " + month+"월 "+day+"일";
 		
 		var memberBabyNameList = "";
 		for(var i=0;i<$("input[name=babyNameList]").length;i++) {
-			memberBabyNameList += '<td><input type="checkbox" name="babyName" value="'+$("input[name=babyNameList]")[i].value+'" style="height:12px;">'
-								+ $("input[name=babyNameList]")[i].value + '</td>';
+			memberBabyNameList += '<td><input type="radio" name="babyName" value="'+$("input[name=babyNameList]")[i].value+'" style="height:12px;">'
+								+ $("input[name=babyNameList]")[i].value
+								+ '<input type="hidden" name="babyColor" value="'+$("input[name=babyColor]")[i].value+'"></td>';
 		}
 		
-		var showAddSchduleFormText = '<div class="cal_plus_form"><div class="cal_plus_ti">아이 일정 추가</div>'
-										+'<table><tr><th colspan="3">누구의 일정인가요?</th></tr>'
-										+'<tr>'+memberBabyNameList+'<input type="hidden" name="scheduleDateForAdd" value="'+ year + month + day +'"></tr>'
-										+'<tr><th colspan="2">날짜</th><th>장소입력</th></tr>'
-										+'<tr><td colspan="2">'+date+'</td>'
-										+'<td><input type="text" name="scheduleLocation" size="10"></td></tr>'
-										+'<tr><th colspan="3">제목</th></tr><tr><td colspan="3"><input type="text" style="width:100%;" name="scheduleTitle"></td></tr><tr><th colspan="3">'
-										+'상세내용</th></tr><tr><td colspan="3"><textarea name="scheduleContent"></textarea></td></tr><tr><td colspan="3">'
-										+'<a href="#"><img src="./img/cal_plus3.jpg" alt="일정추가하기" class="fl" id="addScheduleBtn"></a>&nbsp'
-										+'<a href="#"><img src="./img/cal_cancle.jpg" alt="취소하기" class="fr" id="addScheduleCancelBtn"></a>'
-										+'</td></tr></table></div>';
+		$(".cal_plus_ti").text("일정 등록");
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(1).children().html(
+			memberBabyNameList+'<input type="hidden" name="scheduleDateForAdd" value="'+ year + month + day +'">'
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(3).children().siblings().eq(0).html(date);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(3).children().siblings().eq(1).html(
+			'<input type="text" name="scheduleLocation" size="10">'
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(5).children().html(
+				'<input type="text" style="width:100%;" name="scheduleTitle">');
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(7).children().html(
+				'<textarea name="scheduleContent"></textarea>'
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(8).children().html(
+			'<a href="#"><img src="./img/regist_schedule.png" alt="등록" class="fl" id="addScheduleBtn"></a>'
+			+'<a href="#"><img src="./img/cancel_schedule.png" alt="취소" class="fr" id="cancelScheduleBtn"></a>'
+		);
 		
-										
-		document.getElementById('addScheduleForm').innerHTML = showAddSchduleFormText;
+		$("#addScheduleForm").show();
+		
+		//텍스트 애니메이션으로 날짜 변경 알려주기
+		//$('#date').animate({'font-size':'16px'}, 1000, 'easeOutQuad');
 	}
 	
 	
@@ -201,16 +236,39 @@
 			alert("내용을 입력해주세요.");
 			return;
 		}
+		if($("input[name=scheduleLocation]").val().length>8) {
+			alert("장소는 8자 이하로 입력해주세요.");
+			return;
+		}
+		if($("input[name=scheduleTitle]").val().length>20) {
+			alert("제목은 20자 이하로 입력해주세요.");
+			return;
+		}
+		if($("textarea[name=scheduleContent]").val().length>100) {
+			alert("내용은 100자 이하로 입력해주세요.");
+			return;
+		}
+		
+		var babyColor;
+		
+		if($("input[name=babyName]:checked").siblings().val()==1) {
+			babyColor = "#FFDEAD";
+		} else if($("input[name=babyName]:checked").siblings().val()==2) {
+			babyColor = "#F4A460";
+		} else if($("input[name=babyName]:checked").siblings().val()==3) {
+			babyColor = "#CD853F";
+		}
 		
 		$.ajax({
 			type: "POST",
 			url: "${initParam.root}member_addSchedule.do",
 			data: "babyName="+$("input[name=babyName]:checked").val()
+					+"&babyColor="+babyColor
 					+"&scheduleDate="+$("input[name=scheduleDateForAdd]").val()
 					+"&memberId=${sessionScope.blliMemberVO.memberId}"
 					+"&scheduleTitle="+$("input[name=scheduleTitle]").val()
 					+"&scheduleLocation="+$("input[name=scheduleLocation]").val()
-					+"&scheduleContent="+$("textarea[name=scheduleContent]").val(),
+					+"&scheduleContent=<pre>"+$("textarea[name=scheduleContent]").val()+"</pre>", //위치 그대로 출력하기 위한 pre태그
 			cache: false,
 			success: function(bsvo){
 				
@@ -231,7 +289,7 @@
 				day = day*1;
 				
 				showCalendar(year, month, day);
-				alert("일정이 추가되었습니다.");
+				alert("일정이 등록되었습니다.");
 				showSchduleDetail(bsvo);
 			}
 	    });
@@ -240,9 +298,7 @@
 	
 	function showSchduleDetail(bsvo) {
 		
-		alert(bsvo.scheduleDate);
-		
-		var yearToString = "20" + bsvo.scheduleDate.substring(2,4)+"년 ";
+		var yearToString = bsvo.scheduleDate.substring(0,4)+"년 ";
 		
 		//1의 자리라서 앞에 0이 붙어있었다면 지워준다.
 		var monthToString = bsvo.scheduleDate.substring(4,6)+"월 ";
@@ -255,45 +311,50 @@
 		}
 		
 		var dateToString = yearToString + monthToString + dayToString;
-		
-		var showSchduleDetailText = '<div class="cal_plus_form"><div class="cal_plus_ti">일정 보기</div>'
-										+'<table><tr><th colspan="3">누구의 일정인가요?</th></tr>'
-										+'<tr><td>'+bsvo.babyName+'</td></tr>'
-										+'<tr><th colspan="2">날짜</th><th>장소</th></tr>'
-										+'<tr><td colspan="2">'+dateToString+'</td>'
-										+'<td>'+bsvo.scheduleLocation+'</td></tr>'
-										+'<tr><th colspan="3">제목</th></tr><tr><td colspan="3">'+bsvo.scheduleTitle+'</td></tr>'
-										+'<tr><th colspan="3">내용</th></tr><tr><td colspan="3">'+bsvo.scheduleContent+'</td>'
-										+'<input type="hidden" name="scheduleId" value="'+bsvo.scheduleId+'"></tr>'
-										+'<tr><td colspan="3">'
-										+'<a href="#"><img src="./img/cal_plus3.jpg" alt="수정하기" class="fl" id="changeFormToUpdateScheduleBtn"></a>&nbsp'
-										+'<a href="#"><img src="./img/cal_cancle.jpg" alt="취소하기" class="fr" id="addScheduleCancelBtn"></a>'
-										+'</td></tr></table></div>';
+										
+		$(".cal_plus_ti").text("일정 보기");								
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(1).children().html(
+			bsvo.babyName
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(3).children().siblings().eq(0).html(
+			dateToString
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(3).children().siblings().eq(1).html(
+			bsvo.scheduleLocation
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(5).children().html(
+			bsvo.scheduleTitle
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(7).children().html(
+			bsvo.scheduleContent
+			+'<input type="hidden" name="scheduleId" value="'+bsvo.scheduleId+'">'
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(8).children().html(
+			'<a href="#"><img src="./img/update_schedule.png" alt="수정" class="fl" id="changeFormToUpdateScheduleBtn"></a>'
+			+'<a href="#"><img src="./img/delete_schedule.png" alt="삭제" class="fr" id="deleteScheduleBtn"></a>'
+		);
 			
-		document.getElementById('addScheduleForm').innerHTML = showSchduleDetailText;
+		$(".cal_plus_form").css("background", bsvo.babyColor);
+		$("#addScheduleForm").show();
 	}
 	
 	
 	//일정 클릭시 해당 일정의 상세 정보를 보여준다.
 	$(document).on("click", ".schedule", function(){
-		
 		$.ajax({
 			type: "POST",
-			url: "${initParam.root}member_getSchduleInfoByScheduleId.do",
+			url: "${initParam.root}member_getScheduleInfoByScheduleId.do",
 			data: "scheduleId="+$(this).children().val(),
 			cache: false,
 			success: function(bsvo){
-				
-				
 				showSchduleDetail(bsvo);
 			}
 	    });
-		
 	});
 	
 	
-	$(document).on("click", "#addScheduleCancelBtn", function(){
-		document.getElementById('addScheduleForm').innerHTML = '';
+	$(document).on("click", "#cancelScheduleBtn", function(){
+		$("#addScheduleForm").hide();
 	});
 	
 	$(document).on("click", "#changeFormToUpdateScheduleBtn", function(){
@@ -304,23 +365,29 @@
 		var title = $(this).parent().parent().parent().siblings().eq(5).children().text();
 		var content = $(this).parent().parent().parent().siblings().eq(7).children().text();
 						
-		var scheduleId = $(this).parent().parent().parent().siblings().eq(7).children().siblings().eq(1).val();
+		var scheduleId = $("input[name=scheduleId]").val();
 		
-		var updateScheduleText = '<div class="cal_plus_form"><div class="cal_plus_ti">일정 수정</div>'
-										+'<table><tr><th colspan="3">누구의 일정인가요?</th></tr>'
-										+'<tr><td>'+babyName+'</td></tr>'
-										+'<tr><th colspan="2">날짜</th><th>장소</th></tr>'
-										+'<tr><td colspan="2">'+date+'</td>'
-										+'<td><input type="text" size="14" name="scheduleLocation" value="'+location+'"></td></tr>'
-										+'<tr><th colspan="3">제목</th></tr><tr><td colspan="3"><input type="text" style="width:100%;" name="scheduleTitle" value="'
-										+title+'"></td></tr>'
-										+'<tr><th colspan="3">내용</th></tr><tr><td colspan="3"><input type="text" style="width:100%;" name="scheduleContent" value="'
-										+content+'"></td><input type="hidden" name="scheduleId" value="'+scheduleId+'"></tr><tr><td colspan="3">'
-										+'<a href="#"><img src="./img/cal_plus3.jpg" alt="확인" class="fl" id="updateScheduleBtn"></a>&nbsp'
-										+'<a href="#"><img src="./img/cal_cancle.jpg" alt="취소" class="fr" id="addScheduleCancelBtn"></a>'
-										+'</td></tr></table></div>';
-									
-		document.getElementById('addScheduleForm').innerHTML = updateScheduleText;
+		$(".cal_plus_ti").text("일정 수정");								
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(1).children().html(
+			babyName
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(3).children().siblings().eq(0).html(
+			date
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(3).children().siblings().eq(1).html(
+			'<input type="text" size="14" name="scheduleLocation" value="'+location+'">'
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(5).children().html(
+			'<input type="text" style="width:100%;" name="scheduleTitle" value="'+title+'">'
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(7).children().html(
+			'<textarea name="scheduleContent">'+content+'</textarea>'
+			+'<input type="hidden" name="scheduleId" value="'+scheduleId+'">'
+		);
+		$("#scheduleDetailInfoTable").children().children().siblings().eq(8).children().html(
+			'<a href="#"><img src="./img/confirm_schedule.png" alt="확인" class="fl" id="updateScheduleBtn"></a>'
+			+'<a href="#"><img src="./img/cancel_schedule.png" alt="취소" class="fr" id="cancelScheduleBtn"></a>'
+		);
 	});
 	
 	$(document).on("click", "#updateScheduleBtn", function(){
@@ -329,7 +396,7 @@
 		var titleVal = $(this).parent().parent().parent().siblings().eq(5).children().children().val();
 		var contentVal = $(this).parent().parent().parent().siblings().eq(7).children().children().val();
 		
-		var scheduleIdVal = $(this).parent().parent().parent().siblings().eq(7).children().siblings().eq(1).val();
+		var scheduleIdVal = $("input[name=scheduleId]").val();
 		
 		if(locationVal=="") {
 			alert("일정 장소를 입력해주세요.");
@@ -372,6 +439,8 @@
 				thisMonth = thisMonth*1;
 				thisDay = thisDay*1;
 				
+				bsvo.scheduleId = scheduleIdVal;
+				
 				showCalendar(thisYear, thisMonth, thisDay);
 				alert("일정이 수정되었습니다.");
 				showSchduleDetail(bsvo);
@@ -380,14 +449,51 @@
 		
 	});
 	
+	
+	$(document).on("click", "#deleteScheduleBtn", function(){
+		
+		if(!confirm("삭제하시겠습니까?")){
+			return;
+		};
+		
+		$.ajax({
+			type: "POST",
+			url: "${initParam.root}member_deleteSchedule.do",
+			data: "scheduleId="+$("input[name=scheduleId]").val(),
+			cache: false,
+			success: function(){
+				showCalendar();
+				alert("일정이 삭제되었습니다.");
+				$("#addScheduleForm").hide();
+			}
+	    });
+		
+	});
+	
 </script>
 
-<body background="./img/calendar_bgimg_winter.jpg" style="background-size:100% 100%;">
 
-	<c:forEach items="${sessionScope.blliMemberVO.blliBabyVOList}" var="blliBabyVOList">
+<c:set var="season" value=""/> <!-- 계절별로 배경이미지 다르게 -->
+<c:choose>
+	<c:when test="">
+		<body background="./img/calendar_bgimg_winter.jpg" style="background-size:100% 100%;">
+	</c:when>
+	<c:when test="">
+		<body background="./img/calendar_bgimg_winter.jpg" style="background-size:100% 100%;">
+	</c:when>
+	<c:when test="">
+		<body background="./img/calendar_bgimg_winter.jpg" style="background-size:100% 100%;">
+	</c:when>
+	<c:otherwise>
+		<body background="./img/calendar_bgimg_winter.jpg" style="background-size:100% 100%;">
+	</c:otherwise>
+</c:choose>
+
+	<c:forEach items="${sessionScope.blliMemberVO.blliBabyVOList}" var="blliBabyVOList" varStatus="status">
 		<input type="hidden" name="babyNameList" value="${blliBabyVOList.babyName}">
+		<input type="hidden" name="babyColor" value="${status.count}">
 	</c:forEach>
-
+	
     <div class="jbContent">
 		<div class="in_fr">
 			<div>
@@ -395,7 +501,7 @@
 					이달의 아이 일정
 				</div>
 				<div>
-					<div id="calendarControllerDiv" style="margin-top:30px;">
+					<div id="calendarControllerDiv" style="margin-top:30px; vertical-align:middel;">
 						<a href="#">
 							<img src="./img/allow_lgray.jpg" alt="왼쪽 화살표" class="fl" onclick="showCalendar('left')">
 						</a>
@@ -413,6 +519,43 @@
 				</div>
 			</div>
 		</div>
-		<div id="addScheduleForm"></div>
+		<div id="addScheduleForm">
+			<div class="cal_plus_form">
+				<div class="cal_plus_ti"></div>
+				<table id="scheduleDetailInfoTable">
+					<tr>
+						<th colspan="3">누구의 일정인가요?</th>
+					</tr>
+					<tr>
+						<td><!-- 아기 이름 --></td>
+					</tr>
+					<tr>
+						<th colspan="2">날짜</th>
+						<th>장소</th>
+					</tr>
+					<tr>
+						<td colspan="2"><!-- 날짜 --></td>
+						<td><!-- 장소 --></td>
+					</tr>
+					<tr>
+						<th colspan="3">제목</th>
+					</tr
+					><tr>
+						<td colspan="3"><!-- 제목 --></td>
+					</tr>
+					<tr>
+						<th colspan="3">내용</th>
+					</tr>
+					<tr>
+						<td colspan="3" style="margin-bottom: 20px;"><!-- 내용 --></td>
+					</tr>
+					<tr>
+						<td colspan="3" align="center">
+							<!-- 이미지 -->
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
     </div>
 </body>

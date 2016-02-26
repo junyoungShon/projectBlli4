@@ -1,5 +1,6 @@
 package kr.co.blli.model.member;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -7,8 +8,8 @@ import javax.annotation.Resource;
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBreakAwayVO;
 import kr.co.blli.model.vo.BlliMailVO;
-import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliNoticeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliScheduleVO;
 
@@ -121,15 +122,34 @@ public class MemberDAOImpl implements MemberDAO{
 		return sqlSessionTemplate.selectList("member.getMemberScheduleList", memberId);
 	}
 	@Override
-	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId) {
-		return sqlSessionTemplate.selectOne("member.getSchduleInfoByScheduleId", scheduleId);
+	public BlliScheduleVO getScheduleInfoByScheduleId(String scheduleId) {
+		return sqlSessionTemplate.selectOne("member.getScheduleInfoByScheduleId", scheduleId);
 	}
+	@Override
+	public void deleteSchedule(String scheduleId) {
+		sqlSessionTemplate.delete("member.deleteSchedule", scheduleId);
+	}
+	@Override
+	public List<BlliScheduleVO> getScheduleIdAndDateByMemberId(String memberId) {
+		return sqlSessionTemplate.selectList("member.getScheduleIdAndDateByMemberId", memberId);
+	}
+	@Override
+	public void updateCheckState(HashMap<String, Integer> updateWithThis) {
+		sqlSessionTemplate.update("member.updateCheckState", updateWithThis);
+	}
+	@Override
+	public List<BlliNoticeVO> getNoticeList() {
+		return sqlSessionTemplate.selectList("member.getNoticeList");
+	}
+	
+	
 	
 	//현석 작성 영역
 	@Override
 	public int denySendEmail(String memberEmail) {
 		return sqlSessionTemplate.update("member.denySendEmail", memberEmail);
 	}
+	
 	@Override
 	public int acceptSendEmail(String memberEmail) {
 		return sqlSessionTemplate.update("member.acceptSendEmail", memberEmail);
@@ -154,6 +174,8 @@ public class MemberDAOImpl implements MemberDAO{
 	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO) {
 		sqlSessionTemplate.insert("member.breakAwayFromBlli",blliBreakAwayVO);
 	}
+	
 
+	
 
 }

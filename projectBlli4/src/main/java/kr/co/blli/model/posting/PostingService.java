@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 
@@ -32,5 +31,9 @@ public interface PostingService {
 	List<BlliPostingVO> searchPostingBySmallProductList(
 			List<BlliSmallProductVO> blliSmallProductVOList, String memberId,
 			String pageNum);
+
+	abstract ArrayList<BlliPostingVO> getPostingList(String pageNo, String searchWord);
+
+	abstract int totalPosting(String searchWord);
 
 }

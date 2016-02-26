@@ -191,4 +191,6 @@ public interface ProductDAO {
 
 	int totalSmallProductOfBigCategory(String searchWord);
 
+	BlliSmallProductVO getSmallProductBySmallProductId(String smallProductId);
+
 }

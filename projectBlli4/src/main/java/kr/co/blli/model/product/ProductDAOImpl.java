@@ -558,4 +558,9 @@ public class ProductDAOImpl implements ProductDAO{
 		return sqlSessionTemplate.selectOne("product.totalSmallProductOfBigCategory", searchWord);
 	}
 
+	@Override
+	public BlliSmallProductVO getSmallProductBySmallProductId(String smallProductId) {
+		return sqlSessionTemplate.selectOne("product.getSmallProductBySmallProductId", smallProductId);
+	}
+
 }
