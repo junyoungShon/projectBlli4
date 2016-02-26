@@ -216,7 +216,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="updateCheckStateAndLeftDays">
-		update blli_schedule set schedule_check_state = #{noticeOrNot} and left_days = #{leftDays}
+		update blli_schedule set schedule_check_state = #{noticeOrNot}, left_days = #{leftDays}
 		where schedule_id = #{scheduleId}
 	</update>
 	

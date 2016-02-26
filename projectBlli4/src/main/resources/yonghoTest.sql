@@ -73,6 +73,8 @@ select * from blli_small_product;
 select product_db_insert_date from blli_small_product;
 
 update blli_small_product set small_product_status='confirmed' where small_product_status='unconfirmed';
+update blli_small_product set small_product_whentouse_min='2' where small_product_status='confirmed';
+update blli_small_product set small_product_whentouse_max='8' where small_product_status='confirmed';
 
 
 insert into blli_schedule (schedule_id, member_id, baby_name, schedule_date, schedule_title, schedule_location, schedule_content)
@@ -81,16 +83,18 @@ insert into blli_schedule (schedule_id, member_id, baby_name, schedule_date, sch
 select * from blli_schedule;
 
 delete from blli_schedule;
+delete from blli_posting;
+delete from blli_mid_category;
 
 update blli_posting set posting_status='confirmed';
 
+update blli_small_product set small_product_status='confirmed' where small_product_status='unconfirmed';
 update blli_small_product set small_product_whentouse_min='2' where small_product_status='confirmed';
 update blli_small_product set small_product_whentouse_max='8' where small_product_status='confirmed';
 
-
 update blli_schedule set schedule_location = '0000000000000000', schedule_title = '00000000000000', schedule_content = '000000000000' where schedule_id = '266';
 
-
+update blli_posting set posting_status='confirmed' where posting_status='unconfirmed';
 
 select bs.baby_name, to_char(bs.schedule_date) as schedule_date, bs.schedule_title, bs.schedule_check_state, bb.baby_photo
 from blli_schedule bs, blli_baby bb
@@ -112,4 +116,4 @@ select frombs.baby_name, frombs.schedule_date, frombs.schedule_title, frombs.sch
 		where schedule_check_state = '1' and bs.baby_name = bb.baby_name
 		
 
-		
+		select * from blli_member;
