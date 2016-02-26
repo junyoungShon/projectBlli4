@@ -23,8 +23,9 @@ import org.springframework.stereotype.Component;
 public class BlliAop {
 	@Resource
 	private PostingDAO postingDAO;
-	@Around("within(kr.co.blli.*.*.*)")
+	@Around("execution(* kr.co.blli.controller.*.*(..)) & execution(* kr.co.blli.member.*.*(..)) & execution(* kr.co.blli.posting.*.*(..)) & execution(* kr.co.blli.product.*.*(..)) & execution(* kr.co.blli.security.*.*(..)) & execution(* kr.co.blli.utility.*.*(..))")
 	public Object checkScheduler(ProceedingJoinPoint point) throws Throwable{
+		System.out.println("AOP~!");
 		Logger logger = Logger.getLogger(getClass());
 		Object retValue= null;
 		try{
