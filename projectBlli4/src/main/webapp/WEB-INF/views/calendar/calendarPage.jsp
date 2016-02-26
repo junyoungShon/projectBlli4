@@ -142,8 +142,8 @@
 		}
 	});
 	
+	//마우스가 td위이면서 p위에 있으면 td 클릭 이벤트를 실행하지 않는다.
 	var isPointerInP;
-	
 	$(document).on('mouseenter', '.schedule',  function(){
 		isPointerInP = true;
 	}).on('mouseleave', '.schedule', function() {

@@ -2,14 +2,10 @@
 	<wb-module deploy-name="projectBlli4">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
 		<wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-<<<<<<< HEAD
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-=======
-		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-		<wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
->>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli4.git
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
 		<property name="java-output-path" value="target/classes"/>
-        <property name="context-root" value="projectBlli4"/>
+        <property name="context-root" value="blli"/>
 	</wb-module>
 </project-modules>

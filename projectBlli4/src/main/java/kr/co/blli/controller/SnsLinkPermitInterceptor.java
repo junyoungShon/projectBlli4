@@ -24,9 +24,11 @@ public class SnsLinkPermitInterceptor extends HandlerInterceptorAdapter{
 			Authentication auth=ctx.getAuthentication();*/
 			//메인 페이지로 이동하며 세션에 blliMemberVO객체를 담아준다.
 			//Query : member_id,member_email,member_name,member_state,authority,recommending_baby_name
-			BlliMemberVO blliMemberVO = new BlliMemberVO();
-			blliMemberVO.setMemberId("anonymousBySns");
-			session.setAttribute("blliMemberVO", blliMemberVO);
+			if(session.getAttribute("blliMemberVO")==null){
+				BlliMemberVO blliMemberVO = new BlliMemberVO();
+				blliMemberVO.setMemberId("anonymousBySns");
+				session.setAttribute("blliMemberVO", blliMemberVO);
+			}
 			flag = true;
 		}
 		return flag;
