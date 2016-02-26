@@ -24,8 +24,8 @@ public class BlliAop {
 	@Resource
 	private PostingDAO postingDAO;
 	
-	/*@Around("execution(public * kr.co.blli.utility.BlliWordCounter.*(..))")*/
-	@Around("!bean(kr.co.blli.scheduler.*)")
+	@Around("bean(*)")
+	/*@Around("!bean(kr.co.blli.scheduler.*)")*/
 	public Object checkScheduler(ProceedingJoinPoint point){
 		Object retValue= null;
 		Logger logger = Logger.getLogger(getClass());
