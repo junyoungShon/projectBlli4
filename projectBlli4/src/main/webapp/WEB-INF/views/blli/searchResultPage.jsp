@@ -435,8 +435,8 @@ $(document).ready(function(){
 <div id="body">
 <c:if test="${fn:length(requestScope.resultList) == 0}">
 	<div style="margin-top: 65px; width: 100%; position: absolute; top: 0px; bottom: 79px; text-align: center;">
-		<div style="height: 40%; padding-top: 5%;">
-			<img src="${initParam.root}img/notFoundImg.PNG" style="height: 100%;">
+		<div style="height: 10%; padding-top: 15%;">
+			<img src="${initParam.root}image/blliLogo_orange.jpg" style="height: 100%;">
 		</div>
 		<div style="font-size: x-large; height: 10%; line-height: 100px;">
 			<font color="red">'${requestScope.searchWord}'</font>에 대한 검색 결과가 없습니다.
@@ -464,7 +464,7 @@ $(document).ready(function(){
 			</div>
 			<div>
 				<div class="result_foto fl" style="width: 320px;">
-					<img src="${smallProductList.smallProductMainPhotoLink}" alt="${smallProductList.smallProduct}" style="width: 80%; height: 100%; vertical-align: middle; margin-left: 50px;">
+					<img src="${smallProductList.smallProductMainPhotoLink}" alt="${smallProductList.smallProduct}" style="width: 80%; height: 100%; vertical-align: middle; margin-left: 50px; cursor: pointer;" onclick="${initParam.root}goSmallProductDetailView.do?smallProduct=${smallProductList.smallProduct}">
 					<div class="product_month" style="margin-left: 50px;">
 						${smallProductList.smallProductWhenToUseMin}~${smallProductList.smallProductWhenToUseMax}<br/>
 						개월

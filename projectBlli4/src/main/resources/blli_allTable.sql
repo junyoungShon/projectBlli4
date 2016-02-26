@@ -308,6 +308,13 @@ create table MONTHLY_PRODUCT_AND_N_MID(
 	constraint BlliPRODUCTNAVER_MId2 foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id), -- mid_category_id 추가
 	constraint pk_MONTHLY_PRODUCT_AND_N_MID primary key (Monthly_Product_ID,Mid_Category_id,mid_category)
 )
+--2016.02.몰라 추가
+drop table blli_permanent_dead_posting cascade constraint;
+CREATE TABLE blli_permanent_dead_posting (
+	posting_url     VARCHAR2(300) NOT NULL,
+	posting_title   VARCHAR2(450) NOT NULL,
+	constraint pk_permanent_dead_posting primary key(posting_url, posting_title)
+);
 
 ------------------------------------------------------------------------------------------------------------
 

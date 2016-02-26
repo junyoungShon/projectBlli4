@@ -62,7 +62,7 @@ public class SearchController {
 	 * @param searchWord
 	 * @return
 	 */
-	@RequestMapping("searchSmallProduct.do")
+	@RequestMapping("member_searchSmallProduct.do")
 	public ModelAndView searchSmallProduct(String pageNo, String searchWord,HttpServletRequest request){
 		HttpSession session = request.getSession();
 		String memberId = "anonymous";

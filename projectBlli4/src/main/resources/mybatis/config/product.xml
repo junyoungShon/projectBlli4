@@ -148,8 +148,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 						select mid_category_id from blli_mid_category where big_category = #{searchWord}
 					)bmc, blli_small_product bsp where bmc.mid_category_id = bsp.mid_category_id and bsp.small_product_status = 'confirmed'
 				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
-			)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
-		) where page = #{pageNo} order by small_product_id
+			)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc, small_product_id asc
+		) where page = #{pageNo}
 	</select>
 	
 	<select id="searchMidCategory" resultMap="bspvRM">
@@ -159,8 +159,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				select b.small_product_id, min(b.buy_link_price) as min_price from (
 					select small_product_id from blli_small_product where mid_category = #{searchWord}  and small_product_status = 'confirmed'
 				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
-			)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
-		) where page = #{pageNo} order by small_product_id
+			)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc, small_product_id asc
+		) where page = #{pageNo} 
 	</select>
 	
 	<select id="searchSmallProduct" resultMap="bspvRM">
@@ -185,8 +185,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				select b.small_product_id, min(b.buy_link_price) as min_price from (
 					select small_product_id from blli_small_product where small_product like '%' || #{searchWord} || '%' and small_product_status = 'confirmed'
 				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
-			)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
-		) where page = #{pageNo} order by small_product_id
+			)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc, small_product_id asc
+		) where page = #{pageNo} 
 	</select>
 	
 	<select id="totalOtherSmallProduct" resultType="int">
@@ -287,7 +287,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="getSmallProductBuyLink" resultMap="bspblvRM">
-		select buy_link, buy_link_price, buy_link_delivery_cost, buy_link_option, seller from blli_small_prod_buy_link where small_product_id = #{smallProductId} order by buy_link_price asc
+		select small_product_id, buy_link, buy_link_price, buy_link_delivery_cost, buy_link_option, seller from blli_small_prod_buy_link where small_product_id = #{smallProductId} order by buy_link_price asc
 	</select>
 	
 	<select id="getDibMidCategory" resultType="String">

@@ -430,6 +430,16 @@ $(document).on("click", ".smallProductDibBtn", function(){
 
 $(document).ready(function(){
 	
+	var bodyHeight = $("#body").height();
+	var jbMenuHeight = $(".jbMenu").height();
+	var footerHeight = $(".container.footer footer").height();
+	var windowHeight = window.innerHeight;
+	if(windowHeight > (bodyHeight+jbMenuHeight+footerHeight)){
+		$(".container.footer").css("position", "absolute");
+		$(".container.footer").css("width", "100%");
+		$(".container.footer").css("bottom", "0px");
+	}
+	
 	$( '.jbMenu' ).addClass( 'jbFixed' );
 	
 	$(".postingImg").show();
@@ -450,6 +460,19 @@ $(document).ready(function(){
 	
 });
 </script>
+<div id="body">
+<c:choose>
+<c:when test="${fn:length(requestScope.smallProductList.list) == 0}">
+	<div style="margin-top: 65px; width: 100%; position: absolute; top: 0px; bottom: 79px; text-align: center;">
+		<div style="height: 10%; padding-top: 15%; padding-bottom: 2%;">
+			<img src="${initParam.root}image/blliLogo_orange.jpg" style="height: 100%;">
+		</div>
+		<div class="result_ti" style="width: 345px; background: none; margin: auto;">
+			찜하신 제품이 없습니다.
+		</div>
+	</div>
+</c:when>
+<c:otherwise>
 <div class="dib_mid_category">
 	<c:if test="${fn:length(requestScope.midCategoryList) >= 2}">
 		<c:set var="allDibMidCategoryCount" value="${0}"/>
@@ -677,3 +700,6 @@ $(document).ready(function(){
 	</c:forEach>
 </div>
 <a href="#" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
+</c:otherwise>
+</c:choose>
+</div>

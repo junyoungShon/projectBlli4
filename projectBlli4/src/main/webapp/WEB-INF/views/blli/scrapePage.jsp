@@ -157,6 +157,16 @@ function goBlogPosting(targetURL,smallProductId){
 
 $(document).ready(function(){
 	
+	var bodyHeight = $("#body").height();
+	var jbMenuHeight = $(".jbMenu").height();
+	var footerHeight = $(".container.footer footer").height();
+	var windowHeight = window.innerHeight;
+	if(windowHeight > (bodyHeight+jbMenuHeight+footerHeight)){
+		$(".container.footer").css("position", "absolute");
+		$(".container.footer").css("width", "100%");
+		$(".container.footer").css("bottom", "0px");
+	}
+	
 	var totalPage = 0;
 	var currPage = 0;
 	var currMidCategory = "";
@@ -301,7 +311,19 @@ $(document).ready(function(){
 	});
 });
 </script>
-<c:if test="${fn:length(requestScope.scrapeList) != 0}">
+<div id="body">
+<c:choose>
+<c:when test="${fn:length(requestScope.scrapeList) == 0}">
+	<div style="margin-top: 65px; width: 100%; position: absolute; top: 0px; bottom: 79px; text-align: center;">
+		<div style="height: 10%; padding-top: 15%; padding-bottom: 2%;">
+			<img src="${initParam.root}image/blliLogo_orange.jpg" style="height: 100%;">
+		</div>
+		<div class="result_ti" style="width: 345px; background: none; margin: auto;">
+			스크랩하신 포스팅이 없습니다.
+		</div>
+	</div>
+</c:when>
+<c:otherwise>
 	<input type="hidden" value="${fn:length(requestScope.midCategoryList)}">
 	<div class="scrape_category">
 		<c:if test="${fn:length(requestScope.midCategoryList) >= 2}">
@@ -404,7 +426,6 @@ $(document).ready(function(){
 	</c:forEach>
 	</c:forEach>
 <input type="hidden" value="${page_index}" id="last_page">
-</c:if>
-<c:if test="${fn:length(requestScope.scrapeList) == 0}">
-스크랩하신 블로그 포스팅이 없습니다.
-</c:if>
+</c:otherwise>
+</c:choose>
+</div>
