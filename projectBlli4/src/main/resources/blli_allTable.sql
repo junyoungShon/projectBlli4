@@ -30,12 +30,13 @@ CREATE TABLE blli_schedule (
 	schedule_id          NUMBER(10) NOT NULL primary key,
 	member_id            VARCHAR2(30) NOT NULL ,
 	baby_name            VARCHAR2(50) NOT NULL ,
-	baby_color            VARCHAR2(10) NOT NULL , -- 추가
+	baby_color           VARCHAR2(10) NOT NULL , -- 추가
 	schedule_date        DATE NOT NULL ,
 	schedule_title       VARCHAR2(80) NOT NULL ,
 	schedule_content     CLOB NULL ,
 	schedule_location    VARCHAR2(100) NULL ,
 	schedule_check_state NUMBER(2) default -1 ,
+	left_days 			 NUMBER(5) default -1 , -- 추가
 	constraint fk_schedule_member_id foreign key(member_id, baby_name) references blli_baby(member_id, baby_name)
 );
 

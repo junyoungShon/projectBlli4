@@ -7,6 +7,7 @@ public class BlliNoticeVO {
 	private String scheduleTitle;
 	private String scheduleCheckState;
 	private long noticeDate;
+	private int leftDays;
 	private String babyPhoto;
 	
 	public BlliNoticeVO() {
@@ -53,6 +54,14 @@ public class BlliNoticeVO {
 		this.noticeDate = noticeDate;
 	}
 
+	public int getLeftDays() {
+		return leftDays;
+	}
+
+	public void setLeftDays(int leftDays) {
+		this.leftDays = leftDays;
+	}
+
 	public String getBabyPhoto() {
 		return babyPhoto;
 	}
@@ -66,8 +75,8 @@ public class BlliNoticeVO {
 		return "BlliNoticeVO [babyName=" + babyName + ", scheduleDate="
 				+ scheduleDate + ", scheduleTitle=" + scheduleTitle
 				+ ", scheduleCheckState=" + scheduleCheckState
-				+ ", noticeDate=" + noticeDate + ", babyPhoto=" + babyPhoto
-				+ "]";
+				+ ", noticeDate=" + noticeDate + ", leftDays=" + leftDays
+				+ ", babyPhoto=" + babyPhoto + "]";
 	}
 	
 }

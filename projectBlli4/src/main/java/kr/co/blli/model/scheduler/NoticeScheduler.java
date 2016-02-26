@@ -31,20 +31,18 @@ public class NoticeScheduler {
 	  * @param memberId
 	  * @return
 	  */
-	//@Scheduled(cron = "00 00 00 * * *") // 매일 00시 모든 회원의 일정 알림 상태를 업데이트
-	@Scheduled(cron = "00/05 * * * * *") //테스트용
+	@Scheduled(cron = "00 00 00 * * *") // 매일 00시 모든 회원의 일정 알림 상태를 업데이트
+	//@Scheduled(cron = "00/05 * * * * *") //테스트용
 	public void updateCheckStateScheduler() {
 		
-		List<BlliMemberVO> memberList = memberService.getMemberHavingBabyAgeChangedList();
+		List<String> memberIdList = memberService.getAllMemberIdList();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String currentDate = formatter.format(new Date());
+		HashMap<String, Integer> updateWithThis = new HashMap<String, Integer>();
 		
-		for(int i=0; i<memberList.size(); i++) {
+		for(int i=0; i<memberIdList.size(); i++) {
 			
-			List<BlliScheduleVO> sidList = memberDAO.getScheduleIdAndDateByMemberId(memberList.get(i).getMemberId());
-			
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			String currentDate = formatter.format(new Date());
-			
-			HashMap<String, Integer> updateWithThis = new HashMap<String, Integer>();
+			List<BlliScheduleVO> sidList = memberDAO.getScheduleIdAndDateByMemberId(memberIdList.get(i));
 			
 			for(int j=0;j<sidList.size();j++) {
 				
@@ -59,20 +57,21 @@ public class NoticeScheduler {
 				
 				// 시간차이를 시간,분,초를 곱한 값으로 나누면 하루 단위가 나옴
 				long diffTime = scheduleDate.getTime() - today.getTime();
-				long leftDays = diffTime / (24 * 60 * 60 * 1000);
+				int leftDays = (int) (diffTime / (24 * 60 * 60 * 1000));
 				
 				System.out.println("일정까지 남은일수: " + leftDays);
 				
-				updateWithThis.put("memberId", sidList.get(j).getScheduleId());
+				updateWithThis.put("scheduleId", sidList.get(j).getScheduleId());
 				
-				//일정이 아직 지나지 않은 것 중에서 0, 1, 3, 7일 남은 것들만 출력되도록 checkState 세팅
-				if(leftDays >= 0 && (leftDays == 0 || leftDays == 1 || leftDays == 3 || leftDays == 7)){
+				//0, 1, 3, 7일 남은 것들만 출력되도록 checkState 세팅
+				if(leftDays == 0 || leftDays == 1 || leftDays == 3 || leftDays == 7) {
 					updateWithThis.put("noticeOrNot", 1);
+					updateWithThis.put("leftDays", leftDays);
 				} else {
 					updateWithThis.put("noticeOrNot", -1);
 				}
 				
-				memberDAO.updateCheckState(updateWithThis);
+				memberDAO.updateCheckStateAndLeftDays(updateWithThis);
 			}
 			
 		}

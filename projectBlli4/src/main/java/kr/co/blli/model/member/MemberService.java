@@ -54,6 +54,7 @@ public interface MemberService {
 	public void deleteSchedule(String scheduleId);
 	public List<BlliScheduleVO> getScheduleIdAndDateByMemberId(String memberId);
 	public List<BlliNoticeVO> getNoticeList();
+	public List<String> getAllMemberIdList();
 
 	
 	
@@ -65,6 +66,7 @@ public interface MemberService {
 	public int selectMailAgreeByMemberId(String memberId);
 
 	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO);
+
 
 
 
