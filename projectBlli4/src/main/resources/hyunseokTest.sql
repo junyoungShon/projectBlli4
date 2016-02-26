@@ -150,3 +150,5 @@ select count(*) from(
 	select small_product_id from blli_posting 
 	where posting_title like '%' || '리틀미미' || '%' or posting_content like '%' || '리틀미미' || '%' and posting_status = 'confirmed'
 )bp, blli_small_product bsp where bp.small_product_id = bsp.small_product_id and bsp.small_product_status = 'confirmed'
+
+select register_day from blli_small_product;
