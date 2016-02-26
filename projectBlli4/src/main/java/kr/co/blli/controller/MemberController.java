@@ -210,6 +210,7 @@ public class MemberController {
 	 */
 	@RequestMapping("joinMemberByEmail.do")
 	public ModelAndView joinMemberByEmail(HttpServletRequest request, BlliMemberVO blliMemberVO){
+		blliMemberVO.setMemberEmail(blliMemberVO.getMemberId());
 		memberService.joinMemberByEmail(blliMemberVO);
 		blliMemberVO.setMemberPassword("protected");
 		HttpSession session = request.getSession();

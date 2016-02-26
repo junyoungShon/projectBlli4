@@ -286,6 +286,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateSmallProductMainPhotoLink">
 		update blli_small_product set small_product_main_photo_link = #{smallProductMainPhotoLink} where small_product_id = #{smallProductId}
 	</update>
+	<select id="selectConfirmedPostingUrlAndSmallProductId" resultMap="bpvRM">
+		select small_product_id,posting_url from blli_posting where posting_status = 'confirmed'
+	</select>
 	<!-- 준영 끝 -->
  </mapper>
  

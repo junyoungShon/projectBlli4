@@ -304,3 +304,6 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		select * from (
 			select buy_link_price,rownum as rn from blli_small_prod_buy_link where small_product_id = '7909155651' 
 		) where rn =1
+		
+		select count(*) from blli_small_product where small_product like '모빌'
+		

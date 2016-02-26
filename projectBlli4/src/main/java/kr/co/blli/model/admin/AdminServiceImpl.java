@@ -33,6 +33,7 @@ import kr.co.blli.model.vo.ListVO;
 import kr.co.blli.utility.BlliFileDownLoader;
 import kr.co.blli.utility.BlliWordCounter;
 
+import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -436,26 +437,31 @@ public class AdminServiceImpl implements AdminService{
 	}
 	@Override
 	public void insertAndUpdateWordCloud(ArrayList<BlliPostingVO> blliPostingVOList) {
+		Logger logger = Logger.getLogger(getClass());
 		if(blliPostingVOList.size()>0){
 			HashMap<String, StringBuffer> sbMap = new HashMap<String, StringBuffer>();
 			for(int i=0;i<blliPostingVOList.size();i++){
 				String smallProductId = blliPostingVOList.get(i).getSmallProductId();
-				if(sbMap.get(blliPostingVOList.get(i).getSmallProductId())==null){
+				if(sbMap.get(smallProductId)==null){
 					sbMap.put(smallProductId,new StringBuffer());
 				}
-				blliPostingVOList.get(i).setPostingContent
-				(adminDAO.selectPostingContentByPostingUrl(blliPostingVOList.get(i)));
+				String postingContent = adminDAO.selectPostingContentByPostingUrl(blliPostingVOList.get(i));
+				logger.error("소제품명: "+smallProductId);
+				logger.error("포스팅주소: "+blliPostingVOList.get(i).getPostingUrl());
+				logger.error("포스팅 내용: "+postingContent);
+				blliPostingVOList.get(i).setPostingContent(postingContent);
 				sbMap.get(smallProductId).append(blliPostingVOList.get(i).getPostingContent());
 			}
 			Iterator<String> it = sbMap.keySet().iterator();
 			while(it.hasNext()){
 				String smallProductId = it.next();
-				HashMap<String, Integer> wordCounting = 
-						blliWordCounter.wordCounting(sbMap.get(smallProductId));
+				System.out.println("분석할 본문 :"+sbMap.get(smallProductId));
+				HashMap<String, Integer> wordCounting = blliWordCounter.wordCounting(sbMap.get(smallProductId));
 				Iterator<String> it2 = wordCounting.keySet().iterator();
 				while(it2.hasNext()){
 					String key = it2.next();
 					int value = wordCounting.get(key);  
+					logger.error("분석된 본문 smallId"+smallProductId+" 분석된 단어 :"+key+" 등장횟수 : "+value);
 					BlliWordCloudVO blliWordCloudVO = new BlliWordCloudVO();
 					blliWordCloudVO.setSmallProductId(smallProductId);
 					blliWordCloudVO.setWord(key);
@@ -478,10 +484,10 @@ public class AdminServiceImpl implements AdminService{
 		try {
 			String localPath = null;
 			if(System.getProperty("os.name").contains("Windows")){
-				localPath = "C:\\Users\\"+System.getProperty("user.name")+"\\git\\blli\\blli\\src\\main\\webapp\\logFile\\blliLog.log";
+				localPath = "C:\\Users\\"+System.getProperty("user.name")+"\\git\\projectBlli4\\projectBlli4\\src\\main\\webapp\\logFile\\blliLog.log";
 			}else{
 				//서버 환경일 경우 path
-				localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/logFile/blliLog.log";
+				localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/ROOT/logFile/blliLog.log";
 			}
 			BufferedReader in = new BufferedReader(new FileReader(localPath));
 			String message;
@@ -608,10 +614,10 @@ public class AdminServiceImpl implements AdminService{
 		try {
 			String localPath = null;
 			if(System.getProperty("os.name").contains("Windows")){
-				localPath = "C:\\Users\\"+System.getProperty("user.name")+"\\git\\blli\\blli\\src\\main\\webapp\\logFile\\errorByUser.log";
+				localPath = "C:\\Users\\"+System.getProperty("user.name")+"\\git\\projectBlli4\\projectBlli4\\src\\main\\webapp\\logFile\\errorByUser.log";
 			}else{
 				//서버 환경일 경우 path
-				localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/logFile/errorByUser.log";
+				localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/ROOT/logFile/errorByUser.log";
 			}
 			in = new BufferedReader(new FileReader(localPath));
 			String message;
@@ -720,5 +726,9 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public ArrayList<BlliMemberVO> checkMember() {
 		return (ArrayList<BlliMemberVO>)adminDAO.checkMember();
+	}
+	@Override
+	public List<BlliPostingVO> selectConfirmedPosting() {
+		return adminDAO.selectConfirmedPostingUrlAndSmallProductId();
 	}
 }

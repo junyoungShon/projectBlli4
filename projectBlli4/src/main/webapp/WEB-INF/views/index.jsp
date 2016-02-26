@@ -61,7 +61,7 @@ $(document).ready(function(){
 			location.href='${initParam.root}authorityCheck.do'
 		</script>
 	</sec:authorize>
-	
+		${catalina.home}
 		<div class="login_bg2">
 			<img src="./img/login_logo.png" class="login_logo"><br>
 			<img src="./img/login_ti.png" style="margin-top:20px; margin-bottom:20px;"><br>
@@ -111,7 +111,7 @@ $(document).ready(function(){
 		
 		//네이버 아이디로 로그인 시작
 		var naver_id_login = new naver_id_login("vy4NpIx3E_02LT8vXvkh", 
-				"http://bllidev.dev/projectBlli2/");
+				"http://blli.co.kr/");
 		naver_id_login.setButton("green", 3,47);
 		naver_id_login.setState("abcdefghijkmnopqrst");
 		naver_id_login.init_naver_id_login();

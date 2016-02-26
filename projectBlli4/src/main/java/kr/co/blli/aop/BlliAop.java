@@ -23,13 +23,14 @@ import org.springframework.stereotype.Component;
 public class BlliAop {
 	@Resource
 	private PostingDAO postingDAO;
-	@Around("within(kr.co.blli.*.*.*)")
+	@Around("execution(* kr.co.blli.controller.*.*(..)) & execution(* kr.co.blli.member.*.*(..)) & execution(* kr.co.blli.posting.*.*(..)) & execution(* kr.co.blli.product.*.*(..)) & execution(* kr.co.blli.security.*.*(..)) & execution(* kr.co.blli.utility.*.*(..))")
 	public Object checkScheduler(ProceedingJoinPoint point) throws Throwable{
+		System.out.println("AOP~!");
 		Logger logger = Logger.getLogger(getClass());
 		Object retValue= null;
 		try{
 			retValue= point.proceed();
-		}catch(Exception e){
+		}catch(Throwable e){
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd hh:mm:ss");
 			String datetime = sdf.format(cal.getTime());
@@ -39,13 +40,13 @@ public class BlliAop {
 			logger.error("발생메서드 : "+point.getSignature().getName());
 			logger.error("발생클래스 : "+point.getTarget().getClass().getName().substring(point.getTarget().getClass().getName().lastIndexOf(".")));
 			logger.error("------------------End--------------------------");
-		}
+		} 
 		return retValue;
 	}
+	
 	@Around("execution(public * kr.co.blli.model.posting.PostingService.searchPosting*(..))")
 	public Object postingStatusChecker(ProceedingJoinPoint point) throws Throwable{
 		Object retValue = point.proceed();
-		Logger logger = Logger.getLogger(getClass());
 		String memberId = (String) point.getArgs()[1];
 		if(retValue instanceof List){
 			//포스팅을 가져올 때 해당 회원이 포스팅을 스크램,좋아요,싫어요 했는지 여부를 파악해준다.
