@@ -287,7 +287,26 @@ CREATE TABLE blli_permanent_dead_posting (
 	posting_title   VARCHAR2(450) NOT NULL,
 	constraint pk_permanent_dead_posting primary key(posting_url, posting_title)
 );
-
+--2016.02.06 추가
+drop table Blli_Monthly_Product cascade constraint;
+CREATE TABLE Blli_Monthly_Product (
+	Monthly_Product varchar2(50) NOT NULL,
+	Monthly_Product_ID varchar2(30) PRIMARY KEY,
+	Min_USABLE_MONTH number(3) NOT null,
+	Max_USABLE_MONTH number(3) NOT NUll,
+	MONThLY_PRODUCT_INST varchar(200) NOT NULL,
+	MONTHly_product_PhotoLink varchar2(300) default 'default'
+)
+--2016.02.06 추가
+drop table MONTHLY_PRODUCT_AND_N_MID cascade constraint;
+create table MONTHLY_PRODUCT_AND_N_MID(
+	Monthly_Product_ID varchar2(30) NOT NULL,
+	Mid_Category_id varchar2(30) NOT NULL,
+	mid_category   VARCHAR2(100) NOT NULL,
+	constraint BlliPRODUCTNAVER_MId foreign key(Monthly_Product_ID) references Blli_Monthly_Product(Monthly_Product_ID),
+	constraint BlliPRODUCTNAVER_MId2 foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id), -- mid_category_id 추가
+	constraint pk_MONTHLY_PRODUCT_AND_N_MID primary key (Monthly_Product_ID,Mid_Category_id,mid_category)
+)
 
 ------------------------------------------------------------------------------------------------------------
 
