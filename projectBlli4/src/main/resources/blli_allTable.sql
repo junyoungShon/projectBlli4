@@ -30,6 +30,7 @@ CREATE TABLE blli_schedule (
 	schedule_id          NUMBER(10) NOT NULL primary key,
 	member_id            VARCHAR2(30) NOT NULL ,
 	baby_name            VARCHAR2(50) NOT NULL ,
+	baby_color            VARCHAR2(10) NOT NULL , -- 추가
 	schedule_date        DATE NOT NULL ,
 	schedule_title       VARCHAR2(80) NOT NULL ,
 	schedule_content     CLOB NULL ,

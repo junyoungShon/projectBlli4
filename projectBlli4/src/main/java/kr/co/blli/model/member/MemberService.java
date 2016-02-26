@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import kr.co.blli.model.vo.BlliBabyVO;
 import kr.co.blli.model.vo.BlliBreakAwayVO;
-import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliNoticeVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliScheduleVO;
 
@@ -50,7 +50,10 @@ public interface MemberService {
 	public BlliScheduleVO selectSchedule(BlliScheduleVO bsvo);
 	public int denySendEmail(String memberEmail);
 	public List<BlliScheduleVO> getMemberScheduleList(String memberId);
-	public BlliScheduleVO getSchduleInfoByScheduleId(String scheduleId);
+	public BlliScheduleVO getScheduleInfoByScheduleId(String scheduleId);
+	public void deleteSchedule(String scheduleId);
+	public List<BlliScheduleVO> getScheduleIdAndDateByMemberId(String memberId);
+	public List<BlliNoticeVO> getNoticeList();
 
 	
 	
@@ -62,5 +65,8 @@ public interface MemberService {
 	public int selectMailAgreeByMemberId(String memberId);
 
 	public void breakAwayFromBlli(BlliBreakAwayVO blliBreakAwayVO);
+
+
+
 
 }

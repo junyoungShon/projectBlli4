@@ -32,6 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="scheduleId" column="schedule_id"/>
  		<result property="memberId" column="member_id"/>
  		<result property="babyName" column="baby_name"/>
+ 		<result property="babyColor" column="baby_color"/>
  		<result property="scheduleDate" column="schedule_date"/>
  		<result property="scheduleTitle" column="schedule_title"/>
  		<result property="scheduleContent" column="schedule_content"/>
@@ -69,6 +70,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="postingDbInsertDate" column="posting_Db_Insert_Date"/>
  		<result property="midCategory" column="mid_category"/>
  	</resultMap>
+ 	<!-- BlliNoticeVO Result Map 설정 -->
+ 	<resultMap type="blliNoticeVO" id="nvRM">
+ 		<result property="babyName" column="baby_name"/>
+ 		<result property="babyPhoto" column="baby_photo"/>
+ 		<result property="scheduleDate" column="schedule_date"/>
+ 		<result property="scheduleTitle" column="schedule_title"/>
+ 		<result property="scheduleCheckState" column="schedule_check_state"/>
+ 	</resultMap>
+ 	
  	<!-- 준영 작성 쿼리 -->
  	<!-- id로 회원의 존재 여부를 찾습니다. -->
 	<select id="findMemberByIdForLogin" resultMap="bmvRM">
@@ -166,14 +176,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<selectKey resultType="Integer" keyProperty="scheduleId" order="BEFORE">
             select blli_schedule_seq.nextval from dual
 		</selectKey>   
-		insert into blli_schedule (schedule_id, member_id, baby_name, schedule_date, schedule_title, schedule_location, schedule_content)
-		values (#{scheduleId},#{memberId},#{babyName},#{scheduleDate},#{scheduleTitle},#{scheduleLocation},#{scheduleContent})
+		insert into blli_schedule (schedule_id, member_id, baby_name, baby_color, schedule_date, schedule_title, schedule_location, schedule_content)
+		values (#{scheduleId},#{memberId},#{babyName},#{babyColor},#{scheduleDate},#{scheduleTitle},#{scheduleLocation},#{scheduleContent})
 	</insert>
 	<!-- 일정을 수정한다. -->
 	<update id="updateSchedule">
 		update blli_schedule set schedule_location = #{scheduleLocation}, schedule_title = #{scheduleTitle}, schedule_content = #{scheduleContent} 
 		where schedule_id = #{scheduleId}
 	</update>
+	<!-- 일정을 삭제한다. -->
+	<delete id="deleteSchedule">
+		delete from blli_schedule
+		where schedule_id = #{value}
+	</delete>
 	<!-- 일정ID로 해당 일정 정보를 가져온다 -->
 	<select id="selectSchedule" resultMap="bsvRM">
 		select member_id, baby_name, to_char(schedule_date) as schedule_date, schedule_title, schedule_content, schedule_location
@@ -182,14 +197,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- 회원ID로 회원의 일정 목록을 가져온다 -->
 	<select id="getMemberScheduleList" resultMap="bsvRM">
-		select schedule_id, member_id, baby_name, to_char(schedule_date) as schedule_date, schedule_title, schedule_content, schedule_location, schedule_check_state
+		select schedule_id, member_id, baby_name, baby_color, to_char(schedule_date) as schedule_date, schedule_title, schedule_content, schedule_location, schedule_check_state
 		from blli_schedule
 		where member_id = #{value}
 	</select>
-	<select id="getSchduleInfoByScheduleId" resultMap="bsvRM">
-		select schedule_id, member_id, baby_name, to_char(schedule_date) as schedule_date, schedule_title, schedule_content, schedule_location, schedule_check_state
+	<select id="getScheduleInfoByScheduleId" resultMap="bsvRM">
+		select schedule_id, member_id, baby_name, baby_color, to_char(schedule_date) as schedule_date, schedule_title, schedule_content, schedule_location, schedule_check_state
 		from blli_schedule
 		where schedule_id = #{value}
+	</select>
+	<select id="getScheduleIdAndDateByMemberId" resultMap="bsvRM">
+		select schedule_id, schedule_date
+		from blli_schedule
+		where member_id = #{value}
+	</select>
+	<update id="updateCheckState">
+		update blli_schedule set schedule_check_state = #{noticeOrNot}
+		where schedule_id = #{scheduleId}
+	</update>
+	<select id="getNoticeList" resultMap="nvRM">
+		select frombs.baby_name, frombs.schedule_date, frombs.schedule_title, frombsbb.baby_photo
+		from (select baby_name, schedule_date, schedule_title
+		from blli_schedule where schedule_check_state = '1') frombs,
+		(select bb.baby_photo from blli_baby bb, blli_schedule bs where bs.baby_name = bb.baby_name) frombsbb
 	</select>
 	<!-- 용호 쿼리 끝 -->
 	

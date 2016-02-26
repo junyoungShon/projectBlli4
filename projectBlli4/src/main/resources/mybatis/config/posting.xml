@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		insert into blli_posting(small_product_id, posting_url, small_product, posting_title, posting_photo_link, posting_media_count, 
  		posting_content, posting_summary, posting_author, posting_date, posting_rank, posting_reply_count, posting_status, posting_db_insert_date)
  		values(#{smallProductId}, #{postingUrl}, #{smallProduct}, #{postingTitle}, #{postingPhotoLink}, #{postingMediaCount}, 
- 		#{postingContent}, #{postingSummary}, #{postingAuthor}, #{postingDate}, #{postingRank}, #{postingReplyCount}, 'unconfirmed', sysdate)
+ 		#{postingContent}, #{postingSummary}, #{postingAuthor}, to_date(#{postingDate},'YYYY-MM-DD'), #{postingRank}, #{postingReplyCount}, 'unconfirmed', sysdate)
  	</insert>
  	
 	<select id="searchPosting" resultMap="bpvRM">
@@ -123,6 +123,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select posting_url, small_product, small_product_id, posting_photo_link, posting_author 
 		from blli_posting where small_product_id = #{smallProductId} and posting_status = 'confirmed'
 		order by posting_score desc 
+	</select>
+	
+	<select id="getPostingList" resultMap="bpvRM">
+		select small_product_id, posting_url, posting_title, posting_content, posting_score, posting_like_count, posting_dislike_count, posting_photo_link, posting_author, posting_date, posting_rank from(
+			select ceil(rownum/5) as page, small_product_id, posting_url, posting_title, posting_content, posting_score, posting_like_count, posting_dislike_count, posting_photo_link, posting_author, posting_date, posting_rank from(
+				select bp.small_product_id, bp.posting_url, bp.posting_title, bp.posting_content, bp.posting_score, bp.posting_like_count, bp.posting_dislike_count, bp.posting_photo_link, bp.posting_author, bp.posting_date, bp.posting_rank from(
+					select small_product_id, posting_url, posting_title, posting_content, posting_score, posting_like_count, posting_dislike_count, posting_photo_link, posting_author, posting_date, posting_rank
+					from blli_posting where posting_title like '%' || #{searchWord} || '%' or posting_content like '%' || #{searchWord} || '%' and posting_status = 'confirmed' order by posting_score desc
+				)bp, blli_small_product bsp where bp.small_product_id = bsp.small_product_id and bsp.small_product_status = 'confirmed' order by posting_url desc
+			)
+		) where page = #{pageNo}
+	</select>
+	
+	<select id="totalPosting" resultType="int">
+		select count(*) from(
+			select small_product_id from blli_posting 
+			where posting_title like '%' || #{searchWord} || '%' or posting_content like '%' || #{searchWord} || '%' and posting_status = 'confirmed'
+		)bp, blli_small_product bsp where bp.small_product_id = bsp.small_product_id and bsp.small_product_status = 'confirmed'
 	</select>
 	<!-- 현석 쿼리 끝 -->
 	

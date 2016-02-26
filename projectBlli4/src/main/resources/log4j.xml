@@ -55,6 +55,16 @@
             <param name="ConversionPattern" value="%m%n" />
         </layout>   
     </appender>
+    
+	<logger name="kr.co.blli.aop">
+        <level value="ERROR"/>
+        <appender-ref ref="errorByUser"/>
+    </logger>
+    
+    <logger name="kr.co.blli.model.scheduler">
+        <level value="ERROR"/>
+        <appender-ref ref="rollingFileInLocal" />
+    </logger>
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
