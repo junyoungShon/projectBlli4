@@ -1,6 +1,5 @@
 package kr.co.blli.model.admin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 

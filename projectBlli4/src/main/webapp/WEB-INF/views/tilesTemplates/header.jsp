@@ -100,59 +100,115 @@ clear:left;
 
 <script type="text/javascript">
 
-   $(document).ready(function() {
-      
-      $.ajax({
-         type: "POST",
-         url: "${initParam.root}member_getNoticeList.do",
-         cache: false,
-         success: function(nvoList){
-            
-            $(".badge").text(nvoList.length);
-            
-            if($(".badge").text()!="") {
-               $(".badge").show();
-            }
-            
-            var noticeListText; 
-            
-            $(".noticeList").html(noticeListText);
-         }
-       });
-
-      
-      $(".searchBar").click(function(){
-         var searchWord = $.trim($(this).prev("input").val());
-         if(searchWord == ""){
-            return false;
-         }else{
-            location.href = "${initParam.root}searchSmallProduct.do?searchWord="+searchWord;
-         }
-      });
-      
-      $(".search_text").keydown(function (key) {
-           if (key.keyCode == 13) {
-              $(this).next().click();
-           }
-       });
-    
-    
-   });
+	$(document).ready(function() {
+		
+		$.ajax({
+			type: "POST",
+			url: "${initParam.root}member_getNoticeList.do",
+			cache: false,
+			success: function(nvoList){
+				
+				$(".badge").text(nvoList.length);
+				
+				if($(".badge").text()!="" && nvoList.length!=0) {
+					$(".badge").show();
+				}
+				
+				var noticeListText = "";
+				for(var i=0;i<nvoList.length;i++) {
+					
+					noticeListText += '<div class="noticeDiv">';
+					noticeListText += '<div class="notice_photoDiv"><img src="${initParam.root}babyphoto/'+nvoList[i].babyPhoto+'"></div>';
+					noticeListText += '<div class="notice_titleDiv">'+nvoList[i].scheduleTitle + "</div>"
+					if(nvoList[i].leftDays!="0") {
+						noticeListText += '<div class="notice_leftDaysDiv">'+nvoList[i].leftDays +'일 후</div>';
+					} else {
+						noticeListText += '<div class="notice_leftDaysDiv">오늘</div>';
+					}
+					noticeListText += '</div>';
+				}
+				
+				$(".noticeList").html(noticeListText);
+			}
+	    });
+		
+		
+		$(document).on('click', '.noticeList',  function(){
+			
+			$.ajax({
+				type: "POST",
+				url: "${initParam.root}dsajkljdklsajdl.do",
+				cache: false,
+				success: function(nvoList){
+					
+					$(".badge").text(nvoList.length);
+					
+					if($(".badge").text()!="" && nvoList.length!=0) {
+						$(".badge").show();
+					}
+					
+					var noticeListText = "";
+					for(var i=0;i<nvoList.length;i++) {
+						
+						noticeListText += '<div class="noticeDiv"><img src="${initParam.root}babyphoto/'+nvoList[i].babyPhoto+'">';
+						noticeListText += nvoList[i].scheduleTitle + "   " +nvoList[i].leftDays +"일 전";
+						noticeListText += '</div>';
+					}
+					
+					$(".noticeList").html(noticeListText);
+				}
+		    });
+			
+		});
+		
+		
+		var isPointerInNoticeDiv = true;
+		$(document).on('mouseenter', '.noticeList',  function(){
+			isPointerInNoticeDiv = false;
+		}).on('mouseleave', '.noticeList', function() {
+			isPointerInNoticeDiv = true;
+		});
+		
+		$("body").click(function(){
+			if(isPointerInNoticeDiv) {
+				$(".noticeList").css("display", "none");
+				isPointerInNoticeDiv = false;
+			}
+		});
+		
+		$("#noticeLink").click(function(){
+			isPointerInNoticeDiv = true;
+		});
+		
+		$(".searchBar").click(function(){
+			var searchWord = $.trim($(this).prev("input").val());
+			if(searchWord == ""){
+				return false;
+			}else{
+				location.href = "${initParam.root}searchSmallProduct.do?searchWord="+searchWord;
+			}
+		});
+		
+		$(".search_text").keydown(function (key) {
+	        if (key.keyCode == 13) {
+	        	$(this).next().click();
+	        }
+	    });
+	});
 
 
 </script>
 
 <c:set value="${requestScope['javax.servlet.forward.request_uri']}" var="currentUri"/>
 <c:choose>
-<c:when test="${fn:containsIgnoreCase(currentUri,'member_goMain.do') }">
    
-   <div class="main_top">
+<c:when test="${fn:containsIgnoreCase(currentUri,'member_goMain.do')}">
+	<div class="main_top">
       <div class="in_fr">
          <div class="top_nav">
             <div class="menubar">
                <ul>
-                <li><a href="${initParam.root}member_goMain.do">Main</a></li>
-                <li><a href="#" onclick="$('.noticeList').toggle();">알림&nbsp<span class="badge" style="background:#ff8000;"></span></a>
+                <li id="noticeLink"><a href="#" onclick="$('.noticeList').toggle();">알림&nbsp<span class="badge" style="background:#ff8000;"></span></a>
                    <div class="noticeList">
                    </div>
                 </li>
@@ -188,7 +244,6 @@ clear:left;
          <div class="top_nav">
             <div class="menubar">
             <ul>
-             <li><a href="${initParam.root}member_goMain.do">Main</a></li>
              <li><a href="#">알림&nbsp<span class="badge"></span></a></li>
              <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>
              <li><a href="#" id="current">마이페이지</a>
@@ -208,6 +263,7 @@ clear:left;
    </div>
 </c:when>
 <c:otherwise>
+<<<<<<< HEAD
 <div class="jbMenu">
        <div class="in_fr">
          <a href="${initParam.root}member_goMain.do"><img src="${initParam.root}img/top_logo.png" alt="탑로고" class="logo" style="margin-top:-6px"></a>
@@ -239,5 +295,34 @@ clear:left;
 
 
 
+=======
+   <div class="jbMenuNotMain">
+       <div class="in_fr">
+         <a href="${initParam.root}member_goMain.do"><img src="${initParam.root}img/top_logo.png" alt="탑로고" class="logo" style="margin-top:-6px"></a>
+         <div class="top_search">
+            <input type="text" class="search_text" placeholder="검색어를 입력하세요" name="searchWord">
+            <img class="searchBar" src="${initParam.root}img/search.png" alt="검색" style="cursor: pointer;">
+         </div>
+         <div class="top_nav">
+            <div class="menubar">
+            <ul>
+                <li><a href="#">알림&nbsp<span class="badge"></span></a></li>
+                <li><a href="${initParam.root}member_goCalenderPage.do?memberId=${sessionScope.blliMemberVO.memberId}">아이 일정</a></li>
+                <li><a href="#" id="current">마이페이지</a>
+                  <ul>
+                    <li><a href="${initParam.root}member_goDibPage.do">찜 제품 확인</a></li>
+                    <li><a href="${initParam.root}member_goScrapePage.do">스크랩 포스팅확인</a></li>
+                    <li><a href="#">추천 제품확인</a></li>
+                    <li><a href="${initParam.root}member_goModifyMemberInfoPage.do">회원 정보 수정</a></li>
+                    <li><a href="${initParam.root}member_goModifyBabyInfoPage.do">아이정보 확인</a></li>
+                   </ul>
+                </li>
+                 <li><a href="${initParam.root}logout.do">로그아웃</a></li>
+               </ul>
+            </div>
+         </div>
+      </div>
+   </div>
+>>>>>>> branch 'master' of https://github.com/junyoungShon/projectBlli4.git
 </c:otherwise>
 </c:choose>

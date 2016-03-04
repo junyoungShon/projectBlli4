@@ -403,7 +403,7 @@
 										${blliMonthlyProductVO.monthlyProductInst}
 									</div>
 									<div class="smallProductDetailBtn">
-										<a href="searchSmallProduct.do?searchWord=${blliMonthlyProductVO.monthlyProductId}" style="color: white"> 
+										<a href="member_searchSmallProduct.do?searchWord=${recommProductList.midCategory}" style="color: white"> 
 										상세보기</a>
 									</div>
 								</div>

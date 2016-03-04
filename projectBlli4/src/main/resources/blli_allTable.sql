@@ -30,12 +30,13 @@ CREATE TABLE blli_schedule (
 	schedule_id          NUMBER(10) NOT NULL primary key,
 	member_id            VARCHAR2(30) NOT NULL ,
 	baby_name            VARCHAR2(50) NOT NULL ,
-	baby_color            VARCHAR2(10) NOT NULL , -- 추가
+	baby_color           VARCHAR2(10) NOT NULL , -- 추가
 	schedule_date        DATE NOT NULL ,
 	schedule_title       VARCHAR2(80) NOT NULL ,
 	schedule_content     CLOB NULL ,
 	schedule_location    VARCHAR2(100) NULL ,
 	schedule_check_state NUMBER(2) default -1 ,
+	left_days 			 NUMBER(5) default -1 , -- 추가
 	constraint fk_schedule_member_id foreign key(member_id, baby_name) references blli_baby(member_id, baby_name)
 );
 
@@ -53,7 +54,7 @@ CREATE TABLE blli_big_category (
 	big_category         VARCHAR2(50) NOT NULL primary key,
 	big_category_id          VARCHAR2(30) NOT NULL -- 추가
 );
-select * from BLLI_BIG_CATEGORY;
+
 
 drop table blli_mid_category cascade constraint;
 CREATE TABLE blli_mid_category (
@@ -178,6 +179,7 @@ CREATE TABLE blli_recomm_mid_category (
 	constraint pk_recomm_mid_cate primary key (member_id, mid_category)
 );
 
+
 drop table BLLI_NOT_RECOMM_MID_CATEGORY cascade constraint;
 CREATE TABLE BLLI_NOT_RECOMM_MID_CATEGORY(
 	member_id            VARCHAR2(30) NOT NULL ,
@@ -228,6 +230,7 @@ CREATE TABLE blli_member_scrape (
 	constraint pk_member_scrape primary key (member_id, posting_url,small_product_id)
 );
 
+
 drop table blli_posting_like cascade constraint;
 CREATE TABLE blli_posting_like (
 	member_id            VARCHAR2(30) NOT NULL ,
@@ -240,6 +243,8 @@ CREATE TABLE blli_posting_like (
 	constraint fk_member_LIKE_small_p_id foreign key(small_product_id) references blli_small_product(small_product_id),
 	constraint pk_member_LIKE primary key (member_id, posting_url,small_product_id)
 );
+
+
 drop table blli_posting_dislike cascade constraint;
 CREATE TABLE blli_posting_dislike (
 	member_id            VARCHAR2(30) NOT NULL ,
@@ -261,6 +266,7 @@ CREATE TABLE blli_mailing (
 	mail_content_file		VARCHAR2(50) NOT NULL -- VARCHAR2(30)에서 VARCHAR2(50)으로 변경
 );
 
+
 drop table blli_word_cloud cascade constraint;
 CREATE TABLE blli_word_cloud (
 	small_product_id   VARCHAR2(30) NOT NULL , -- 추가
@@ -268,26 +274,33 @@ CREATE TABLE blli_word_cloud (
 	word_count		number(6) NOT NULL,
 	constraint fk_blli_word_cloud_sp_id foreign key(small_product_id) references blli_small_product(small_product_id)
 );
+
+
 drop table PERSISTENT_LOGINS cascade constraint;
 CREATE TABLE PERSISTENT_LOGINS(
 	USERNAME VARCHAR2(64) NOT NULL,
 	SERIES VARCHAR2(64) PRIMARY KEY,
 	TOKEN VARCHAR2(64) NOT NULL,
 	LAST_USED TIMESTAMP NOT NULL
-)
+);
+
 
 drop table BLLI_BREAK_AWAY cascade constraint;
 CREATE TABLE BLLI_BREAK_AWAY(
 	member_id varchar2(30) primary key,
 	break_away_reason varchar2(500) not null,
 	break_away_date date not null
-)
+);
+
+
 drop table blli_permanent_dead_posting cascade constraint;
 CREATE TABLE blli_permanent_dead_posting (
 	posting_url     VARCHAR2(300) NOT NULL,
 	posting_title   VARCHAR2(450) NOT NULL,
 	constraint pk_permanent_dead_posting primary key(posting_url, posting_title)
 );
+
+
 --2016.02.06 추가
 drop table Blli_Monthly_Product cascade constraint;
 CREATE TABLE Blli_Monthly_Product (
@@ -297,7 +310,9 @@ CREATE TABLE Blli_Monthly_Product (
 	Max_USABLE_MONTH number(3) NOT NUll,
 	MONThLY_PRODUCT_INST varchar(200) NOT NULL,
 	MONTHly_product_PhotoLink varchar2(300) default 'default'
-)
+);
+
+
 --2016.02.06 추가
 drop table MONTHLY_PRODUCT_AND_N_MID cascade constraint;
 create table MONTHLY_PRODUCT_AND_N_MID(
@@ -308,6 +323,13 @@ create table MONTHLY_PRODUCT_AND_N_MID(
 	constraint BlliPRODUCTNAVER_MId2 foreign key(mid_category, mid_category_id) references blli_mid_category(mid_category, mid_category_id), -- mid_category_id 추가
 	constraint pk_MONTHLY_PRODUCT_AND_N_MID primary key (Monthly_Product_ID,Mid_Category_id,mid_category)
 )
+--2016.02.몰라 추가
+drop table blli_permanent_dead_posting cascade constraint;
+CREATE TABLE blli_permanent_dead_posting (
+	posting_url     VARCHAR2(300) NOT NULL,
+	posting_title   VARCHAR2(450) NOT NULL,
+	constraint pk_permanent_dead_posting primary key(posting_url, posting_title)
+);
 
 ------------------------------------------------------------------------------------------------------------
 

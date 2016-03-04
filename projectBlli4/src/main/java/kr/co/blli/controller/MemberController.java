@@ -106,7 +106,7 @@ public class MemberController {
 	  * @작성일 : 2016. 1. 13.
 	  * @작성자 : junyoung
 	  * @return
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	@RequestMapping("member_goMain.do")
 	public ModelAndView goMainPage(HttpServletRequest request) throws ParseException{

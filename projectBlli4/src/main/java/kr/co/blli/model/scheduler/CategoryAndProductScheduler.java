@@ -197,6 +197,7 @@ public class CategoryAndProductScheduler {
 										imgSrc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?cat_id="+midCategoryId).timeout(0).
 												  get().select("._product_list .img_area img").attr("data-original");
 									}
+									imgSrc = imgSrc.replaceAll("type=f140", "type=f300");
 									
 									doc = Jsoup.connect("http://shopping.naver.com/search/list.nhn?pagingIndex=1"+
 											"&pagingSize=40&productSet=model&viewType=list&sort=rel&searchBy=none&cat_id="+
@@ -420,6 +421,7 @@ public class CategoryAndProductScheduler {
 										doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+
 												"&cat_id="+midCategoryId+"&frm=NVSHMDL&query=").timeout(0).get();
 										String smallProductMainPhotoLink = doc.select("#summary_thumbnail_img").attr("src");
+										smallProductMainPhotoLink = smallProductMainPhotoLink.replaceAll("type=f140", "type=f300");
 										blliSmallProductVO.setSmallProductMainPhotoLink(
 											blliFileDownLoader.imgFileDownLoader(smallProductMainPhotoLink, smallProductId, "smallProduct"));
 										
@@ -596,6 +598,7 @@ public class CategoryAndProductScheduler {
 											doc = Jsoup.connect("http://shopping.naver.com/detail/detail.nhn?nv_mid="+smallProductId+
 													"&cat_id="+midCategoryId+"&frm=NVSHMDL&query=").timeout(0).get();
 											String smallProductMainPhotoLink = doc.select("#summary_thumbnail_img").attr("src");
+											smallProductMainPhotoLink = smallProductMainPhotoLink.replaceAll("type=f140", "type=f300");
 											blliSmallProductVO.setSmallProductMainPhotoLink(
 												blliFileDownLoader.imgFileDownLoader(smallProductMainPhotoLink, smallProductId, "smallProduct"));
 											

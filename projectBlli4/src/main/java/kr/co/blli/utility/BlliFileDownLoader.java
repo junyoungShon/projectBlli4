@@ -19,7 +19,12 @@ public class BlliFileDownLoader {
 			//서버 환경일 경우 path
 			localPath = "/usr/bin/apache-tomcat-7.0.64/webapps/ROOT/scrawlImage/";
 		}
-		String fileEXT = url.substring(url.lastIndexOf(".")+1, url.lastIndexOf(".")+4).toLowerCase();
+		String fileEXT = null;
+		if(url.substring(url.lastIndexOf(".")+1).length()>3) {
+			fileEXT = url.substring(url.lastIndexOf(".")+1, url.lastIndexOf(".")+4).toLowerCase();
+		} else {
+			fileEXT = url.substring(url.lastIndexOf(".")+1).toLowerCase();
+		}
 		if(!fileEXT.equals("jpeg")){
 			fileEXT.substring(0, 2);
 		}

@@ -153,3 +153,26 @@ select count(*) from(
 )bp, blli_small_product bsp where bp.small_product_id = bsp.small_product_id and bsp.small_product_status = 'confirmed'
 
 select register_day from blli_small_product;
+
+select * from(
+	select ceil(rownum/5) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_ranking,
+	sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
+		select b.small_product_id, min(b.buy_link_price) as min_price from (
+			select bsp.small_product_id from (
+				select mid_category_id from blli_mid_category where big_category = '분유'
+			)bmc, blli_small_product bsp where bmc.mid_category_id = bsp.mid_category_id and bsp.small_product_status = 'confirmed'
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc, small_product_id asc
+) where page = '1'
+
+
+select * from(
+	select ceil(rownum/5) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_ranking,
+	sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
+		select b.small_product_id, min(b.buy_link_price) as min_price from (
+			select bsp.small_product_id from (
+				select mid_category_id from blli_mid_category where big_category = '분유'
+			)bmc, blli_small_product bsp where bmc.mid_category_id = bsp.mid_category_id and bsp.small_product_status = 'confirmed'
+		)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+	)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc, order by small_product_id
+) where page = '1'
