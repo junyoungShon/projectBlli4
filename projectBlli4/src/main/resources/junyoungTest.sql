@@ -307,3 +307,57 @@ select posting_url,small_product,small_product_id,posting_title,posting_summary,
 		
 		select count(*) from blli_small_product where small_product like '모빌'
 		
+		유아의자	86	유아소파	50000592
+		insert into Monthly_product_and_n_mid (Monthly_Product_ID,MiD_CATEGORY,MiD_CATEGORY_ID) values  ('86','유아소파','50000592')
+
+select monthly_product_id from blli_monthly_product
+
+	select mid_category_id from monthly_product_and_n_mid where monthly_product_id ='1'
+	select * from (
+		select  mid_category_id,mid_category_main_photo_link from blli_mid_category where mid_category_id = (
+			select rownum rn mid_category_id from monthly_product_and_n_mid where monthly_product_id ='103'AND ROWNUM = 1
+		) AND rn = 1
+	)
+
+	select m.mid_category_id as mid_category_id , m.mid_category_main_photo_link as mid_category_main_photo_link, mp.monthly_product_id as monthly_product_id
+	from blli_mid_category m , monthly_product_and_n_mid mp
+	where m.mid_category_id = mp.mid_category_id and mp.monthly_product_id = '103' 
+	
+	select * from blli_small_product where mid_category = '젖병세정제';
+	select * from blli_mid_category where mid_category_id='50000603';
+	select * from blli_small_product where small_product_status = 'confirmed'
+	select count(*) from blli_posting where posting_status = 'confirmed'
+	
+	
+	select * from(
+			select ceil(rownum/5) as page, bl.small_product_id, bl.min_price, sp.small_product, sp.small_product_main_photo_link, sp.small_product_ranking,
+			sp.small_product_whentouse_min, sp.small_product_whentouse_max, sp.db_insert_posting_count, sp.small_product_score,sp.small_product_dibs_count from(
+				select b.small_product_id, min(b.buy_link_price) as min_price from (
+					select small_product_id from blli_small_product where mid_category = '무릎보호대'  and small_product_status = 'confirmed'
+				)s, blli_small_prod_buy_link b where s.small_product_id = b.small_product_id  group by b.small_product_id
+			)bl, blli_small_product sp where bl.small_product_id = sp.small_product_id order by sp.small_product_score desc
+		) where page = 1 order by small_product_id
+	
+	CREATE TABLE blli_member (
+	member_id            VARCHAR2(30) NOT NULL primary key,
+	member_email         VARCHAR2(50) NULL ,
+	member_password      VARCHAR2(100) NOT NULL ,
+	member_name          VARCHAR2(30) NOT NULL ,
+	member_state         NUMBER(2) default 0 ,
+	--recommending 		NUMBER(1) NOT NULL, 삭제 
+	authority            VARCHAR2(20),
+	mail_agree          NUMBER(1) default 0
+);	
+create table book(
+	title varchar2(30) not null primary key,
+	author varchar2(30) not null,
+	area number(20) default 0,
+	width number(10) default 0,
+	height number(10) default 0
+);
+insert into "SCOTT"."book"  title,author,width,height values ('장한솔씨의 야근피하기','장한솔',10,10);
+insert into "SCOTT"."BOOK" ("TITLE", "AUTHOR", "AREA", "WIDTH", "HEIGHT") values('장한솔씨의집착', '장한솔', 0, 10, 10)
+
+UPDATE BOOK SET AREA = (SELECT WIDTH*HEIGHT FROM BOOK ) where area!= (SELECT WIDTH*HEIGHT FROM BOOK );
+
+		

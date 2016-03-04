@@ -34,7 +34,6 @@
 		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
 	<!-- 한글 인코딩 필터 적용 -->
 	<filter>
 		<filter-name>encodeFilter</filter-name>
@@ -49,9 +48,9 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	<context-param>
-		<param-name>/</param-name>
+		<param-name>/projectBlli4/</param-name>
 		<!-- <param-value>/projectBlli4/</param-value> -->
-		<param-value>/projectBlii4/</param-value>
+		<param-value>/</param-value>
 	</context-param>
 	
 	<welcome-file-list>

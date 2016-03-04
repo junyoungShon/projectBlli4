@@ -24,6 +24,7 @@ import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
+import kr.co.blli.model.vo.BlliMonthlyProductVO;
 import kr.co.blli.model.vo.BlliPagingBean;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
@@ -730,5 +731,15 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<BlliPostingVO> selectConfirmedPosting() {
 		return adminDAO.selectConfirmedPostingUrlAndSmallProductId();
+	}
+	@Override
+	public void monthlyProductImageDownLoader() {
+		List<BlliMonthlyProductVO> list = adminDAO.selectAllMonthlyProduct();
+		for(int i=0;i<list.size();i++){
+			list.get(i).setBlliMidCategoryVOList(adminDAO.selectMidCategoryByMonthlyProductID(list.get(i).getMonthlyProductId()));
+			System.out.println(list.get(i));
+			list.get(i).setMonthlyProductPhotoLink(list.get(i).getBlliMidCategoryVOList().get(0).getMidCategoryMainPhotoLink());
+			adminDAO.updatMonthlyProductPhotoLink(list.get(i));
+		}
 	}
 }

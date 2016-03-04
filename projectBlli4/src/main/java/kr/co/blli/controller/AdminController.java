@@ -199,4 +199,8 @@ public class AdminController {
 		mav.setViewName("admin/userExceptionLog");
 		return mav.addObject("list", adminService.checkUserExceptionLog());
 	}
+	@RequestMapping("admin_monthlyProductImageDownLoader.do")
+	public void monthlyProductImageDownLoader(){
+		adminService.monthlyProductImageDownLoader();
+	}
 }

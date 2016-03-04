@@ -388,27 +388,27 @@
 				
 					<div id="menu-wrapper">
 						<ul class="midRecommProduct">
-						<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList">
+						<c:forEach items="${requestScope.blliMonthlyProductVO}" var="blliMonthlyProductVO">
 							<li class="gallery-cell productInst" style="margin-left: 30px; border-radius:20px;">
 								<div class="yellow_foto">
-								<img src='${recommProductList.midCategoryMainPhotoLink}' style="width: 115px;height: 115px;border-radius:20px; z-index: -1">
+								<img src='${blliMonthlyProductVO.monthlyProductPhotoLink}' style="width: 115px;height: 115px;border-radius:20px; z-index: -1">
 								</div>
 								<div class="productInstAfter" style="text-align: center;">
 									<i class="fa fa-times fa-1-5x recommendMidDelete" style="margin-left: 120px;">
-										<input type="hidden" class="midCategoryValue" value="${recommProductList.midCategory}">
-										<input type="hidden" class="midCategoryIdValue" value="${recommProductList.midCategoryId}">
+										<input type="hidden" class="midCategoryValue" value="${blliMonthlyProductVO.monthlyProduct}">
+										<input type="hidden" class="midCategoryIdValue" value="${blliMonthlyProductVO.monthlyProductId}">
 									</i>
-									<div class="productName" style="font-size: 15px;font-weight: bold; margin-top:-15px">${recommProductList.midCategory}</div>
+									<div class="productName" style="font-size: 15px;font-weight: bold; margin-top:-15px">${blliMonthlyProductVO.monthlyProduct}</div>
 									<div class="productInstDetail" style="color: white; padding: 10px; text-align: justify;">
-										${recommProductList.midCategoryInfo}
+										${blliMonthlyProductVO.monthlyProductInst}
 									</div>
 									<div class="smallProductDetailBtn">
-										<a href="searchSmallProduct.do?searchWord=${recommProductList.midCategory}" style="color: white"> 
+										<a href="searchSmallProduct.do?searchWord=${blliMonthlyProductVO.monthlyProductId}" style="color: white"> 
 										상세보기</a>
 									</div>
 								</div>
 								<div class="yellow_ti">
-									${recommProductList.midCategory }
+									${blliMonthlyProductVO.monthlyProduct }
 								</div>
 							</li>
 					</c:forEach>
@@ -591,15 +591,15 @@
 				월령별 추천상품
 			</div>
 			<div class="accordion accordion1">
-				<c:forEach items="${requestScope.blliMidCategoryVOList}" var="recommProductList" varStatus="midProductNum">
+				<c:forEach items="${requestScope.blliMonthlyProductVO}" var="blliMonthlyProductVO" varStatus="midProductNum">
 				<div class="accordion-section">
-					<input type="hidden" value="${recommProductList.midCategoryId}" class="midCategoryIdValue"> 
+					<input type="hidden" value="${blliMonthlyProductVO.monthlyProductId}" class="midCategoryIdValue"> 
 					<a class="accordion-section-header" data-target="#accordion-${midProductNum.index}">
 						<div class="foto50">
-							<img alt="" src="${recommProductList.midCategoryMainPhotoLink}" style="width: 50px;height: 50px;">
+							<img alt="" src="${blliMonthlyProductVO.monthlyProductPhotoLink}" style="width: 50px;height: 50px;">
 						</div>
 						<div class="main_right_name">
-							${recommProductList.midCategory }
+							${blliMonthlyProductVO.monthlyProduct }
 						</div>
 					</a>
 					<div id="accordion-${midProductNum.index}" class="accordion-section-content">

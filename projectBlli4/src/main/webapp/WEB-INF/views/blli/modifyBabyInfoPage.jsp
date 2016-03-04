@@ -4,7 +4,9 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <script type="text/javascript">
-		
+	function appReadyAlert(){
+		alert('현재 APP은 개발 중입니다.')
+	}	
 	//이메일 유효성 변수
 	var emailValidity = true;
 	//쌍둥이 선택 시 몇번째 칸 아이인지 저장하는 변수
@@ -956,8 +958,8 @@
 			</div>
 			<div class="fr">
 				<div class="login_bottom_right">
-				<a href="${initParam.root}adminIndex.do"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
-				<a href="#"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
+				<a href="#" onclick="appReadyAlert();"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
+				<a href="#" onclick="appReadyAlert();"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
 				</div>
 			</div>
 		</div>

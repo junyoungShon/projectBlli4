@@ -11,6 +11,7 @@ import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
+import kr.co.blli.model.vo.BlliMonthlyProductVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
 import kr.co.blli.model.vo.BlliPostingLikeVO;
@@ -62,7 +63,7 @@ public class ProductDAOImpl implements ProductDAO{
 		return sqlSessionTemplate.selectList("product.getMidCategory");
 	}
 	@Override
-	public List<BlliMidCategoryVO> selectRecommendingMidCategory(
+	public List<BlliMonthlyProductVO> selectRecommendingMidCategory(
 			BlliBabyVO blliBabyVO) {
 		return sqlSessionTemplate.selectList("product.selectRecommendingMidCategory",blliBabyVO);
 	}
@@ -80,17 +81,20 @@ public class ProductDAOImpl implements ProductDAO{
 		// TODO Auto-generated method stub
 		
 	}
-
+	@Override
+	public List<BlliMidCategoryVO> selectMidCategoryByMonthlyProductID(String monthlyProductId) {
+		return sqlSessionTemplate.selectList("admin.selectMidCategoryByMonthlyProductID",monthlyProductId);
+	}
 	@Override
 	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(
-			HashMap<String, String> paraMap) {
-		return sqlSessionTemplate.selectList("product.selectSameAgeMomBestPickedSmallProductList", paraMap);
+			String midCategoryId) {
+		return sqlSessionTemplate.selectList("product.selectSameAgeMomBestPickedSmallProductList", midCategoryId);
 	}
 
 	@Override
 	public BlliSmallProductVO selectSameAgeMomBestPickedSmallProduct(
-			HashMap<String, String> paraMap) {
-		return sqlSessionTemplate.selectOne("product.selectSameAgeMomBestPickedSmallProduct", paraMap);
+			String midCategoryId) {
+		return sqlSessionTemplate.selectOne("product.selectSameAgeMomBestPickedSmallProduct", midCategoryId);
 	}
 
 	@Override

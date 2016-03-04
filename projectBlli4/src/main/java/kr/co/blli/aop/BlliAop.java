@@ -23,12 +23,12 @@ import org.springframework.stereotype.Component;
 public class BlliAop {
 	@Resource
 	private PostingDAO postingDAO;
-	
-	@Around("bean(*)")
-	/*@Around("!bean(kr.co.blli.scheduler.*)")*/
-	public Object checkScheduler(ProceedingJoinPoint point){
-		Object retValue= null;
+
+	/*@Around("execution(* kr.co.blli.controller.*.*(..)) & execution(* kr.co.blli.member.*.*(..)) & execution(* kr.co.blli.posting.*.*(..)) & execution(* kr.co.blli.product.*.*(..)) & execution(* kr.co.blli.security.*.*(..)) & execution(* kr.co.blli.utility.*.*(..))")
+	public Object checkScheduler(ProceedingJoinPoint point) throws Throwable{
+		System.out.println("AOP~!");
 		Logger logger = Logger.getLogger(getClass());
+		Object retValue= null;
 		try{
 			retValue= point.proceed();
 		}catch(Throwable e){
@@ -44,7 +44,7 @@ public class BlliAop {
 		} 
 		return retValue;
 	}
-	
+	*/
 	@Around("execution(public * kr.co.blli.model.posting.PostingService.searchPosting*(..))")
 	public Object postingStatusChecker(ProceedingJoinPoint point) throws Throwable{
 		Object retValue = point.proceed();

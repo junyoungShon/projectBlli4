@@ -190,7 +190,7 @@ img {
     background-color: #ffc91d; /* Green */
     border: none;
     color: black;
-    padding: 8px 32px;
+    /* padding: 8px 32px; */
     text-align: center;
     text-decoration: none;
     display: inline-block;

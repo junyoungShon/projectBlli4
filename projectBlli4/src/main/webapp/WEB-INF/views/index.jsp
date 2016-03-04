@@ -38,6 +38,9 @@ $(document).ready(function(){
 		}
 	});
 });
+function appReadyAlert(){
+	alert('현재 APP은 개발 중입니다.')
+}
 </script>
 </head>
 <body class="login_bg">
@@ -70,8 +73,8 @@ $(document).ready(function(){
 				이미 블리 회원이신가요? <a href="${initParam.root}loginPage.do" style="color: gold; font-weight: bolder;">로그인</a>
 			</p>
 			<div class="login_bt">
-				<p><a href="#" onclick="checkLoginState()"><img src="./img/login_bt1.png" alt="페이스북으로 가입하기"></a>	</p>	
-				<p><a href="#" onclick="kakaoLogin()"><img src="./img/login_bt2.png" alt="카카오톡으로 가입하기"></a></p>
+				<p><a href="#" onclick="checkLoginState()"><img src="./img/login_bt1.png" alt="페이스북으로 가입하기" style="width: 217px"></a>	</p>	
+				<p><a href="#" onclick="kakaoLogin()"><img src="./img/login_bt2.png" alt="카카오톡으로 가입하기" style="width: 217px"></a></p>
 				<p><a href="#" id="naver_id_login"><img src="./img/login_bt2.png" alt="네이버로 가입하기"></a></p>
 				<p><a href="${initParam.root}goJoinMemberPage.do"><img src="./img/login_bt3.png" alt="이메일로 가입하기"></a></p>
 			</div>
@@ -82,8 +85,8 @@ $(document).ready(function(){
 			</div>
 			<div class="fr">
 				<div class="login_bottom_right">
-				<a href="${initParam.root}admin_adminIndex.do"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
-				<a href="#"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
+				<a href="#" onclick="appReadyAlert();"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
+				<a href="#" onclick="appReadyAlert();"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
 				</div>
 			</div>
 		</div>

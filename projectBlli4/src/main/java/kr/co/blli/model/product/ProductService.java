@@ -11,6 +11,7 @@ import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
+import kr.co.blli.model.vo.BlliMonthlyProductVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
 import kr.co.blli.model.vo.BlliPostingLikeVO;
@@ -21,12 +22,12 @@ import kr.co.blli.model.vo.ListVO;
 
 public interface ProductService {
 
-	public List<BlliMidCategoryVO> selectRecommendingMidCategory(BlliBabyVO blliBabyVO);
+	public List<BlliMonthlyProductVO> selectRecommendingMidCategory(BlliBabyVO blliBabyVO);
 
 	public void deleteRecommendMidCategory(BlliNotRecommMidCategoryVO blliNotRecommMidCategoryVO);
 
 	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(
-			List<BlliMidCategoryVO> blliMidCategoryVOList, BlliBabyVO blliBabyVO);
+			List<BlliMonthlyProductVO> blliMonthlyProductVO, BlliBabyVO blliBabyVO);
 
 	public List<BlliPostingVO> selectPostingBySmallProductList(List<BlliSmallProductVO> blliSmallProductVOList,String meberId,String pageNum);
 

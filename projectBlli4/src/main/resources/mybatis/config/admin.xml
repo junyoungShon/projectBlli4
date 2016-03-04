@@ -76,6 +76,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="word" column="word"/>
  		<result property="wordCount" column="word_count"/>
  	</resultMap>
+ 	<!-- blliMonthlyProduct ResultMap 설정 -->
+ 	<resultMap type="blliMonthlyProductVO" id="bmp">
+ 		<result property="monthlyProduct" column="monthly_product"/>
+ 		<result property="monthlyProductId" column="monthly_product_id"/>
+ 		<result property="minUsableMonth" column="min_Usable_Month"/>
+ 		<result property="maxUsableMonth" column="max_Usable_Month"/>
+ 		<result property="maxUsableMonth" column="max_Usable_Month"/>
+ 		<result property="monthlyProductPhotoLink" column="monthly_Product_PhotoLink"/>
+ 	</resultMap>
  	<!-- 용호 작성 쿼리 -->
  	<!-- memberId로 회원의 메일주소를 찾습니다. -->
 	<select id="findMemberInfoById" resultMap="bmbvRM">
@@ -289,6 +298,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectConfirmedPostingUrlAndSmallProductId" resultMap="bpvRM">
 		select small_product_id,posting_url from blli_posting where posting_status = 'confirmed'
 	</select>
+	<select id="selectAllMonthlyProduct" resultMap="bmp">
+		select monthly_product_id from blli_monthly_product
+	</select>
+	<select id="selectMidCategoryByMonthlyProductID" resultMap="bmcvRM">
+			select m.mid_category_id as mid_category_id , m.mid_category_main_photo_link as mid_category_main_photo_link, mp.monthly_product_id as monthly_product_id
+	from blli_mid_category m , monthly_product_and_n_mid mp
+	where m.mid_category_id = mp.mid_category_id and mp.monthly_product_id = #{value}
+	</select>
+	<update id="updatMonthlyProductPhotoLink">
+		update blli_monthly_product set monthly_product_photolink = #{monthlyProductPhotoLink} where monthly_product_id = #{monthlyProductId}
+	</update>
 	<!-- 준영 끝 -->
  </mapper>
  

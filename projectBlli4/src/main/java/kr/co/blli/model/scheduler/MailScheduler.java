@@ -83,7 +83,7 @@ public class MailScheduler {
 					//해당 회원의 아이 중 월령이 바뀐 아이의 정보를 회원VO가 가진 회원아기VOList 변수에 set 해준다.
 					for(int i=0; i<memberList.size(); i++) {
 						memberList.get(i).setBlliBabyVOList(memberService.getBabyAgeChangedListOfMember(memberList.get(i).getMemberId()));
-						memberList.get(i).setBlliRecommendingMidCategoryVOList(productService.selectRecommendingMidCategory(memberService.getBabyAgeChangedListOfMember(memberList.get(i).getMemberId()).get(0)));
+						//memberList.get(i).setBlliRecommendingMidCategoryVOList(productService.selectRecommendingMidCategory(memberService.getBabyAgeChangedListOfMember(memberList.get(i).getMemberId()).get(0)));
 					}
 					
 					Map<String, Object> textParams = new HashMap<String, Object>();

@@ -9,6 +9,7 @@ import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
+import kr.co.blli.model.vo.BlliMonthlyProductVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
 import kr.co.blli.model.vo.BlliPostingLikeVO;
@@ -33,7 +34,7 @@ public interface ProductDAO {
 
 	List<BlliMidCategoryVO> getMidCategory();
 
-	List<BlliMidCategoryVO> selectRecommendingMidCategory(BlliBabyVO blliBabyVO);
+	List<BlliMonthlyProductVO> selectRecommendingMidCategory(BlliBabyVO blliBabyVO);
 
 	void deleteRecommendMidCategory(BlliNotRecommMidCategoryVO blliNotRecommMidCategoryVO);
 
@@ -41,9 +42,9 @@ public interface ProductDAO {
 
 	void selectSameAgeMomBestPickedSmallProductList(Integer put);
 
-	List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(HashMap<String, String> paraMap);
+	List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(String midCategoryId);
 
-	BlliSmallProductVO selectSameAgeMomBestPickedSmallProduct(HashMap<String, String> paraMap);
+	BlliSmallProductVO selectSameAgeMomBestPickedSmallProduct(String midCategoryId);
 
 	void insertSmallProduct(BlliSmallProductVO blliSmallProductVO);
 
@@ -192,5 +193,8 @@ public interface ProductDAO {
 	int totalSmallProductOfBigCategory(String searchWord);
 
 	BlliSmallProductVO getSmallProductBySmallProductId(String smallProductId);
+
+	List<BlliMidCategoryVO> selectMidCategoryByMonthlyProductID(
+			String monthlyProductId);
 
 }

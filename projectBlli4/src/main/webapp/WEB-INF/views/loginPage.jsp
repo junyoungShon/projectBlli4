@@ -12,9 +12,19 @@
 <meta name="Description" content="" />
 <link rel="stylesheet" type="text/css" href="./css/reset.css" />
 <link rel="stylesheet" type="text/css" href="./css/css.css" />
+<link id="bs-css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="${initParam.root}css/ct-paper.css" rel="stylesheet"/>
+<link href="${initParam.root}css/css.css" rel="stylesheet"/>
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="${initParam.root}js/bootstrap.min.js"></script>
+<!--  Plugins -->
+<script src="${initParam.root}js/ct-paper-radio.js"></script>
+<script src="${initParam.root}js/ct-paper.js"></script> 
 <script type="text/javascript">
+	function appReadyAlert(){
+		alert('현재 APP은 개발 중입니다.')
+	}	
 	$(document).ready(function(){
 		
 		$.ajax({
@@ -25,7 +35,12 @@
 				$('.footerPostingStatics').text(data.postingStatics);
 			}
 		});
-		
+		//엔터 클릭시 로그인
+		$('#memberPassword').keyup(function(key){
+			if (key.keyCode == 13) {
+				$('.loginButton').click();
+	        }
+		});
 		$('.loginButton').click(function(){
 			if($('#memberId').val()==""){
 				alert('id를 입력해주세요');
@@ -54,13 +69,12 @@
 </script>
 </head>
 <body class="loginPage_bg">
-${requestScope.loginFail}
 <c:if test="${requestScope.loginFail=='true'}">
 	<script type="text/javascript">
 		alert('로그인에 실패했습니다. 비밀번호를 확인해주세요!');
 	</script>
 </c:if>
-		<div class="loginComp_bg" style="height: 350px; margin-top: 5%">
+		<div class="loginComp_bg" style="height: 350px; margin-top: 5%; height:450px;">
 			<div class="title" style="margin-top: 40px;">
 				Email Login
 			</div>
@@ -75,8 +89,9 @@ ${requestScope.loginFail}
 				<br>
 				<input type="button" class="loginButton" value="로그인" style="margin-top:20px;"> 
 			</form>
-			<br>
-			<a href="${initParam.root}goFindPasswordPage.do"><font color="white"><b>비밀번호가 뭐였지..?</b></font></a>
+			<br><br>
+			<a href="${initParam.root}goFindPasswordPage.do"><font color="white"><b>비밀번호 찾기</b></font></a><br>
+			<a href="${initParam.root}goJoinMemberPage.do"><font color="white"><b>이메일 회원가입</b></font></a>
 		</div>
 			<div class="login_bottom">
 			<div class="fl login_bottom_ft">
@@ -84,8 +99,8 @@ ${requestScope.loginFail}
 			</div>
 			<div class="fr">
 				<div class="login_bottom_right">
-				<a href="${initParam.root}adminIndex.do"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
-				<a href="#"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
+				<a href="#" onclick="appReadyAlert();"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
+				<a href="#" onclick="appReadyAlert();"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
 				</div>
 			</div>
 		</div>

@@ -41,6 +41,9 @@
 		</script>
 	</sec:authorize>
 <script type="text/javascript">
+	function appReadyAlert(){
+		alert('현재 APP은 개발 중입니다.')
+	}	
 	//이메일 유효성 변수
 	var emailValidity = false;
 	//회원 이름 유효성 변수
@@ -75,15 +78,17 @@
 			var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i; 
 			if(userMail==""){
 				$('#memberIdInsertMSG').text('이메일을 입력해주세요');
+				emailValidity = false;
 			}else if(!regExp.test(userMail)){
 				$('#memberIdInsertMSG').text('유효한 이메일을 입력해주세요');
+				emailValidity = false;
 			}else{
-				$('#memberIdInsertMSG').text('유효한 이메일입니다 ');
 				$.ajax({
 	            	type:"get",
 	            	url:"findMemberByEmailId.do?memberId="+userMail,
 	            	success:function(result){
 	            		if(result==true){
+							emailValidity = false;
 	            			$('#memberIdInsertMSG').text('이미 등록한 이메일 주소 입니다.');
 	            		}else{
 	            			$('#memberIdInsertMSG').text('유효한 이메일입니다 ');
@@ -102,11 +107,19 @@
 			var userName = $(this).val();
 			if(userName==""){
 				$('#memberNameInsertMSG').text('성함 혹은 별칭을 입력해주세요');
+				memberNameValidity = false;
 			}
 			if(userName.length>=10){
 				$('#memberNameInsertMSG').text('성함 혹은 별칭은 9글자 이하로 입력해주세요');
 				$(this).val(userName.substring(0,9));
-			}else if(userName.length>0){
+				memberNameValidity = false;
+			}
+			if(userName.search(/\W|\s/g) > -1 ){
+				$('#memberNameInsertMSG').text('특수문자나 공백을 사용하실 수 없습니다!');
+				memberNameValidity = false;
+				return false;
+			}
+			if(userName.length>0){
 				$('#memberNameInsertMSG').text('유효한 이름입니다!');
 				memberNameValidity = true;
 			}
@@ -117,31 +130,52 @@
 			var userPassword = $(this).val();
 			if(userPassword==""){
 				$('#memberPasswordInsertMSG').text('비밀번호를 입력 해주세요');
+				passwordValidity = false;
 			}
 			if(userPassword.length>=12){
 				$('#memberPasswordInsertMSG').text('비밀번호는 6글자 이상, 12글자 이하로 입력해주세요');
 				$(this).val(userPassword.substring(0,12));
-			}else if(userPassword.length>6){
-				$('#memberPasswordInsertMSG').text('유효한 비밀번호입니다!');
-				passwordValidity = true;
+				passwordValidity = false;
+			}
+			if(userPassword.length>6){
+				if($(':input[name="memberRePassword"]').val()!=userPassword){
+					$('#memberPasswordInsertMSG').text('비밀번호를 일치시켜주세요');
+					$('#memberRePasswordInsertMSG').text('비밀번호가 서로 일치하지 않습니다.');
+					passwordValidity = false;
+				}else{
+					$('#memberPasswordInsertMSG').text('유효한 비밀번호입니다!');
+					$('#memberRePasswordInsertMSG').text('비밀번호가 확인되었습니다.');
+					passwordValidity = true;
+					repasswordValidity = true;
+				}
 			}
 		});
-		$(':input[name="memberRePassword"]').keyup(function(){
+		$(':input[name="memberRePassword"]').keyup(function(key){
 			var userRePassword = $(this).val();
 			if(userRePassword==""){
 				$('#memberRePasswordInsertMSG').text('비밀번호를 확인 해주세요');
+				repasswordValidity = false;
 			}
 			if(userRePassword.length>=12){
 				$('#memberRePasswordInsertMSG').text('비밀번호는 6글자 이상, 12글자 이하로 입력해주세요');
 				$(this).val(userRePassword.substring(0,12));
-			}else if(userRePassword.length>5){
+				repasswordValidity = false;
+			}
+			if(userRePassword.length>6){
 				if($(':input[name="memberPassword"]').val()==userRePassword){
+					$('#memberPasswordInsertMSG').text('유효한 비밀번호입니다!');
 					$('#memberRePasswordInsertMSG').text('비밀번호가 확인되었습니다.');
+					passwordValidity = true;
 					repasswordValidity = true;
 				}else{
+					$('#memberPasswordInsertMSG').text('비밀번호를 일치시켜주세요');
 					$('#memberRePasswordInsertMSG').text('비밀번호가 서로 일치하지 않습니다.');
+					repasswordValidity = false;
 				}
 			}
+			if (key.keyCode == 13) {
+	        	   submitMemberInfo();
+	        }
 		});
 		
 	});
@@ -195,10 +229,9 @@
                                     <label>비밀번호 확인</label>
                                     <input type="password" class="form-control" name="memberRePassword" placeholder="비밀번호 확인">
                                     <div class="alertDiv" id="memberRePasswordInsertMSG"></div>
-                                    <a class="btn btn-danger btn-block" onclick="submitMemberInfo()" style="margin-top:30px;">등록</a>
+                                    <a class="btn btn-danger btn-block" onclick="submitMemberInfo()" style="margin-top:30px;" id="memberInfoSubmit">등록</a>
                                 </form>
                                 <div class="forgot">
-                                    <a href="#" class="btn btn-simple btn-danger">비밀번호를 잊으셨나요?</a>
                                 </div>
                             </div>
                         </div>
@@ -231,8 +264,8 @@
 			</div>
 			<div class="fr">
 				<div class="login_bottom_right">
-				<a href="${initParam.root}adminIndex.do"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
-				<a href="#"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
+				<a href="#" onclick="appReadyAlert();"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
+				<a href="#" onclick="appReadyAlert();"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
 				</div>
 			</div>
 		</div>

@@ -55,7 +55,6 @@
             <param name="ConversionPattern" value="%m%n" />
         </layout>   
     </appender>
-    
 	<logger name="kr.co.blli.aop">
         <level value="ERROR"/>
         <appender-ref ref="errorByUser"/>

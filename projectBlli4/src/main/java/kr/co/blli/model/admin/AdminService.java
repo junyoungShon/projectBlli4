@@ -54,4 +54,6 @@ public interface AdminService {
 	ArrayList<BlliUserExceptionLogVO> checkUserExceptionLog() throws IOException;
 
 	public List<BlliPostingVO> selectConfirmedPosting();
+
+	public void monthlyProductImageDownLoader();
 }

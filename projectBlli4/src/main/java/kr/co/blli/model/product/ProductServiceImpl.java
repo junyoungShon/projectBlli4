@@ -14,6 +14,7 @@ import kr.co.blli.model.vo.BlliBuyLinkClickVO;
 import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
+import kr.co.blli.model.vo.BlliMonthlyProductVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliPagingBean;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
@@ -40,11 +41,11 @@ public class ProductServiceImpl implements ProductService{
 	  * @return
 	 */
 	@Override
-	public List<BlliMidCategoryVO> selectRecommendingMidCategory(BlliBabyVO blliBabyVO) {
+	public List<BlliMonthlyProductVO> selectRecommendingMidCategory(BlliBabyVO blliBabyVO) {
 		//회원의 추천받을 아이이름과 , 아이디를 이용해 추천대상인 중분류 제품을 선정한다.(회원이 추천을 기피했던 중제품 제외)
-		List<BlliMidCategoryVO> blliMidCategoryVOList = productDAO.selectRecommendingMidCategory(blliBabyVO);
+		List<BlliMonthlyProductVO> blliMidCategoryVOList = productDAO.selectRecommendingMidCategory(blliBabyVO);
 		//기피 중분류들을 추출한다.
-		List<BlliNotRecommMidCategoryVO> notRecommMidCategoryList = productDAO.selectNotRecommMidCategoryList(blliBabyVO); 
+		/*List<BlliNotRecommMidCategoryVO> notRecommMidCategoryList = productDAO.selectNotRecommMidCategoryList(blliBabyVO); 
 		//이중 for문으로 추천받을 중분류 제품에서 기피한 중제품을 제거한다.
 		if(blliMidCategoryVOList!=null&&notRecommMidCategoryList!=null)
 		for(int i=0;i<notRecommMidCategoryList.size();i++){
@@ -53,7 +54,7 @@ public class ProductServiceImpl implements ProductService{
 					blliMidCategoryVOList.remove(j);
 				}
 			}
-		}
+		}*/
 		return blliMidCategoryVOList;
 	}
 	/**
@@ -77,43 +78,49 @@ public class ProductServiceImpl implements ProductService{
 	  * @return
 	 */
 	@Override
-	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(
-			List<BlliMidCategoryVO> blliMidCategoryVOList, BlliBabyVO blliBabyVO) {
-		for(int i=0;i<blliMidCategoryVOList.size();i++){
-		}
+	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(List<BlliMonthlyProductVO> blliMonthlyProductVO, BlliBabyVO blliBabyVO) {
 		List<BlliSmallProductVO> blliSmallProductVOList = new ArrayList<BlliSmallProductVO>();
+		List<BlliMidCategoryVO> blliMidCategoryVOList = new ArrayList<BlliMidCategoryVO>();
+		//월령별 중분류 리스트를 받아 이에 속하는 중분류 리스트를 반환 받자
+		for(int i=0;blliMonthlyProductVO.size()<i;i++){
+			List<BlliMidCategoryVO> tempList = productDAO.selectMidCategoryByMonthlyProductID(blliMonthlyProductVO.get(i).getMonthlyProductId());
+			for(int j=0;j<tempList.size();j++){
+				if(tempList.get(j)!=null){
+					blliMidCategoryVOList.add(tempList.get(j));
+				}
+			}
+		}
+		//중분류리스트수에 따라 소분류 추천 갯수를 달리하자		
 		int recommMidNumber = blliMidCategoryVOList.size();
 		if(recommMidNumber>9){
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
-				HashMap<String,String> paraMap = new HashMap<String, String>();
-				paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategoryId());
-				paraMap.put("babyMonthAge",Integer.toString(blliBabyVO.getBabyMonthAge()));
 				//중제품 당 찜 상위 1개 만을 가져온다.
-				BlliSmallProductVO blliSmallProductVO = productDAO.selectSameAgeMomBestPickedSmallProduct(paraMap);
+				BlliSmallProductVO blliSmallProductVO = productDAO.selectSameAgeMomBestPickedSmallProduct(blliMidCategoryVOList.get(i).getMidCategoryId());
 				if(blliSmallProductVO!=null){
+					blliSmallProductVO.setMinPrice(productDAO.selectMinPriceBySmallProductId(blliSmallProductVOList.get(i).getSmallProductId()));
+					if(blliSmallProductVO.getMinPrice()!=null){
+						DecimalFormat df = new DecimalFormat("#,##0");
+						blliSmallProductVOList.get(i).setMinPrice(df.format(Integer.parseInt(blliSmallProductVOList.get(i).getMinPrice())));
+						blliSmallProductVOList.set(i, productDibChecker(blliBabyVO.getMemberId(), blliSmallProductVOList.get(i)));
+					}
 					blliSmallProductVOList.add(blliSmallProductVO);
 				}
 			}
 		}else{
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
-				HashMap<String,String> paraMap = new HashMap<String, String>();
-				paraMap.put("recommMid", blliMidCategoryVOList.get(i).getMidCategoryId());
-				paraMap.put("babyMonthAge",Integer.toString(blliBabyVO.getBabyMonthAge()));
 				// 중제품 당 찜 상위 2개씩을 가져온다.
-				List<BlliSmallProductVO> tempList = productDAO.selectSameAgeMomBestPickedSmallProductList(paraMap);
+				List<BlliSmallProductVO> tempList = productDAO.selectSameAgeMomBestPickedSmallProductList(blliMidCategoryVOList.get(i).getMidCategoryId());
 				for(int j=0;j<tempList.size();j++){
 					if(tempList.get(j)!=null){
+						tempList.get(j).setMinPrice(productDAO.selectMinPriceBySmallProductId(blliSmallProductVOList.get(i).getSmallProductId()));
+						if(tempList.get(j).getMinPrice()!=null){
+							DecimalFormat df = new DecimalFormat("#,##0");
+							tempList.get(j).setMinPrice(df.format(Integer.parseInt(blliSmallProductVOList.get(i).getMinPrice())));
+							tempList.set(j, productDibChecker(blliBabyVO.getMemberId(), blliSmallProductVOList.get(i)));
+						}
 						blliSmallProductVOList.add(tempList.get(j));
 					}
 				}
-			}
-		}
-		for(int i=0;i<blliSmallProductVOList.size();i++){
-			blliSmallProductVOList.get(i).setMinPrice(productDAO.selectMinPriceBySmallProductId(blliSmallProductVOList.get(i).getSmallProductId()));
-			if(blliSmallProductVOList.get(i).getMinPrice()!=null){
-				DecimalFormat df = new DecimalFormat("#,##0");
-				blliSmallProductVOList.get(i).setMinPrice(df.format(Integer.parseInt(blliSmallProductVOList.get(i).getMinPrice())));
-				blliSmallProductVOList.set(i, productDibChecker(blliBabyVO.getMemberId(), blliSmallProductVOList.get(i)));
 			}
 		}
 		return blliSmallProductVOList;

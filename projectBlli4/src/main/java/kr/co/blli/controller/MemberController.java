@@ -24,6 +24,7 @@ import kr.co.blli.model.vo.BlliMemberDibsVO;
 import kr.co.blli.model.vo.BlliMemberScrapeVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
+import kr.co.blli.model.vo.BlliMonthlyProductVO;
 import kr.co.blli.model.vo.BlliNotRecommMidCategoryVO;
 import kr.co.blli.model.vo.BlliNoticeVO;
 import kr.co.blli.model.vo.BlliPostingDisLikeVO;
@@ -123,10 +124,9 @@ public class MemberController {
 				}
 			}
 			//메인페이지로 이동할 때 회원에게 추천될 상품 리스트를 전달받는다.
-			List<BlliMidCategoryVO> blliMidCategoryVOList = productService.selectRecommendingMidCategory(blliBabyVO);
-			
+			List<BlliMonthlyProductVO> blliMonthlyProductVO = productService.selectRecommendingMidCategory(blliBabyVO);
 			//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품 리스트를 전달 받는다.(또래엄마가 많이 찜한 상품)
-			List<BlliSmallProductVO> blliSmallProductVOList = productService.selectSameAgeMomBestPickedSmallProductList(blliMidCategoryVOList,blliBabyVO);
+			List<BlliSmallProductVO> blliSmallProductVOList = productService.selectSameAgeMomBestPickedSmallProductList(blliMonthlyProductVO,blliBabyVO);
 			
 			List<BlliPostingVO> blliPostingVOList = postingService.searchPostingBySmallProductList(blliSmallProductVOList,blliMemberVO.getMemberId(),"1");
 			for(int i=0;i<blliSmallProductVOList.size();i++){
@@ -137,10 +137,13 @@ public class MemberController {
 			//회원정보 삽입
 			mav.addObject("blliMemberVO", blliMemberVO);
 			//회원에게 추천될 중분류 상품 리스트 삽입
-			mav.addObject("blliMidCategoryVOList", blliMidCategoryVOList);
+			mav.addObject("blliMonthlyProductVO", blliMonthlyProductVO);
+			System.out.println(blliMonthlyProductVO);
 			//회원에게 추천될 소분류 상품 리스트 삽입
 			mav.addObject("blliSmallProductVOList", blliSmallProductVOList);
+			System.out.println(blliSmallProductVOList);
 			//회원에게 추천될 소분류 관련 포스팅 리스트 삽입
+			System.out.println(blliPostingVOList);
 			mav.addObject("blliPostingVOList", blliPostingVOList);
 		
 		return mav;
@@ -216,7 +219,7 @@ public class MemberController {
 		HttpSession session = request.getSession();
 		session.setAttribute("blliMemberVO", blliMemberVO);
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("memberjoin/insertBabyInfo");
+		mav.setViewName("redirect:memberjoin_insertBabyInfo.do");
 		return mav;
 	}
 	/**

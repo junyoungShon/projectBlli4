@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
+import kr.co.blli.model.vo.BlliMonthlyProductVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 import kr.co.blli.model.vo.BlliWordCloudVO;
@@ -198,5 +199,17 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public List<BlliPostingVO> selectConfirmedPostingUrlAndSmallProductId() {
 		return sqlSessionTemplate.selectList("admin.selectConfirmedPostingUrlAndSmallProductId");
+	}
+	@Override
+	public List<BlliMonthlyProductVO> selectAllMonthlyProduct() {
+		return sqlSessionTemplate.selectList("admin.selectAllMonthlyProduct");
+	}
+	@Override
+	public List<BlliMidCategoryVO> selectMidCategoryByMonthlyProductID(String monthlyProductId) {
+		return sqlSessionTemplate.selectList("admin.selectMidCategoryByMonthlyProductID",monthlyProductId);
+	}
+	@Override
+	public void updatMonthlyProductPhotoLink(BlliMonthlyProductVO blliMonthlyProductVO) {
+		sqlSessionTemplate.update("admin.updatMonthlyProductPhotoLink",blliMonthlyProductVO);
 	}
 }

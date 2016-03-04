@@ -48,13 +48,16 @@
 <script src="${initParam.root}js/ct-paper-radio.js"></script>
 <script src="${initParam.root}js/ct-paper.js"></script> 
 <script type="text/javascript">
-		
+function appReadyAlert(){
+	alert('현재 APP은 개발 중입니다.')
+}	
 	//이메일 유효성 변수
 	var emailValidity = false;
 	//쌍둥이 선택 시 몇번째 칸 아이인지 저장하는 변수
 	var selectBabyNum ;
 	//최근 업로드된 사진번호 저장 변수
 	var updateBabyPhotoNum;
+	
 	
 	function setUpdateBabyPhotoNum(updateBabyPhotoNum){
 		this.updateBabyPhotoNum = updateBabyPhotoNum;
@@ -67,6 +70,7 @@
 		}
 	}
 	$(document).ready(function(){
+		
 		//초기에 기본 성별 설정
 		for(var i=0;i<3;i++){
 			$(':input[name="BlliBabyVO['+i+'].babySex"]').eq(0).radio('check');
@@ -121,6 +125,8 @@
 				$('#babyPhoto'+updateBabyPhotoNum).attr("src","${initParam.root}img/baby_foto.jpg");
 				$('#babyPhoto'+updateBabyPhotoNum).css("width","100px");
 				$('#babyPhoto'+updateBabyPhotoNum).css("height","100px");
+				return false;
+			}else if(fileName==""){
 				return false;
 			}else{
 				var data = new FormData();
@@ -195,9 +201,9 @@
 			}
 		});
 		//쌍둥이 선택 취소 혹은 완료 시 입력창 초기화
-		$('#addTwins').on('hidden.bs.modal', function (e) {
+		/* $('#addTwins').on('hidden.bs.modal', function (e) {
 			$('.twinsName').val('');
-		})
+		}) */
 		
 		
 		$(':input[name="memberEmail"]').keyup(function(){
@@ -238,18 +244,27 @@
 			if($(this).children(':input[name="BlliBabyVO[0].babySex"]').val()=='쌍둥이'){
 				selectBabyNum = 0;
 				$('#addTwins').modal();
+			}else{
+				$(':input[name="BlliBabyVO[0].babyName"]').attr("readonly",false);
+				$(':input[name="BlliBabyVO[0].babyName"]').val('');
 			}
 		})
 		$('.BlliBaby2Gender').click(function(){
 			if($(this).children(':input[name="BlliBabyVO[1].babySex"]').val()=='쌍둥이'){
 				selectBabyNum = 1;
 				$('#addTwins').modal();
+			}else{
+				$(':input[name="BlliBabyVO[0].babyName"]').attr("readonly",false);
+				$(':input[name="BlliBabyVO[0].babyName"]').val('');
 			}
 		})
 		$('.BlliBaby3Gender').click(function(){
 			if($(this).children(':input[name="BlliBabyVO[2].babySex"]').val()=='쌍둥이'){
 				selectBabyNum = 2;
 				$('#addTwins').modal();
+			}else{
+				$(':input[name="BlliBabyVO[0].babyName"]').attr("readonly",false);
+				$(':input[name="BlliBabyVO[0].babyName"]').val('');
 			}
 		})
 		//date-picker 키보드 이용 불능으로 만들기
@@ -327,9 +342,18 @@
 				if($($('.twinsName').get(1)).val()!=""){
 					twinsName = $($('.twinsName').get(0)).val();
 				}
+				if($($('.twinsName').get(1)).val().search(/\W|\s/g) > -1 ){
+					alert((i+1)+'번째 아이의 이름에 특수문자나 공백을 사용하실 수 없습니다!');
+					$($('.twinsName').get(0)).focus();
+					return false;
+				}
 			}else{
 				if($($('.twinsName').get(i)).val()!=""){
 					if($($('.twinsName').get(i)).val()==$($('.twinsName').get(i-1)).val()){
+						duplicateTwins = true;
+					}else if($($('.twinsName').get(1)).val().search(/\W|\s/g) > -1 ){
+						alert((i+1)+'번째 아이의 이름에 특수문자나 공백을 사용하실 수 없습니다!');
+						$($('.twinsName').get(i)).focus();
 						duplicateTwins = true;
 					}else{
 						twinsName += "&"+ $($('.twinsName').get(i)).val();
@@ -340,9 +364,14 @@
 				if($($('.twinsName').get(0)).val()==$($('.twinsName').get(2)).val()){
 					duplicateTwins = true;
 				}
+				if($($('.twinsName').get(1)).val().search(/\W|\s/g) > -1 ){
+					alert((i+1)+'번째 아이의 이름에 특수문자나 공백을 사용하실 수 없습니다!');
+					$($('.twinsName').get(i)).focus();
+					duplicateTwins = true;
+				}
 			}
 		}
-		if(duplicateTwins&&twinsName!=""){
+		if(duplicateTwins){
 			alert('이름이 중복됩니다.');
 			$('.twinsName').val('');
 			twinsName = "";
@@ -390,6 +419,11 @@
 					$(':input[name="firstBabyBirthday"]').focus();
 					return false;
 				}
+				if($(':input[name="BlliBabyVO['+i+'].babyBirthday"]').val().search(/\W|\s/g) > -1 ){
+					alert((i+1)+'번째 아이의 이름에 특수문자나 공백을 사용하실 수 없습니다!');
+					$(':input[name="firstBabyBirthday"]').focus();
+					return false;
+				}
 				if(targetAmount>=2){
 					for(var j=targetAmount-1;j>0;j--){
 						if($(':input[name="BlliBabyVO['+i+'].babyName"]').val()==$(':input[name="BlliBabyVO['+j+'].babyName"]').val()){
@@ -404,6 +438,7 @@
 						};
 					}
 				}
+				
 			}
 			return true;
 		}
@@ -639,8 +674,8 @@
 			</div>
 			<div class="fr">
 				<div class="login_bottom_right">
-				<a href="${initParam.root}adminIndex.do"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
-				<a href="#"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
+				<a href="#" onclick="appReadyAlert();"><img src="./img/bottom_app1.png" alt="안드로이드 다운로드받기"></a>
+				<a href="#" onclick="appReadyAlert();"><img src="./img/bottom_app2.png" alt="애플 다운로드받기"></a>
 				</div>
 			</div>
 		</div>

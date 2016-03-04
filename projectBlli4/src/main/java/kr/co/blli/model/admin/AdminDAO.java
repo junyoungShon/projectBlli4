@@ -6,6 +6,7 @@ import java.util.List;
 import kr.co.blli.model.vo.BlliMailVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliMidCategoryVO;
+import kr.co.blli.model.vo.BlliMonthlyProductVO;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliSmallProductVO;
 import kr.co.blli.model.vo.BlliWordCloudVO;
@@ -94,6 +95,12 @@ public interface AdminDAO {
 	void updateMinMaxUseWhenByMidcategoryId(BlliMidCategoryVO blliMidCategoryVO);
 
 	List<BlliPostingVO> selectConfirmedPostingUrlAndSmallProductId();
+
+	List<BlliMonthlyProductVO> selectAllMonthlyProduct();
+
+	List<BlliMidCategoryVO> selectMidCategoryByMonthlyProductID(String monthlyProductId);
+
+	void updatMonthlyProductPhotoLink(BlliMonthlyProductVO blliMonthlyProductVO);
 
 }
  

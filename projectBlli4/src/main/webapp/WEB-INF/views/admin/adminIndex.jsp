@@ -34,6 +34,7 @@
 		<li><a href="${initParam.root}admin_allProductDownLoader.do">모든 제품 사진 다운로드</a></li>
 		<li><a href="${initParam.root}admin_checkUserExceptionLog.do">사용자에의한 익셉션 확인</a></li>
 		<li><a href="${initParam.root}admin_makingWordCloud.do">현재 confirmed인 포스팅을 대상으로 워드클라우드 생성</a></li>
+		<li><a href="${initParam.root}admin_monthlyProductImageDownLoader.do">블리의 월령별 추천상품을 모두 다운로드해요</a></li>
 	</ul>
 	
 </form>
