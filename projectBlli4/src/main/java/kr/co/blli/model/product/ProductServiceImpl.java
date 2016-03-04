@@ -26,6 +26,7 @@ import kr.co.blli.model.vo.BlliWordCloudVO;
 import kr.co.blli.model.vo.ListVO;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -188,6 +189,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
+	@Transactional
 	public int smallProductDib(BlliMemberDibsVO blliMemberDibsVO) {
 		int result = 0;
 		if(productDAO.deleteDipsInfo(blliMemberDibsVO)==0){
@@ -200,6 +202,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
+	@Transactional
 	public int postingScrape(BlliMemberScrapeVO blliMemberScrapVO) {
 		int result = 0;
 		if(productDAO.deletePostingScrapeInfo(blliMemberScrapVO)==0){
@@ -212,6 +215,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
+	@Transactional
 	public int postingLike(BlliPostingLikeVO blliPostingLikeVO) {
 		int result = 0;
 		if(productDAO.deletePostingLikeInfo(blliPostingLikeVO)==0){
@@ -224,6 +228,7 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
+	@Transactional
 	public int postingDisLike(BlliPostingDisLikeVO blliPostingDisLikeVO) {
 		int result = 0;
 		if(productDAO.deletePostingDisLikeInfo(blliPostingDisLikeVO)==0){
@@ -402,6 +407,7 @@ public class ProductServiceImpl implements ProductService{
 	  * @param blliBuyLinkClickVO
 	 */
 	@Override
+	@Transactional
 	public void buyLinkClick(BlliBuyLinkClickVO blliBuyLinkClickVO) {
 		if(blliBuyLinkClickVO.getMemberId()==null){
 			blliBuyLinkClickVO.setMemberId("anonyMousUser");
