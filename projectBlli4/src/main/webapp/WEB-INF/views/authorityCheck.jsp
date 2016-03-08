@@ -23,7 +23,7 @@
 	<!-- 회원가입페이지에 ROLE_USER접근 시 alert과 메인페이지 이동 -->
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 		<script type="text/javascript">
-			location.replace('${initParam.root}admin_goAdminIndexPage.do');
+			location.replace('${initParam.root}admin_adminIndex.do');
 		</script>
 	</sec:authorize>
 	<sec:authorize access="hasRole('ROLE_RESTRICTED')">

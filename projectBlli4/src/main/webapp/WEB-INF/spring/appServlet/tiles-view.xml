@@ -18,7 +18,17 @@
 		<put-attribute name="footer"  value="/WEB-INF/views/tilesTemplates/footer.jsp"  />
 		<put-attribute name="main"  value="/WEB-INF/views/blli/main.jsp"  />
 	</definition>
+	<definition name="admin" template="/WEB-INF/views/tilesTemplates/admin/layout.jsp">
+		<put-attribute name="header"  value="/WEB-INF/views/tilesTemplates/admin/header.jsp"  />
+		<put-attribute name="left"  value="/WEB-INF/views/tilesTemplates/admin/left.jsp"  />
+		<put-attribute name="right"  value="/WEB-INF/views/admin/right.jsp"  />
+	</definition>
 	
+	<definition name="admin_*" extends="admin">
+		<put-attribute name="right" value="/WEB-INF/views/admin/{1}.jsp"/>
+	</definition>
+
+
 	<definition name="blli_*" extends="home">
 		<put-attribute name="main" value="/WEB-INF/views/blli/{1}.jsp"/>
 	</definition>

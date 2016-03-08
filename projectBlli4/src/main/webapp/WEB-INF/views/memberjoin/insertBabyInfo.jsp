@@ -22,7 +22,7 @@
 	<!-- 회원가입페이지에 ROLE_USER접근 시 alert과 메인페이지 이동 -->
 	<sec:authorize access="hasRole('ROLE_ADMIN')">
 		<script type="text/javascript">
-			location.replace('${initParam.root}admin_goAdminIndexPage.do');
+			location.replace('${initParam.root}admin_adminIndex.do');
 		</script>
 	</sec:authorize>
 	<!-- 미인증 유저에게는 로그인 폼이 제공된다. -->

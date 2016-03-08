@@ -23,9 +23,9 @@ public class AdminController {
 	@Resource
 	private AdminService adminService;
 	
-	@RequestMapping("admin_goAdminIndexPage.do")
+	@RequestMapping("admin_adminIndex.do")
 	public String goAdminIndexPage(){
-		return "admin/adminIndex";
+		return "admin_adminIndex";
 	}
 	@RequestMapping("admin_sendMail.do")
 	public String sendMail(String memberId, String mailForm) {
