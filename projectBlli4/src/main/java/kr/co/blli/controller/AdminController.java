@@ -84,7 +84,20 @@ public class AdminController {
 	 */
 	@RequestMapping("admin_unconfirmedSmallProduct.do")
 	public ModelAndView unconfirmedSmallProduct(String pageNo){
-		return new ModelAndView("admin/unconfirmedSmallProduct","resultList",adminService.unconfirmedSmallProduct(pageNo));
+		return new ModelAndView("admin_unconfirmedSmallProduct","resultList",adminService.unconfirmedSmallProduct(pageNo));
+	}	
+	/**
+	 * 
+	 * @Method Name : admin_managingProductByMonthAge.do
+	 * @Method 설명 : 확정안된 소제품의 리스트를 반환해주는 메서드 
+	 * @작성일 : 2016. 1. 27.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @return
+	 */
+	@RequestMapping("admin_managingProductByMonthAge.do")
+	public ModelAndView admin_managingProductByMonthAge(){
+		return new ModelAndView("admin_managingProductByMonthAge","resultList",adminService.managingProductByMonthAge());
 	}	
 	/**
 	 * 

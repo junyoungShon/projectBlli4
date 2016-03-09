@@ -211,4 +211,20 @@ public class AdminDAOImpl implements AdminDAO{
 	public void updatMonthlyProductPhotoLink(BlliMonthlyProductVO blliMonthlyProductVO) {
 		sqlSessionTemplate.update("admin.updatMonthlyProductPhotoLink",blliMonthlyProductVO);
 	}
+	@Override
+	public List<HashMap<String, Object>> selectMonthlyMidProductList(int minUsableMonth) {
+		return sqlSessionTemplate.selectList("admin.selectMonthlyMidProductList",minUsableMonth);
+	}
+	@Override
+	public List<HashMap<String, String>> selectSmallProductByMidCategoryId(String midCategoryId) {
+		return sqlSessionTemplate.selectList("admin.selectSmallProductByMidCategoryId",midCategoryId);
+	}
+	@Override
+	public String countConfirmedPostingNumBySmallProductId(String smallProductId) {
+		return sqlSessionTemplate.selectOne("admin.countConfirmedPostingNumBySmallProductId", smallProductId);
+	}
+	@Override
+	public String countBuyLinkNumBySmallProductId(String smallProductId) {
+		return sqlSessionTemplate.selectOne("admin.countBuyLinkNumBySmallProductId", smallProductId);
+	}
 }

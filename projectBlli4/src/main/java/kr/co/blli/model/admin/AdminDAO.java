@@ -1,6 +1,7 @@
 package kr.co.blli.model.admin;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import kr.co.blli.model.vo.BlliMailVO;
@@ -101,6 +102,15 @@ public interface AdminDAO {
 	List<BlliMidCategoryVO> selectMidCategoryByMonthlyProductID(String monthlyProductId);
 
 	void updatMonthlyProductPhotoLink(BlliMonthlyProductVO blliMonthlyProductVO);
+
+	List<HashMap<String, Object>> selectMonthlyMidProductList(int minUsableMonth);
+
+	List<HashMap<String, String>> selectSmallProductByMidCategoryId(
+			String midCategoryId);
+
+	String countConfirmedPostingNumBySmallProductId(String smallProductId);
+
+	String countBuyLinkNumBySmallProductId(String smallProductId);
 
 }
  

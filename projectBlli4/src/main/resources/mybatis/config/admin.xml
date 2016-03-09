@@ -82,8 +82,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="monthlyProductId" column="monthly_product_id"/>
  		<result property="minUsableMonth" column="min_Usable_Month"/>
  		<result property="maxUsableMonth" column="max_Usable_Month"/>
- 		<result property="maxUsableMonth" column="max_Usable_Month"/>
  		<result property="monthlyProductPhotoLink" column="monthly_Product_PhotoLink"/>
+ 	</resultMap>
+ 	<!-- monthlyProductRM ResultMap 설정 -->
+ 	<resultMap type="HashMap" id="monthlyProductRM">
+ 		<result property="monthlyProduct" column="monthly_product"/>
+ 		<result property="monthlyProductId" column="monthly_product_id"/>
+ 		<result property="minUsableMonth" column="min_Usable_Month"/>
+ 		<result property="monthlyProductPhotoLink" column="monthly_Product_PhotoLink"/>
+ 		<result property="midCategoryId" column="mid_category_id"/>
+ 		<result property="midCategory" column="mid_category"/>
+ 	</resultMap>
+ 	<!--	smallProductInMonthlAdminRM ResultMap 설정 -->
+ 	<resultMap type="HashMap" id="smallProductInMonthlAdminRM">
+ 		<result property="smallProductId" column="small_product_id"/>
+ 		<result property="smallProduct" column="small_product"/>
+ 		<result property="midCategory" column="mid_category"/>
+ 		<result property="smallProductMainPhotoLink" column="small_product_main_photo_link"/>
+ 		<result property="smallProductScore" column="small_product_score"/>
+ 		<result property="smallProductStatus" column="small_product_status"/>
+ 		<result property="midCategoryId" column="mid_category_id"/>
+ 		<result property="smallProductId" column="small_product_id"/>
  	</resultMap>
  	<!-- 용호 작성 쿼리 -->
  	<!-- memberId로 회원의 메일주소를 찾습니다. -->
@@ -306,6 +325,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	from blli_mid_category m , monthly_product_and_n_mid mp
 	where m.mid_category_id = mp.mid_category_id and mp.monthly_product_id = #{value}
 	</select>
+	<select id="selectMonthlyMidProductList" resultMap="monthlyProductRM">
+		select bmp.monthly_product,bmp.min_usable_month,bmp.monthly_product_photolink,
+		mpanm.monthly_product_id,mpanm.mid_category_id,mpanm.mid_category
+	from blli_monthly_product bmp , monthly_product_and_n_mid mpanm
+	where bmp.monthly_product_id = mpanm.monthly_product_id and bmp.min_usable_month = #{value}
+	</select>
+	<select id="selectSmallProductByMidCategoryId" resultMap="smallProductInMonthlAdminRM">
+ 		select small_product_id,small_product,mid_category,small_product_main_photo_link,small_product_status
+ 		small_product_score,mid_category_id,small_product_id
+ 		from blli_small_product
+ 		where mid_category_id = #{value} and small_product_status = 'confirmedbyadmin'
+	</select>
+	
+	<select id="countConfirmedPostingNumBySmallProductId" resultType="String">
+ 		select count(*)
+ 		from blli_posting
+ 		where small_product_id = #{value} and posting_status = 'confirmed'
+	</select>
+	<select id="countBuyLinkNumBySmallProductId" resultType="String">
+ 		select count(*)
+ 		from blli_small_prod_buy_link
+ 		where small_product_id = #{value}
+ 	</select>
 	<update id="updatMonthlyProductPhotoLink">
 		update blli_monthly_product set monthly_product_photolink = #{monthlyProductPhotoLink} where monthly_product_id = #{monthlyProductId}
 	</update>

@@ -360,4 +360,15 @@ insert into "SCOTT"."BOOK" ("TITLE", "AUTHOR", "AREA", "WIDTH", "HEIGHT") values
 
 UPDATE BOOK SET AREA = (SELECT WIDTH*HEIGHT FROM BOOK ) where area!= (SELECT WIDTH*HEIGHT FROM BOOK );
 
+
+
+select monthly_product,monthly_product_id,
+
+select bmp.monthly_product,bmp.min_usable_month,bmp.monthly_product_photolink,mpanm.monthly_product_id,mpanm.mid_category_id,mpanm.mid_category
+from blli_monthly_product bmp , monthly_product_and_n_mid mpanm
+where bmp.monthly_product_id = mpanm.monthly_product_id and bmp.min_usable_month = 0
+
+
+
+
 		

@@ -3,7 +3,7 @@
 <div class="left_col scroll-view">
 
           <div class="navbar nav_title" style="border: 0;">
-            <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>Gentellela Alela!</span></a>
+            <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>블리 관리자 메뉴</span></a>
           </div>
           <div class="clearfix"></div>
 
@@ -37,19 +37,11 @@
                     </li>
                   </ul>
                 </li>
-                <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
+                <li><a><i class="fa fa-edit"></i> 상품 관리 <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
-                    <li><a href="form.html">General Form</a>
+                    <li><a href="${initParam.root}admin_managingProductByMonthAge.do">시기별 추천 상품관리</a>
                     </li>
-                    <li><a href="form_advanced.html">Advanced Components</a>
-                    </li>
-                    <li><a href="form_validation.html">Form Validation</a>
-                    </li>
-                    <li><a href="form_wizards.html">Form Wizard</a>
-                    </li>
-                    <li><a href="form_upload.html">Form Upload</a>
-                    </li>
-                    <li><a href="form_buttons.html">Form Buttons</a>
+                    <li><a href="${initParam.root}admin_unconfirmedSmallProduct.do">소제품 등록</a>
                     </li>
                   </ul>
                 </li>

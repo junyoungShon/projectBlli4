@@ -742,4 +742,30 @@ public class AdminServiceImpl implements AdminService{
 			adminDAO.updatMonthlyProductPhotoLink(list.get(i));
 		}
 	}
+	@Override
+	public ArrayList<List<HashMap<String, Object>>> managingProductByMonthAge(){
+		//개월별로 추천되는 월령별 추천 중분류 리스트
+		ArrayList<List<HashMap<String, Object>>> midCategoryListByMonthAge = new ArrayList<List<HashMap<String,Object>>>();
+		List<HashMap<String, Object>> midCategoryList = null;
+		for(int i=-2;i<26;i++){
+			//최소사용시기를 기준으로 월령별 추천 중분류를 출력한다.
+			midCategoryList = adminDAO.selectMonthlyMidProductList(i);
+			midCategoryListByMonthAge.add(midCategoryList);
+		}
+		System.out.println("추출된 중분류 리스트 : "+midCategoryList);
+		if(midCategoryList!=null){
+			for(int j=0;j<midCategoryList.size();j++){
+				String midCategoryId = (String) midCategoryList.get(j).get("midCategoryId");
+				List<HashMap<String, String>> smallProductList = adminDAO.selectSmallProductByMidCategoryId(midCategoryId);
+				midCategoryList.get(j).put("smallProductList", smallProductList);
+				for(int k=0;k<smallProductList.size();k++){
+					String smallProductId = smallProductList.get(k).get("smallProductId");
+					smallProductList.get(k).put("smallProductConfirmedPostingNum", adminDAO.countConfirmedPostingNumBySmallProductId(smallProductId));
+					smallProductList.get(k).put("smallProductBuyLinkNum", adminDAO.countBuyLinkNumBySmallProductId(smallProductId));
+				}
+				System.out.println("추출된 소분류 리스트 : "+smallProductList);
+			}
+		}
+		return midCategoryListByMonthAge;
+	}
 }
