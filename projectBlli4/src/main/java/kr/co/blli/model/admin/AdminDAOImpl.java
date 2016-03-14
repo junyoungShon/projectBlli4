@@ -227,4 +227,8 @@ public class AdminDAOImpl implements AdminDAO{
 	public String countBuyLinkNumBySmallProductId(String smallProductId) {
 		return sqlSessionTemplate.selectOne("admin.countBuyLinkNumBySmallProductId", smallProductId);
 	}
+	@Override
+	public int selectConfirmedSmallProductNum(String midCategoryId) {
+		return sqlSessionTemplate.selectOne("admin.selectConfirmedSmallProductNum", midCategoryId);
+	}
 }

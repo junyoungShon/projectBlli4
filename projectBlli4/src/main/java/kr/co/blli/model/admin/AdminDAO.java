@@ -112,5 +112,7 @@ public interface AdminDAO {
 
 	String countBuyLinkNumBySmallProductId(String smallProductId);
 
+	int selectConfirmedSmallProductNum(String midCategoryId);
+
 }
  

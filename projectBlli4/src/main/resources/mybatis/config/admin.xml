@@ -341,7 +341,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="countConfirmedPostingNumBySmallProductId" resultType="String">
  		select count(*)
  		from blli_posting
- 		where small_product_id = #{value} and posting_status = 'confirmed'
+ 		where small_product_id = #{value} and posting_status = 'confirmedbyadmin'
+	</select>
+	<select id="selectConfirmedSmallProductNum" resultType="Integer">
+ 		select count(*)
+ 		from blli_small_product
+ 		where mid_Category_id = #{value} and small_product_status = 'confirmedbyadmin'
 	</select>
 	<select id="countBuyLinkNumBySmallProductId" resultType="String">
  		select count(*)

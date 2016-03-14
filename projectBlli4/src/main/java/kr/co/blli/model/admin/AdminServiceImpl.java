@@ -750,10 +750,14 @@ public class AdminServiceImpl implements AdminService{
 		for(int i=-2;i<26;i++){
 			//최소사용시기를 기준으로 월령별 추천 중분류를 출력한다.
 			midCategoryList = adminDAO.selectMonthlyMidProductList(i);
+			for(int j=0;j<midCategoryList.size();j++){
+				midCategoryList.get(j).put("confirmedSmallProductNum", adminDAO.selectConfirmedSmallProductNum(midCategoryList.get(j).get("midCategoryId").toString()));
+				
+			}
 			midCategoryListByMonthAge.add(midCategoryList);
 		}
 		System.out.println("추출된 중분류 리스트 : "+midCategoryList);
-		if(midCategoryList!=null){
+		/*if(midCategoryList!=null){
 			for(int j=0;j<midCategoryList.size();j++){
 				String midCategoryId = (String) midCategoryList.get(j).get("midCategoryId");
 				List<HashMap<String, String>> smallProductList = adminDAO.selectSmallProductByMidCategoryId(midCategoryId);
@@ -765,7 +769,7 @@ public class AdminServiceImpl implements AdminService{
 				}
 				System.out.println("추출된 소분류 리스트 : "+smallProductList);
 			}
-		}
+		}*/
 		return midCategoryListByMonthAge;
 	}
 }
