@@ -2,6 +2,7 @@ package kr.co.blli.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,6 +87,21 @@ public class AdminController {
 	public ModelAndView unconfirmedSmallProduct(String pageNo){
 		return new ModelAndView("admin_unconfirmedSmallProduct","resultList",adminService.unconfirmedSmallProduct(pageNo));
 	}	
+	/**
+	 * 
+	 * @Method Name : unconfirmedSmallProduct
+	 * @Method 설명 : 확정안된 소제품의 리스트를 중분류 아이디를 기준으로 반환해주는 메서드 
+	 * @작성일 : 2016. 1. 27.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @return
+	 */
+	@RequestMapping("admin_unconfirmedSmallProductByMidCategoryId.do")
+	public ModelAndView unconfirmedSmallProductByMidCategoryId(String midCategoryId,String pageNo){
+		ModelAndView mav = new ModelAndView("admin_unconfirmedSmallProduct","resultList",adminService.unconfirmedSmallProductByMidCategoryId(midCategoryId,pageNo));
+		mav.addObject("midCategoryId", midCategoryId);
+		return mav;
+	}
 	/**
 	 * 
 	 * @Method Name : admin_managingProductByMonthAge.do
@@ -215,5 +231,15 @@ public class AdminController {
 	@RequestMapping("admin_monthlyProductImageDownLoader.do")
 	public void monthlyProductImageDownLoader(){
 		adminService.monthlyProductImageDownLoader();
+	}
+	@RequestMapping("admin_selectConfirmedbyadminProductByMidCategoryId.do")
+	@ResponseBody
+	public List<HashMap<String,String>> selectConfirmedbyadminProductByMidCategoryId(String midCategoryId){
+		return adminService.selectConfirmedbyadminProductByMidCategoryId(midCategoryId);
+	}
+	@RequestMapping("admin_selectConfirmedProductByMidCategoryId.do")
+	@ResponseBody
+	public List<HashMap<String,String>> admin_selectConfirmedProductByMidCategoryId(String midCategoryId){
+		return adminService.selectConfirmedProductByMidCategoryId(midCategoryId);
 	}
 }

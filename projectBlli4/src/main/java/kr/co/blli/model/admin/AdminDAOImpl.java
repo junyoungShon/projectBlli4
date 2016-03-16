@@ -50,6 +50,10 @@ public class AdminDAOImpl implements AdminDAO{
 		return sqlSessionTemplate.selectList("admin.unconfirmedSmallProduct", pageNo);
 	}
 	@Override
+	public List<BlliSmallProductVO> unconfirmedSmallProductByMidCategoryId(HashMap<String, String> paraMap) {
+		return sqlSessionTemplate.selectList("admin.unconfirmedSmallProductByMidCategoryId", paraMap);
+	}
+	@Override
 	public int totalUnconfirmedSmallProduct() {
 		return sqlSessionTemplate.selectOne("admin.totalUnconfirmedSmallProduct");
 	}
@@ -230,5 +234,33 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public int selectConfirmedSmallProductNum(String midCategoryId) {
 		return sqlSessionTemplate.selectOne("admin.selectConfirmedSmallProductNum", midCategoryId);
+	}
+	@Override
+	public int selectConfirmedbyadminSmallProductNum(String midCategoryId) {
+		return sqlSessionTemplate.selectOne("admin.selectConfirmedbyadminSmallProductNum", midCategoryId);
+	}
+	@Override
+	public int selectUnconfirmedSmallProductNum(String midCategoryId) {
+		return sqlSessionTemplate.selectOne("admin.selectUnconfirmedSmallProductNum", midCategoryId);
+	}
+	@Override
+	public int totalUnconfirmedSmallProductInMidCategory(String midCategoryId) {
+		return sqlSessionTemplate.selectOne("admin.totalUnconfirmedSmallProductInMidCategory",midCategoryId);
+	}
+	@Override
+	public List<BlliSmallProductVO> selectConfirmedbyadminProductIdListByMidCategoryId(String midCategoryId) {
+		return sqlSessionTemplate.selectList("admin.selectConfirmedbyadminProductIdListByMidCategoryId",midCategoryId);
+	}
+	@Override
+	public List<BlliSmallProductVO> selectConfirmedProductByMidCategoryId(String midCategoryId) {
+		return sqlSessionTemplate.selectList("admin.selectConfirmedProductByMidCategoryId",midCategoryId);
+	}
+	@Override
+	public String selectConfirmedBlogNum(String smallProductId) {
+		return sqlSessionTemplate.selectOne("admin.selectConfirmedBlogNum", smallProductId);
+	}
+	@Override
+	public String selectUnconfirmedBlogNum(String smallProductId) {
+		return sqlSessionTemplate.selectOne("admin.selectUnconfirmedBlogNum", smallProductId);
 	}
 }

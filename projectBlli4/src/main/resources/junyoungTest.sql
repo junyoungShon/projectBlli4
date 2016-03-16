@@ -369,6 +369,6 @@ from blli_monthly_product bmp , monthly_product_and_n_mid mpanm
 where bmp.monthly_product_id = mpanm.monthly_product_id and bmp.min_usable_month = 0
 
 
-
+select count(*) from blli_posting where small_product_id = '5707728498';
 
 		

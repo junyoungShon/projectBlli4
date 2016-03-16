@@ -114,5 +114,20 @@ public interface AdminDAO {
 
 	int selectConfirmedSmallProductNum(String midCategoryId);
 
+	int selectUnconfirmedSmallProductNum(String midCategoryId);
+	int selectConfirmedbyadminSmallProductNum(String midCategoryId);
+	List<BlliSmallProductVO> unconfirmedSmallProductByMidCategoryId(
+			HashMap<String, String> paraMap);
+
+	int totalUnconfirmedSmallProductInMidCategory(String midCategoryId);
+
+	List<BlliSmallProductVO> selectConfirmedbyadminProductIdListByMidCategoryId(String midCategoryId);
+
+	List<BlliSmallProductVO> selectConfirmedProductByMidCategoryId(String midCategoryId);
+
+	String selectConfirmedBlogNum(String smallProductId);
+
+	String selectUnconfirmedBlogNum(String smallProductId);
+
 }
  

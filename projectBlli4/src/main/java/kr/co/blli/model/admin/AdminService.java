@@ -59,4 +59,13 @@ public interface AdminService {
 	public void monthlyProductImageDownLoader();
 
 	public ArrayList<List<HashMap<String, Object>>> managingProductByMonthAge();
+
+	public ListVO unconfirmedSmallProductByMidCategoryId(String midCategoryId,
+			String pageNo);
+
+	public List<HashMap<String, String>> selectConfirmedbyadminProductByMidCategoryId(
+			String midCategoryId);
+
+	public List<HashMap<String, String>> selectConfirmedProductByMidCategoryId(
+			String midCategoryId);
 }

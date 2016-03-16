@@ -286,6 +286,34 @@ public class AdminServiceImpl implements AdminService{
 		lvo.setPagingBean(paging);
 		return lvo;
 	}
+	/**
+	 * 
+	 * @Method Name : unconfirmedSmallProductByMidCategoryId
+	 * @Method 설명 : 확정안된 소제품 리스트와 pagingBean을 반환해주는 메서드 
+	 * @작성일 : 2016. 1. 27.
+	 * @작성자 : hyunseok
+	 * @param pageNo
+	 * @return
+	 */
+	@Override
+	public ListVO unconfirmedSmallProductByMidCategoryId(String midCategoryId,String pageNo) {
+		if(pageNo == null || pageNo == ""){
+			pageNo = "1";
+		}
+		HashMap<String,String> paraMap = new HashMap<String, String>();
+		
+		paraMap.put("midCategoryId", midCategoryId);
+		paraMap.put("pageNo", pageNo);
+		
+		ArrayList<BlliSmallProductVO> smallProductList = (ArrayList<BlliSmallProductVO>)adminDAO.unconfirmedSmallProductByMidCategoryId(paraMap);
+		int total = adminDAO.totalUnconfirmedSmallProductInMidCategory(midCategoryId);
+		BlliPagingBean paging = new BlliPagingBean(total, Integer.parseInt(pageNo));
+		paging.setNumberOfPostingPerPage(10);
+		ListVO lvo = new ListVO();
+		lvo.setList(smallProductList);
+		lvo.setPagingBean(paging);
+		return lvo;
+	}
 	
 	/**
 	 * @Method Name : selectProduct
@@ -747,29 +775,60 @@ public class AdminServiceImpl implements AdminService{
 		//개월별로 추천되는 월령별 추천 중분류 리스트
 		ArrayList<List<HashMap<String, Object>>> midCategoryListByMonthAge = new ArrayList<List<HashMap<String,Object>>>();
 		List<HashMap<String, Object>> midCategoryList = null;
-		for(int i=-2;i<26;i++){
+		for(int i=-2;i<0;i++){
 			//최소사용시기를 기준으로 월령별 추천 중분류를 출력한다.
 			midCategoryList = adminDAO.selectMonthlyMidProductList(i);
 			for(int j=0;j<midCategoryList.size();j++){
 				midCategoryList.get(j).put("confirmedSmallProductNum", adminDAO.selectConfirmedSmallProductNum(midCategoryList.get(j).get("midCategoryId").toString()));
-				
+				midCategoryList.get(j).put("unconfirmedSmallProductNum", adminDAO.selectUnconfirmedSmallProductNum(midCategoryList.get(j).get("midCategoryId").toString()));
+				midCategoryList.get(j).put("confirmedbyadminSmallProductNum", adminDAO.selectConfirmedbyadminSmallProductNum(midCategoryList.get(j).get("midCategoryId").toString()));
 			}
 			midCategoryListByMonthAge.add(midCategoryList);
 		}
 		System.out.println("추출된 중분류 리스트 : "+midCategoryList);
-		/*if(midCategoryList!=null){
-			for(int j=0;j<midCategoryList.size();j++){
-				String midCategoryId = (String) midCategoryList.get(j).get("midCategoryId");
-				List<HashMap<String, String>> smallProductList = adminDAO.selectSmallProductByMidCategoryId(midCategoryId);
-				midCategoryList.get(j).put("smallProductList", smallProductList);
-				for(int k=0;k<smallProductList.size();k++){
-					String smallProductId = smallProductList.get(k).get("smallProductId");
-					smallProductList.get(k).put("smallProductConfirmedPostingNum", adminDAO.countConfirmedPostingNumBySmallProductId(smallProductId));
-					smallProductList.get(k).put("smallProductBuyLinkNum", adminDAO.countBuyLinkNumBySmallProductId(smallProductId));
-				}
-				System.out.println("추출된 소분류 리스트 : "+smallProductList);
-			}
-		}*/
+		
 		return midCategoryListByMonthAge;
+	}
+	@Override
+	public List<HashMap<String, String>> selectConfirmedbyadminProductByMidCategoryId(String midCategoryId) {
+		List<HashMap<String, String>> resultList = new ArrayList<HashMap<String,String>>();
+		List<BlliSmallProductVO> smallProductIdList = adminDAO.selectConfirmedbyadminProductIdListByMidCategoryId(midCategoryId);
+		for(int i=0;i<smallProductIdList.size();i++){
+			HashMap<String, String> tempMap = new HashMap<String, String>();
+			String smallProductId = smallProductIdList.get(i).getSmallProductId();
+			tempMap.put("smallProductId", smallProductId);
+			tempMap.put("smallProduct", smallProductIdList.get(i).getSmallProduct());
+			tempMap.put("smallProductClickNum",smallProductIdList.get(i).getDetailViewCount()+"");
+			tempMap.put("totalBlogNum", smallProductIdList.get(i).getSmallProductPostingCount()+"");
+			tempMap.put("naverShoppingRank", smallProductIdList.get(i).getNaverShoppingRank()+"");
+			
+			tempMap.put("buyLinkNum", adminDAO.countBuyLinkNumBySmallProductId(smallProductId));
+			tempMap.put("confirmedBlogNum", adminDAO.selectConfirmedBlogNum(smallProductId) );
+			tempMap.put("unconfirmedBlogNum", adminDAO.selectUnconfirmedBlogNum(smallProductId));
+			
+			resultList.add(tempMap);
+		} 
+		return resultList;
+	}
+	@Override
+	public List<HashMap<String, String>> selectConfirmedProductByMidCategoryId(String midCategoryId) {
+		List<HashMap<String, String>> resultList = new ArrayList<HashMap<String,String>>();
+		List<BlliSmallProductVO> smallProductIdList = adminDAO.selectConfirmedProductByMidCategoryId(midCategoryId);
+		for(int i=0;i<smallProductIdList.size();i++){
+			HashMap<String, String> tempMap = new HashMap<String, String>();
+			String smallProductId = smallProductIdList.get(i).getSmallProductId();
+			tempMap.put("smallProductId", smallProductId);
+			tempMap.put("smallProduct", smallProductIdList.get(i).getSmallProduct());
+			tempMap.put("smallProductClickNum",smallProductIdList.get(i).getDetailViewCount()+"");
+			tempMap.put("totalBlogNum", smallProductIdList.get(i).getSmallProductPostingCount()+"");
+			tempMap.put("naverShoppingRank", smallProductIdList.get(i).getNaverShoppingRank()+"");
+			
+			tempMap.put("buyLinkNum", adminDAO.countBuyLinkNumBySmallProductId(smallProductId));
+			tempMap.put("confirmedBlogNum", adminDAO.selectConfirmedBlogNum(smallProductId) );
+			tempMap.put("unconfirmedBlogNum", adminDAO.selectUnconfirmedBlogNum(smallProductId));
+			
+			resultList.add(tempMap);
+		} 
+		return resultList;
 	}
 }

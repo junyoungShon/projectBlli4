@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		<result property="naverShoppingRank" column="naver_shopping_rank"/>
  		<result property="productRegisterDay" column="product_register_day"/>
  		<result property="midCategoryId" column="mid_category_id"/>
- 		<result property="smallProductId" column="small_product_id"/>
+ 		<result property="detailViewCount" column="detail_view_count"/>
  	</resultMap>
  	<!-- BlliWordCloudVO ResultMap 설정 -->
  	<resultMap type="blliWordCloudVO" id="bwc">
@@ -187,8 +187,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		) where page = #{pageNo}
 	</select>
 	
+	<select id="unconfirmedSmallProductByMidCategoryId" resultMap="bspvRM">
+		select small_product, mid_category, small_product_whentouse_min, small_product_whentouse_max, 
+		small_product_main_photo_link, small_product_id from(
+			select ceil(rownum/10) as page, small_product, mid_category, small_product_whentouse_min, 
+			small_product_whentouse_max, small_product_main_photo_link, small_product_id
+			from blli_small_product where mid_category_id = #{midCategoryId} and small_product_status = 'unconfirmed'
+		) where page = #{pageNo}
+	</select>
+	
 	<select id="totalUnconfirmedSmallProduct" resultType="int">
 		select count(*) from blli_small_product where small_product_status = 'unconfirmed'
+	</select>
+	<select id="totalUnconfirmedSmallProductInMidCategory" resultType="int">
+		select count(*) from blli_small_product where small_product_status = 'unconfirmed' and mid_category_id = #{value}
 	</select>
 	
 	<delete id="deletePosting">
@@ -346,7 +358,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectConfirmedSmallProductNum" resultType="Integer">
  		select count(*)
  		from blli_small_product
+ 		where mid_Category_id = #{value} and small_product_status = 'confirmed'
+	</select>
+	<select id="selectConfirmedbyadminSmallProductNum" resultType="Integer">
+ 		select count(*)
+ 		from blli_small_product
  		where mid_Category_id = #{value} and small_product_status = 'confirmedbyadmin'
+	</select>
+	<select id="selectUnconfirmedSmallProductNum" resultType="Integer">
+ 		select count(*)
+ 		from blli_small_product
+ 		where mid_Category_id = #{value} and small_product_status = 'unconfirmed'
 	</select>
 	<select id="countBuyLinkNumBySmallProductId" resultType="String">
  		select count(*)
@@ -356,6 +378,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updatMonthlyProductPhotoLink">
 		update blli_monthly_product set monthly_product_photolink = #{monthlyProductPhotoLink} where monthly_product_id = #{monthlyProductId}
 	</update>
+	<select id="selectConfirmedProductByMidCategoryId" resultMap="bspvRM">
+		select small_product_id, small_product, detail_view_count , naver_shopping_rank , small_product_posting_count 
+		from blli_small_product where mid_category_id = #{value} and small_product_status = 'confirmed'
+	</select>
+	<select id="selectConfirmedbyadminProductIdListByMidCategoryId" resultMap="bspvRM">
+		select small_product_id, small_product, detail_view_count , naver_shopping_rank , small_product_posting_count 
+		from blli_small_product where mid_category_id = #{value} and small_product_status = 'confirmedbyadmin'
+	</select>
+	
+	<select id="selectConfirmedBlogNum" resultType="String">
+ 		select count(*)
+ 		from blli_posting
+ 		where small_product_id = #{value} and posting_status = 'confirmed'
+ 	</select>
+ 	<select id="selectUnconfirmedBlogNum" resultType="String">
+ 		select count(*)
+ 		from blli_posting
+ 		where small_product_id = #{value} and posting_status = 'unconfirmed'
+ 	</select>
+ 	
 	<!-- 준영 끝 -->
  </mapper>
  

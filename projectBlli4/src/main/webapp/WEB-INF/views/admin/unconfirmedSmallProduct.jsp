@@ -18,12 +18,12 @@
 			if(confirm("확실합니까?")){
 				for(var i=0;i<"${fn:length(requestScope.resultList.list)}";i++){
 					if($("input:checkbox[name=delete]")[i].value != "삭제"){
-						if($("input:text[name=min]")[i].value > 36 || $("input:text[name=min]")[i].value < 0){
-							alert("최소 연령은 0개월부터 36개월까지 입력해주세요");
+						if($("input:text[name=min]")[i].value > 36 || $("input:text[name=min]")[i].value < -3){
+							alert("최소 연령은 -3개월부터 36개월까지 입력해주세요");
 							$("input:text[name=min]")[i].focus();
 							return false;
 						}
-						if($("input:text[name=max]")[i].value != "" && $("input:text[name=max]")[i].value < 1){
+						if($("input:text[name=max]")[i].value != "" && $("input:text[name=max]")[i].value < -3){
 							alert("최대 연령은 1개월 이상 입력해주세요");
 							$("input:text[name=max]")[i].focus();
 							return false;
@@ -168,6 +168,7 @@
 	</c:choose>
 </c:forEach>
 </div>
+<c:set value="${requestScope['javax.servlet.forward.request_uri']}" var="currentUri"/>
 
 <table width="70%" align="center">
 	<tr>
@@ -175,12 +176,26 @@
 		<div align="center">
 		<c:set var="pb" value="${requestScope.resultList.pagingBean}"></c:set>
 		<c:if test="${pb.previousPageGroup}">
-			<a href="${initParam.root}admin_unconfirmedSmallProduct.do?pageNo=${pb.startPageOfPageGroup-1}">Prev</a>
+			<c:choose>
+				<c:when test="${fn:containsIgnoreCase(currentUri,'admin_unconfirmedSmallProduct.do')}">
+					<a href="${initParam.root}admin_unconfirmedSmallProduct.do?pageNo=${pb.startPageOfPageGroup-1}">Prev</a>
+				</c:when>
+				<c:when test="${fn:containsIgnoreCase(currentUri,'admin_unconfirmedSmallProductByMidCategoryId.do')}">
+					<a href="${initParam.root}admin_unconfirmedSmallProductByMidCategoryId.do?midCategoryId=${midCategoryId}&pageNo=${pb.startPageOfPageGroup-1}">Prev</a>
+				</c:when>
+			</c:choose>
 		</c:if>
 		<c:forEach var="i" begin="${pb.startPageOfPageGroup}" end="${pb.endPageOfPageGroup}">
 			<c:choose>
 				<c:when test="${pb.nowPage!=i}">
-					<a href="${initParam.root}admin_unconfirmedSmallProduct.do?pageNo=${i}">${i}</a>
+					<c:choose>
+				<c:when test="${fn:containsIgnoreCase(currentUri,'admin_unconfirmedSmallProduct.do')}">
+					<a href="${initParam.root}admin_unconfirmedSmallProduct.do?pageNo=${i}">Prev</a>
+				</c:when>
+				<c:when test="${fn:containsIgnoreCase(currentUri,'admin_unconfirmedSmallProductByMidCategoryId.do')}">
+					<a href="${initParam.root}admin_unconfirmedSmallProductByMidCategoryId.do?midCategoryId=${midCategoryId}&pageNo=${i}">Prev</a>
+				</c:when>
+			</c:choose>
 				</c:when>
 				<c:otherwise>
 					${i}
@@ -188,7 +203,14 @@
 			</c:choose>
 		</c:forEach>
 		<c:if test="${pb.nextPageGroup}">
-			<a href="${initParam.root}admin_unconfirmedSmallProduct.do?pageNo=${pb.endPageOfPageGroup+1}">Next</a>
+		<c:choose>
+				<c:when test="${fn:containsIgnoreCase(currentUri,'admin_unconfirmedSmallProduct.do')}">
+					<a href="${initParam.root}admin_unconfirmedSmallProduct.do?pageNo=${pb.endPageOfPageGroup+1}">Prev</a>
+				</c:when>
+				<c:when test="${fn:containsIgnoreCase(currentUri,'admin_unconfirmedSmallProductByMidCategoryId.do')}">
+					<a href="${initParam.root}admin_unconfirmedSmallProductByMidCategoryId.do?midCategoryId=${midCategoryId}&pageNo=${pb.endPageOfPageGroup+1}">Prev</a>
+				</c:when>
+			</c:choose>
 		</c:if>
 		</div>
 		<div style="float: right;"><input type="button" id="confirmBtn" value="소제품 등록" style="font-size:15px;width: 100px;height: 45px;">
