@@ -113,13 +113,19 @@
     </table>
          <!-- page content -->
         <div class="">
-          <div class="page-title">
-            <div class="title_left">
+          <div class="page-title" style="width:100%">
+            <div class="title_left" style="width:100%">
               <h3>
-                    시기별 중분류 관리 페이지
-                    <small>
-                       
-                    </small>
+                    시기별 중분류 관리 페이지 (${requestScope.currentIndex} 개월)
+                       <ol class="breadcrumb" style="font-size: 20px">
+                      <c:forEach items="${requestScope.monthlyMidCategoryIndex}" var="mapList">
+						  <li>
+							<a href="${initParam.root}admin_managingProductByMonthAge.do?minimumMonthAge=${mapList.MINUSABLEMONTH}">
+							  ${mapList.MINUSABLEMONTH}개월 ( ${mapList.TOTALCOUNT}개의 컨펌드 상품 )
+						 	</a>
+						  </li>
+                      </c:forEach>
+						</ol>
                 </h3>
             </div>
 

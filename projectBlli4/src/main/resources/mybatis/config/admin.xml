@@ -137,9 +137,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="unconfirmedPostingBySearchsmallProductId" resultMap="bpvRM">
 		select posting_url, posting_title, posting_content, small_product, small_product_id from(
 			select ceil(rownum/5) as page, posting_url, posting_title, posting_content, small_product, small_product_id from(
-				select count(*) over (partition by posting_url) as count_posting_url, posting_url, posting_title, 
+				select posting_url, posting_title, 
 				posting_content, small_product, small_product_id from blli_posting where posting_status = 'unconfirmed' order by small_product asc
-			) where count_posting_url = 1 and small_product_id = #{searchWord}
+			) where small_product_id = #{searchWord}
 		) where page = #{pageNo}
 	</select>
 	
@@ -157,8 +157,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="totalUnconfirmedPostingBySearchSmallProductId" resultType="int">
 		select count(*) from(
-			select count(*) over (partition by posting_url) as count_posting_url, small_product_id from blli_posting where posting_status = 'unconfirmed'
-		) where count_posting_url = 1 and small_product_id = #{searchWord}
+			select small_product_id from blli_posting where posting_status = 'unconfirmed'
+		) where small_product_id = #{searchWord}
 	</select>
 	
 	<select id="postingListWithSmallProducts" resultMap="bpvRM">
@@ -204,7 +204,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<delete id="deletePosting">
-		delete from blli_posting where posting_url = #{postingUrl}
+		delete from blli_posting where posting_url = #{postingUrl} and small_product_id = #{smallProductId}
+	</delete>
+	<delete id="deleteOtherSmallProductPosting">
+		delete from blli_posting where posting_url = #{postingUrl} and small_product_id != #{smallProductId}
 	</delete>
 	
 	<update id="selectProduct">
@@ -276,8 +279,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	
 	<insert id="insertPermanentDeadPosting">
-		insert into blli_permanent_dead_posting(posting_url, posting_title) values(#{postingUrl}, #{postingTitle})
+		insert into blli_permanent_dead_posting(posting_url, posting_title,small_product_id) values(#{postingUrl}, #{postingTitle},#{smallProductId})
 	</insert>
+
 	
 	<update id="updatePostingStatusToconfirmed">
 		update blli_posting set posting_status = 'confirmed' where small_product_id = #{smallProductId} and posting_status = 'deadbysmallproduct'
@@ -397,7 +401,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		from blli_posting
  		where small_product_id = #{value} and posting_status = 'unconfirmed'
  	</select>
- 	
+ 	<select id="selectMonthlyMidCategoryIndex" resultType="HashMap">
+	 	<![CDATA[
+	 		select distinct t.min_usable_month as minUsableMonth ,count(*)over (partition by  t.min_usable_month) as totalCount
+			from(
+				select distinct t.mid_category_id as mid_category_id ,count(*)over(partition by t.mid_category_id) as mid_category_count, t.min_usable_month as min_usable_month
+				from(
+				select distinct bsp.small_product_id as small_product_id, bsp.mid_category_id as mid_category_id ,bmp.min_usable_month as min_usable_month
+				from blli_monthly_product bmp,blli_mid_category bmc ,blli_small_product bsp,monthly_product_and_n_mid mpanm
+				where bmp.monthly_product_id = mpanm.monthly_product_id and mpanm.mid_category_id = bsp.mid_category_id  and bsp.small_product_status='confirmed' 
+			
+				) t
+			) t where t.mid_category_count >4 order by t.min_usable_month asc
+ 		]]>
+ 	</select>
+ 	<select id="selectOtherSmallProductForPosting" resultMap="bpvRM">
+ 		select small_product_id , posting_url,posting_title from blli_posting where posting_url = #{postingUrl} and posting_title = #{postingTitle}
+ 	</select>
 	<!-- 준영 끝 -->
  </mapper>
  

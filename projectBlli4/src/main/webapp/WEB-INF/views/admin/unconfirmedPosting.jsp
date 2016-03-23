@@ -34,9 +34,10 @@ function search_unconfirmedPosting(){
 		$(".deleteBtn").click(function(){
 			var postingUrl = $(this).children().eq(0).val();
 			var smallProductId = $(this).children().eq(0).attr("class");
+			var postingTitle = $(this).parent().parent().prev().children().children().children().children().text();
 			$(this).parent().prev().children("img").css("border", "0px");
 			if(urlAndImage.length == 0){
-				urlAndImage.push({"postingUrl": postingUrl, "postingPhotoLink": "", "postingTitle": "",
+				urlAndImage.push({"postingUrl": postingUrl, "postingPhotoLink": "", "postingTitle": postingTitle,
 					"smallProductId": smallProductId, "del": "YES"});
 			}else{
 				for(var i=0;i<urlAndImage.length;i++){
@@ -47,7 +48,7 @@ function search_unconfirmedPosting(){
 					}
 				}
 				if(flag){
-					urlAndImage.push({"postingUrl": postingUrl, "postingPhotoLink": "", "postingTitle": "",
+					urlAndImage.push({"postingUrl": postingUrl, "postingPhotoLink": "", "postingTitle":postingTitle,
 						"smallProductId": smallProductId, "del": "YES"});
 				}
 				flag = true;

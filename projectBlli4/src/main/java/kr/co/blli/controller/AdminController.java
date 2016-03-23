@@ -54,7 +54,7 @@ public class AdminController {
 	@RequestMapping("admin_unconfirmedPosting.do")
 	public ModelAndView unconfirmedPosting(String pageNo, String category, String searchWord) throws IOException{
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("admin/unconfirmedPosting");
+		mav.setViewName("admin_unconfirmedPosting");
 		mav.addObject("resultList", adminService.unconfirmedPosting(pageNo, category, searchWord));
 		mav.addObject("category", category);
 		mav.addObject("searchWord", searchWord);
@@ -112,8 +112,11 @@ public class AdminController {
 	 * @return
 	 */
 	@RequestMapping("admin_managingProductByMonthAge.do")
-	public ModelAndView admin_managingProductByMonthAge(){
-		return new ModelAndView("admin_managingProductByMonthAge","resultList",adminService.managingProductByMonthAge());
+	public ModelAndView admin_managingProductByMonthAge(int minimumMonthAge){
+		ModelAndView mav = new ModelAndView("admin_managingProductByMonthAge","resultList",adminService.managingProductByMonthAge(minimumMonthAge));
+		mav.addObject("monthlyMidCategoryIndex", adminService.monthlyMidCategoryIndex());
+		mav.addObject("currentIndex", minimumMonthAge);
+		return mav;
 	}	
 	/**
 	 * 

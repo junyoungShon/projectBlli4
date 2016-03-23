@@ -372,3 +372,87 @@ where bmp.monthly_product_id = mpanm.monthly_product_id and bmp.min_usable_month
 select count(*) from blli_posting where small_product_id = '5707728498';
 
 		
+
+select distinct min_usable_month from blli_monthly_product order by min_usable_month asc
+
+select distinct t.mid_category_id as mid_category_id ,count(*)over(partition by t.mid_category_id) as mid_category_count
+from(
+select distinct bsp.small_product_id as small_product_id, bsp.mid_category_id as mid_category_id 
+from blli_monthly_product bmp,blli_mid_category bmc ,blli_small_product bsp,monthly_product_and_n_mid mpanm
+where bmp.monthly_product_id = mpanm.monthly_product_id and mpanm.mid_category_id = bsp.mid_category_id  and bsp.small_product_status='confirmedbyadmin' 
+and bmp.min_usable_month = -1
+) t
+where t.mid_category_id = '50000745'
+
+
+select count(*) 
+from blli_mid_category bmc ,blli_small_product bsp
+where bsp.small_product_status='confirmedbyadmin' 
+
+
+select t.mid_category_id,count(*)over (partition by t.mid_category_id)
+from(
+	select distinct t.mid_category_id as mid_category_id ,count(*)over(partition by t.mid_category_id) as mid_category_count
+	from(
+	select distinct bsp.small_product_id as small_product_id, bsp.mid_category_id as mid_category_id 
+	from blli_monthly_product bmp,blli_mid_category bmc ,blli_small_product bsp,monthly_product_and_n_mid mpanm
+	where bmp.monthly_product_id = mpanm.monthly_product_id and mpanm.mid_category_id = bsp.mid_category_id  and bsp.small_product_status='confirmedbyadmin' 
+
+	) t
+) t where t.mid_category_count >4
+
+
+
+select distinct t.min_usable_month as minUsableMonth ,count(*)over (partition by  t.min_usable_month) as totalCount
+from(
+	select distinct t.mid_category_id as mid_category_id ,count(*)over(partition by t.mid_category_id) as mid_category_count, t.min_usable_month as min_usable_month
+	from(
+	select distinct bsp.small_product_id as small_product_id, bsp.mid_category_id as mid_category_id ,bmp.min_usable_month as min_usable_month
+	from blli_monthly_product bmp,blli_mid_category bmc ,blli_small_product bsp,monthly_product_and_n_mid mpanm
+	where bmp.monthly_product_id = mpanm.monthly_product_id and mpanm.mid_category_id = bsp.mid_category_id  and bsp.small_product_status='confirmedbyadmin' 
+
+	) t
+) t where t.mid_category_count >4 order by t.min_usable_month asc
+
+
+select * from blli_posting where small_product_id= '5707788643' and posting_status = 'unconfirmed'
+
+select count(*) over() , t.posting_title,t.posting_url from(
+			select count(*) over (partition by posting_url) as count_posting_url, small_product_id,posting_title,posting_url from blli_posting where posting_status = 'unconfirmed'
+		) t where count_posting_url = 2 and small_product_id = '5707788643'
+		
+				select count(*) from(
+			select small_product_id from blli_posting where posting_status = 'unconfirmed'
+		) where small_product_id = '5707788643'
+		
+		select posting_url, posting_title, posting_content, small_product, small_product_id from(
+			select ceil(rownum/5) as page, posting_url, posting_title, posting_content, small_product, small_product_id from(
+				select  posting_url, posting_title, 
+				posting_content, small_product, small_product_id from blli_posting where posting_status = 'unconfirmed' order by small_product asc
+			) where small_product_id = '5707788643'
+		) where page =2
+		
+		select * from blli_posting where posting_url = 'http://blog.naver.com/again4820/220575736266'
+		select * from blli_posting where posting_url = 'http://blog.naver.com/unchanging1/220465806082'
+		select * from blli_posting where posting_url = 'http://blog.naver.com/cjsqmffl0629/220388553963'
+		
+		select posting_url, posting_title, posting_content, small_product, small_product_id from(
+			select ceil(rownum/5) as page, posting_url, posting_title, posting_content, small_product, small_product_id from(
+				select posting_url, posting_title, 
+				posting_content, small_product, small_product_id from blli_posting where posting_status = 'unconfirmed' order by small_product asc
+			) where small_product_id = '5707788643'
+		) where page = 1
+		
+		
+		select * from(
+			select ceil(row_num/5) as page, posting_url, posting_title, small_product, posting_content, small_product_id from(
+				select (dense_rank() over (order by posting_url)) row_num, posting_url, posting_title, small_product, posting_content, small_product_id from(
+					select count(*) over (partition by posting_url) as small_product_count, posting_url, posting_title, small_product, 
+					posting_content, small_product_id from blli_posting where posting_status = 'unconfirmed' 
+				) where small_product_count > 1 and small_product_id='5707788643' order by posting_url
+			) 
+		) where page =1 
+		
+		
+             18 [리뷰] 유피스 일회용젖병 후기 :: 더블하트 호환           http://blog.naver.com/again4820/220575736266
+    1 http://blog.naver.com/002jhkjhk/220316107081   흡수력 좋은 기저귀 오보소 플라워 팬티 기저귀로 봄을 맞이해요! 오보소 2015 플라워 4단계 대형 팬티형 38매       흡수력 좋은 기저귀 오보소 플라워 팬티 기저귀로 봄을 맞이해요! [오보소 팬티형 기저귀/ 흡수력 좋은 기저귀/ 오보소 기저귀/ 기저귀 추천] 이제 정말 완연한 봄인것 같아요! 밖에 나가면 꽃들도 많이 피어있고 날씨도 정말 포근하네요. 추웠던 겨울이 지나고 봄이 오듯 우리 아이의 기저귀 컨디션도 꽁꽁 얼어있던 겨울이였던 날들과 달리 오보소 플라워 팬티 기저귀를 사용하고 나서 완연한 봄으로 바뀌었네요. 정말 사용하면서 느낀 점으로는 기존에기저귀를 대량으로 사둔 바람에 밴드형으로 계속사용했었는데 아이가걷고 뛰고 많이 움직이다 보니 연약한 피부에 계속쓸려서 상처가 나서 마음이 아팠는데 강력한 흡수력은 물론 아이의 피부를 부드럽게 감싸주는 오보소 기저귀사용으로 역시 아이가 크면 기저귀 선택의 중요성에 대해 한번더 실감하게 되었어요. 그럼 제가 사용한 오보소 플라워 팬티 기저귀의 제품에 대해서 자세한 설명과 함께 그에 따른 궁금증을 풀어 드리도록 할깨요! ▽▼▽▼▽▼▽▼▽▼ 먼저 배송시의 모습이예요! 육아 용품이 배송되어 올때 이렇게 아이 제품에 대하여 소중히 다루어 달라는 안내 문구가 있으면 잘 만들어서 잘 배송되어 손상없이 전달되기를 바라는 마음이 전달되어서 기분이 좋더라구요. 안내문구 덕분인지 조심히 다뤄져 잘 받았네요. 오보소에서 생산되는 제품들의 라인업을 보니 정말 생각보다 종류도 많고 다양하게 소비자의 구매 욕구에 맞추어서 다양한 라인업으로 구성되어 있더라구요. 끈임없는 제품의 개발과 라인업으로 소비자의 구매 만족도를 높여주는 오보소네요. 더욱이오보소가 2014년 한국 소비자 만족 지수에서 1위를 차지했더라구요. 한국 소비자원 품질 평가에서 흡수력 및 핵심 품질이 뛰어나다는 평가를 받은 오보소! 아직 사용전이라 어떨지 정말 궁금하더라구요. 드디어 모습을 드러낸 오보소 팬티 기저귀! 이름답게 포장지에도 봄을 알리듯 꽃이 한 가득 피어있네요~ 오보소 플라워 팬티형은 걷기 시작하는 아기때부터 잘걷고 활발한 아기까지 10~36개월의 아기가 사용 할 수 있도록 3단계로 나누어서 판매되고 있는데요. 아기의 월령과 체중에 맞게 선택하면 된다고 하네요~ 참고하시라고 개월수와 몸무게에 따른 사이즈 선택표를 적어봤어요. L 대형 : 9~13㎏ : 10~22개월 XL 특대형 : 12~16㎏ : 20~30개월 XXL 점보 : 15 ㎏~ : 24~36개월 제조 날짜와 유통 기한은 앞면에 잘보이는 곳에 배치되어있어서 구입시 꼼꼼히 확인하고 살 수 있구요. 저는 22개월의 아이라 XL 특대형 사이즈로 사용했어요. 대형은 38매, 특대형은 32매 점보형은 26매가 한 팩 구성이랍니다. 픔질 표시란도 꼼꼼히 빠짐사항 없이 잘 기록 되어 있구요. 그리고 사용 상 주의사항도 꼭 읽어 봐야할 항목이죠~ ▽▼▽▼▽▼ 오보소 플라워 기저귀는 남녀 공용으로 사용할 수 있고 오보소 플라워 팬티기저귀의 특징을 잘 알 수 있도록 특징들을 그림과 함께 잘 요약해 두었네요. 팩의 앞쪽에는 이동시에 편하게 들고 다닐수 있도록 손잡이형으로 되어 있어 사용하기 편리하고 절취선이 있어서 깔끔하게 기저귀를 개봉할 수 있어 편했어요! 절취선을 따라 쭉 포장팩을 뜯으면 우리 아이가 사용할 기저귀가 이렇게 한가득 나와요~ 신난다잉~~ㅋㅋ ▽▼▽▼▽▼▽▼▽ 기저귀의 디자인을 그럼 살펴 볼깨요~ 요즘 기저귀도 패션이라고 다들 말하더라구요. 그럼 그 패션을 살펴 봅시다! 기저귀의 앞면의 모습! 그리고 뒷면의 모습이예요! 벨크로의 디자인도 각기 다른 디자인으로 총 12가지 디자인으로 다양하게 만들어서 아이의 인지 발달을 돕는 다채로운 색상과 아이들의 해맑은 웃음을 형상화 한 꽃 디자인으로 우리 아기들이 꽃으로 피어나는 아름다움 교감을 하게 해주는 오보소 플라워~ 예전에 오늘은 멀입지? 했었던 광고가 문득 생각나더라더라구요. 아이의 기분에 맞게 하루 하루 다른 패션으로아이가 입는 즐거움을 선사해 줄 수 있겠어요! 예쁜디자인과 함께 오보소기저귀 팬티형의 특징들도꼼꼼히 알려드려요! 빠른 교체시기를 알려주어서 아이의 기저귀 속사정 쾌적하게 지켜줄 수 있도록 앞뒤로 길게 교체 알림선이 있어서 아기가 소변후 색이 변한것을 보고 바로 바로 갈아 줄 수 있어 편했어요! 그리고 아이가 걷기 시작하면서 기저귀 선택에 있어 항상 주의 깊게 보는 부분중 하나인 신축성! 오보소 팬티 기저귀는 어떨지 한번 늘려 볼깨요!! 혼자서 사진을 찍다보니 느낌이 제대로 안 사는데 정말 양쪽으로 손을 넣어서 쭉 당겨보면 셔링벨트가 부드럽게 쫘악 늘어나더라구요~ 처음엔 기저귀를 봤을때 허리부분이 타이트하지 않을까 했는데 이렇게 부드럽게 쫘악늘어나느것을 보고 "아~ 이게 기술력이구나."하고 하고 실감하게 되었네요! 그리고 아이의 허리부분도 셔링밴드로 부드럽게 전체적으로 아이의 허리를 신축성있게 감싸주어서 쪼이지 않고 또한 부드럽고 통기성이있어서 아이의 피부를 숨쉬게 해주고 부드럽게 감싸주더라구요. 예전에 타사 기저귀를 사용했을땐 신축성이 없어 아이가 움직일때마다 쓸려서 진짜 허리부분에 상처로 그득했었거든요.ㅠㅠ 아이가 걷기 시작하면 정말 많이 움직여서 정신이 없는데요. 그런 아이들의 격한 움직임 하나 하나에도 대소변이 새지 않도록 이중으로 샘방지가 되어 있어서 아이의 많은 움직임에도 사고가 발생하지 않아서 외출시 기저귀가 새어서 난감했었던 일들. 이제는 걱정없겠어요!! 그리고 이중 샘방지의 셔링도 부드럽고 잘 늘어나게 디자인 되어 있어서 아이의 다양한 체형에도 조이지 않고 부드럽게 잘 감싸 주더라구요! 팬티형으로 아이의 기저귀를 교체해 줄 때 절취선을 따라 뜯어서 사용하면 되는데 교체시 절취선을 쉽게 찾을 수 있도록 앞뒤 높낮이에 차이를 두어서 쉽게 찾아서 교환하기가 쉽도록 되어 있더라구요~ 배려가 느껴지네요~ 절취선을 따라 뜯었을때 깔끔하게 절취선을 따라 일자로 뜯어지기 때문에 지저분하지 않고 정리해서 버릴때도 깔금하게 정리된체로 버릴수 있어 좋더라구요. 다른 기저귀와 달리 패드안을 펼쳐보았을때 눈에 띄는것이 있었는데요. 파란 패드가 인상적이였는데 이 패트는 BLUE A.D.L패드로 고가의 첨단소재로 신속한 흡수 역류및 뭉침 방지에 탁월한 기능을 한다고 하더라구요. 그래서 얼마나 흡수하는 지 궁금해서 일 회 소변양과 다량의 소변량을 준비해서 기저귀에 부어 보았어요. 옴마! 그랬더니 200CC는 정말 금방 흡수되어버리고 설마했던 900CC의 물도 언제 넘칠듯 기저귀 가득물을 부었는지 모르게 흡수되어 버렸어요. 200CC의 경우 물을 부었을때 7초정도 만에 홀안으로 물이 모두 흡수되어 바깥으로 물이 보이지 않는 것이 눈에 보이고 휴지로 초가 조금지나 미용티슈로 꾹꾹눌려서 베어나옴을 확인했더니 전혀 베어나오는거시 없었어요. 그리고 900CC의 경우에는 3분정도가 지나자 완벽하게 바깥 기저귀에서 물이 안쪽으로 다 스며들어서 위층의 물을 다 흡수한 상태가 되더라구요.. 신기 방기.. 흡수한 물의 양을 체크하기 위해 무게로 달라진 기저귀의 양을 체크해 보았어요~ 저울이 작아 물을 많이 흡수한 기저귀의 무게가 정확히 측정 되지 않은듯 ::하네요. 요래 요래 부운 물을 모두 흡수한 오보소 기저귀! 실험후 기저귀가 과연 뭉치지 않고 잘 흡수했는지 궁금해서 단면을 잘라보았어요! 대박!!! 두깨의 차이가 느껴지시나요? 오랜 기간 유아용 기저귀를 생산해 온 노하우를 통해 펄프와 흡수제를 가장 이상적인 배합비를 통해서 놀라운 흡수력을 자랑하게 되었다고 해요. 아이가 깊은잠을 잘때면 기저귀를 갈아주지 못해서 오랫동안 기저귀를 갈아주지 못해 찝찝했는데 오보소 기저귀라면 아이가 잘때에도 밤새 소변이 잘 흡수되어서 오랜시간동안에도아이가 편안하게 숙면을 취할수 있겠어요! 외출시 엉덩이 부분에 기저귀를 찬 형태가 드러나면 멋스럽지 않잖아요! 얇은 두깨로 아이의 엉덩이 라인을 살려주는 선사해주는 오보소 플라워 팬티 기저귀의 핏을 공개할깨요! 이렇게 우리 아이의 엉덩이에도 봄이 왔을을 알리는 꽃이 한가득 피어 있네요~ 쩍벌다리를 해도 부드럽게 셔링된 이중 샘방지로 아이의 다리를 전체적으로 부드럽게 감싸주고 새지않도록 해주니까 아이의 다양한 표지션에도 샐 걱정없어요! 앞 뒤 높이차가 있어 절취선을 찾기 쉬워서 도망 다니는 아이를 잡고 빠르게 기저귀를 교체해 줄 수 있어서 넘 편하더라구요. 그리고 아이의 허리부분과 배부분을 부드럽고 신축성있게 감싸주어서 팬티 기저귀가 흘러내리지 않아서 좋았구요! 또 밥을 엄청 많이 먹어 배가 불렸을때도 신축성있게 늘어나 쪼이지 않도록 부드러운 착용감을 선사해 주어서 아이가 불편해 하지 않터라구요. 정말 편안해 보이지 않나요?ㅎㅎ 이렇게 마음껏 움직여도 전혀 불편감이 없어요! 열심히 스티커 놀이도 하구요. 아빠가 출장 기념으로 사주신 레고도 맘껏 가지고 놀고 있어요. 그리고 간식을 먹을 때도 오보소 기저귀와 함께 하고 있네요. 사용후 정리 할때도 뒷정리 데이프로 돌돌말아서 정리해주니 부피감도 줄고 냄새도 나지 않아 정말 만족스러워요! 24시간 아이와 한 몸이 되어 아이의 엉덩이 건강을 빠른 흡수력으로 늘 뽀송하게 만들어주는 오보소 기저귀! 아이 몸에 뚜껍지 않게 엉덩이라인과 맞게 예쁘게 밀착되어서 바지를 입었을때도 기저귀라인으로 엉덩이가 두껍게 튀어나오지 않아서 아이의 엉덩이 라인을 살린 핏으로 외출시에도 자신감이 업업! 우리 아이에게도 불어온 봄! 오보소 플라워 팬티기저귀 덕분에 아이의 엉덩이에도 봄이 왔네요! 흡수력은 기본에 편안감과 감각있는 디자인으로 우리 아이의 기저귀 역사에 봄을 가져다 주신 오보소에게 감사하네요! 오보소 팬티형 기저귀 ! 오보소 플라워 팬티 기저귀 사용해 보니 정말 만족스러워요! ▽▼▽ 7906428056

@@ -263,4 +263,20 @@ public class AdminDAOImpl implements AdminDAO{
 	public String selectUnconfirmedBlogNum(String smallProductId) {
 		return sqlSessionTemplate.selectOne("admin.selectUnconfirmedBlogNum", smallProductId);
 	}
+	@Override
+	public List<HashMap<Integer,Integer>> selectMonthlyMidCategoryIndex() {
+		return sqlSessionTemplate.selectList("admin.selectMonthlyMidCategoryIndex");
+	}
+	@Override
+	public void deleteOtherSmallProductPosting(BlliPostingVO vo) {
+		sqlSessionTemplate.delete("admin.deleteOtherSmallProductPosting", vo);
+	}
+	@Override
+	public void insertOtherSmallProductPermanentDeadPosting(BlliPostingVO vo) {
+		sqlSessionTemplate.insert("admin.insertOtherSmallProductPermanentDeadPosting", vo);
+	}
+	@Override
+	public List<BlliPostingVO> selectOtherSmallProductForPosting(BlliPostingVO vo) {
+		return sqlSessionTemplate.selectList("admin.selectOtherSmallProductForPosting",vo);
+	}
 }

@@ -129,5 +129,13 @@ public interface AdminDAO {
 
 	String selectUnconfirmedBlogNum(String smallProductId);
 
+	List<HashMap<Integer,Integer>> selectMonthlyMidCategoryIndex();
+
+	void deleteOtherSmallProductPosting(BlliPostingVO vo);
+
+	void insertOtherSmallProductPermanentDeadPosting(BlliPostingVO vo);
+
+	List<BlliPostingVO> selectOtherSmallProductForPosting(BlliPostingVO vo);
+
 }
  

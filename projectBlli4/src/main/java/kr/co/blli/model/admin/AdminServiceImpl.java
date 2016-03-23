@@ -374,6 +374,7 @@ public class AdminServiceImpl implements AdminService{
 			vo.setSmallProductId(smallProductId);
 			vo.setPostingTitle(postingTitle);
 			if(delete.equals("YES")){
+				System.out.println("지웁니다.:"+vo);
 				adminDAO.deletePosting(vo);
 				adminDAO.insertPermanentDeadPosting(vo);
 			}else{
@@ -384,6 +385,15 @@ public class AdminServiceImpl implements AdminService{
 				if(updateResult != 0){
 					adminDAO.updatePostingCount(vo);
 				}
+				//다른 소제품과 1:N관계에 있는 포스팅을 삭제해준다.
+				List <BlliPostingVO> otherPostingList = adminDAO.selectOtherSmallProductForPosting(vo);
+				for(int j=0;j<otherPostingList.size();j++){
+					System.out.println(otherPostingList.get(j));
+					if(!vo.getSmallProductId().equals(otherPostingList.get(j).getSmallProductId())){
+						adminDAO.insertPermanentDeadPosting(otherPostingList.get(j));
+					}
+				}
+				adminDAO.deleteOtherSmallProductPosting(vo);
 			}
 			int updateResult = adminDAO.updateSmallProductStatus(smallProductId);
 			if(updateResult != 0){
@@ -770,25 +780,25 @@ public class AdminServiceImpl implements AdminService{
 			adminDAO.updatMonthlyProductPhotoLink(list.get(i));
 		}
 	}
+	
 	@Override
-	public ArrayList<List<HashMap<String, Object>>> managingProductByMonthAge(){
+	public ArrayList<List<HashMap<String, Object>>> managingProductByMonthAge(int minimumMonthAge){
 		//개월별로 추천되는 월령별 추천 중분류 리스트
 		ArrayList<List<HashMap<String, Object>>> midCategoryListByMonthAge = new ArrayList<List<HashMap<String,Object>>>();
 		List<HashMap<String, Object>> midCategoryList = null;
-		for(int i=-2;i<0;i++){
-			//최소사용시기를 기준으로 월령별 추천 중분류를 출력한다.
-			midCategoryList = adminDAO.selectMonthlyMidProductList(i);
-			for(int j=0;j<midCategoryList.size();j++){
-				midCategoryList.get(j).put("confirmedSmallProductNum", adminDAO.selectConfirmedSmallProductNum(midCategoryList.get(j).get("midCategoryId").toString()));
-				midCategoryList.get(j).put("unconfirmedSmallProductNum", adminDAO.selectUnconfirmedSmallProductNum(midCategoryList.get(j).get("midCategoryId").toString()));
-				midCategoryList.get(j).put("confirmedbyadminSmallProductNum", adminDAO.selectConfirmedbyadminSmallProductNum(midCategoryList.get(j).get("midCategoryId").toString()));
-			}
-			midCategoryListByMonthAge.add(midCategoryList);
+		//최소사용시기를 기준으로 월령별 추천 중분류를 출력한다.
+		midCategoryList = adminDAO.selectMonthlyMidProductList(minimumMonthAge);
+		for(int j=0;j<midCategoryList.size();j++){
+			midCategoryList.get(j).put("confirmedSmallProductNum", adminDAO.selectConfirmedSmallProductNum(midCategoryList.get(j).get("midCategoryId").toString()));
+			midCategoryList.get(j).put("unconfirmedSmallProductNum", adminDAO.selectUnconfirmedSmallProductNum(midCategoryList.get(j).get("midCategoryId").toString()));
+			midCategoryList.get(j).put("confirmedbyadminSmallProductNum", adminDAO.selectConfirmedbyadminSmallProductNum(midCategoryList.get(j).get("midCategoryId").toString()));
 		}
+		midCategoryListByMonthAge.add(midCategoryList);
 		System.out.println("추출된 중분류 리스트 : "+midCategoryList);
 		
 		return midCategoryListByMonthAge;
 	}
+	
 	@Override
 	public List<HashMap<String, String>> selectConfirmedbyadminProductByMidCategoryId(String midCategoryId) {
 		List<HashMap<String, String>> resultList = new ArrayList<HashMap<String,String>>();
@@ -830,5 +840,13 @@ public class AdminServiceImpl implements AdminService{
 			resultList.add(tempMap);
 		} 
 		return resultList;
+	}
+	@Override
+	public List<HashMap<Integer,Integer>> monthlyMidCategoryIndex() {
+		List<HashMap<Integer,Integer>> monthlyIndexList = adminDAO.selectMonthlyMidCategoryIndex();
+		for(int i=0;i<monthlyIndexList.size();i++){
+			System.out.println("최소사용시기"+monthlyIndexList.get(i).get("MINUSABLEMONTH")+"컨펌 소제품 갯수"+monthlyIndexList.get(i).get("TOTALCOUNT"));
+		}
+		return monthlyIndexList;
 	}
 }

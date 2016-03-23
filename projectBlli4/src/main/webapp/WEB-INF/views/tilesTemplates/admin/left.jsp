@@ -39,7 +39,7 @@
                 </li>
                 <li><a><i class="fa fa-edit"></i> 상품 관리 <span class="fa fa-chevron-down"></span></a>
                   <ul class="nav child_menu" style="display: none">
-                    <li><a href="${initParam.root}admin_managingProductByMonthAge.do">시기별 추천 상품관리</a>
+                    <li><a href="${initParam.root}admin_managingProductByMonthAge.do?minimumMonthAge=-2">시기별 추천 상품관리</a>
                     </li>
                     <li><a href="${initParam.root}admin_unconfirmedSmallProduct.do">소제품 등록</a>
                     </li>
