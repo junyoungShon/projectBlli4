@@ -409,7 +409,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				from(
 				select distinct bsp.small_product_id as small_product_id, bsp.mid_category_id as mid_category_id ,bmp.min_usable_month as min_usable_month
 				from blli_monthly_product bmp,blli_mid_category bmc ,blli_small_product bsp,monthly_product_and_n_mid mpanm
-				where bmp.monthly_product_id = mpanm.monthly_product_id and mpanm.mid_category_id = bsp.mid_category_id  and bsp.small_product_status='confirmed' 
+				where bmp.monthly_product_id = mpanm.monthly_product_id and mpanm.mid_category_id = bsp.mid_category_id  and bsp.small_product_status='confirmedbyadmin' 
 			
 				) t
 			) t where t.mid_category_count >4 order by t.min_usable_month asc
