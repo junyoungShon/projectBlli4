@@ -204,7 +204,7 @@ public class MemberController {
 	}
 	/**
 	  * @Method Name : joinMemberByEmail
-	  * @Method 설명 : 이메일을 통한 회원가입 시 커치는 메서드
+	  * @Method 설명 : 이메일을 통한 회원가입 시 커치는 메서드 
 	  * @작성일 : 2016. 1. 14.
 	  * @작성자 : junyoung
 	  * @param blliMemberVO
