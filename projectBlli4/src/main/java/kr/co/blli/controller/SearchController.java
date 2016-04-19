@@ -50,7 +50,7 @@ public class SearchController {
 	@RequestMapping("admin_insertPosting.do")
 	public ModelAndView insertPosting() throws IOException{
 		postingScheduler.insertPosting();
-		return new ModelAndView("insertDataResult");
+		return new ModelAndView("admin_insertDataResult");
 	}
 	/**
 	 * 
@@ -180,19 +180,19 @@ public class SearchController {
 	@RequestMapping("admin_insertBigCategory.do")
 	public ModelAndView insertBigCategory() throws IOException{
 		categoryAndProductScheduler.insertBigCategory();
-		return new ModelAndView("insertDataResult");
+		return new ModelAndView("admin_insertDataResult");
 	}
 	//스케줄러 완성 전까지 임시 사용
 	@RequestMapping("admin_insertMidCategory.do")
 	public ModelAndView insertMidCategory() {
 		categoryAndProductScheduler.insertMidCategory();
-		return new ModelAndView("insertDataResult");
+		return new ModelAndView("admin_insertDataResult");
 	}
 	//스케줄러 완성 전까지 임시 사용
 	@RequestMapping("admin_insertSmallProduct.do")
 	public ModelAndView insertSmallProduct() {
 		categoryAndProductScheduler.insertSmallProduct();
-		return new ModelAndView("insertDataResult");
+		return new ModelAndView("admin_insertDataResult");
 	}
 	/**
 	  * @Method Name : goPosting

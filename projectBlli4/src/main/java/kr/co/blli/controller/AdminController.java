@@ -188,7 +188,7 @@ public class AdminController {
 	@RequestMapping("admin_checkLog.do")
 	public ModelAndView checkLog(){
 		ArrayList<BlliLogVO> list = (ArrayList<BlliLogVO>)adminService.checkLog();
-		return new ModelAndView("admin/log", "logList", list);
+		return new ModelAndView("admin_log", "logList", list);
 	}	
 	/**
 	 * 
@@ -215,7 +215,7 @@ public class AdminController {
 	@RequestMapping("admin_checkPosting.do")
 	public ModelAndView checkPosting(){
 		ArrayList<BlliPostingVO> list = (ArrayList<BlliPostingVO>)adminService.checkPosting();
-		return new ModelAndView("admin/checkPosting", "postingList", list);
+		return new ModelAndView("admin_checkPosting", "postingList", list);
 	}	
 	@ResponseBody
 	@RequestMapping("admin_deletePosting.do")
@@ -230,12 +230,12 @@ public class AdminController {
 	@RequestMapping("admin_checkMember.do")
 	public ModelAndView checkMember(){
 		ArrayList<BlliMemberVO> list = (ArrayList<BlliMemberVO>)adminService.checkMember();
-		return new ModelAndView("admin/checkMember", "memberList", list);
+		return new ModelAndView("admin_checkMember", "memberList", list);
 	}
 	@RequestMapping("admin_checkUserExceptionLog.do")
 	public ModelAndView checkUserExceptionLog() throws IOException{
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("admin/userExceptionLog");
+		mav.setViewName("admin_userExceptionLog");
 		return mav.addObject("list", adminService.checkUserExceptionLog());
 	}
 	@RequestMapping("admin_monthlyProductImageDownLoader.do")

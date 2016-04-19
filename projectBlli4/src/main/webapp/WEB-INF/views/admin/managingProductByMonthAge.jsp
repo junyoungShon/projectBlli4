@@ -54,10 +54,6 @@
 	  			
 	  			$(this).css('background-color','#f9f9f9');
   			}
-			
-  			
-  			
-  			
   		});
   		$('.confirmedSmallProduct').click(function(){
   			var midCategoryId = $(this).siblings('.midCategoryId').children('.midCategoryIdValue').val();
@@ -93,8 +89,6 @@
 			  			$(midCategoryCell).html(addHtml);
 					}
 				});
-	  			
-	  			
   			}else{
 	  			$(midCategoryCell).css('display','none');
 	  			$(this).parent().css('background-color','#f9f9f9');
@@ -102,14 +96,10 @@
 	  			$(this).siblings('.confirmedbyadminSmallProduct').css('background-color','#f9f9f9');
 	  			$(this).css('background-color','#f9f9f9');
   			}
-			
-  			
   		});
   	});
   </script>
-  
     <table class="table">
-    	
     </table>
          <!-- page content -->
         <div class="">

@@ -514,7 +514,7 @@ function appReadyAlert(){
 				                         	</label>
                            				</div>
                       		  		</div> 
-		                      		<div style="text-align: left ;height: 150px;">
+		                      		<div style="text-align: left; height: 150px;">
 		                      			<label>아이 이름</label>
 		                                <input type="text" class="form-control babyName" name="BlliBabyVO[0].babyName" placeholder="이름">
 		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
@@ -576,7 +576,7 @@ function appReadyAlert(){
 		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
 		                                <label>아이 생일</label>
 		                                <input class="form-control babyBirthday" id ="datepicker2" style="background: white; cursor: pointer;"
-		                                name="BlliBabyVO[1].babyBirthday" readonly="readonly" type="text">
+		                                	name="BlliBabyVO[1].babyBirthday" readonly="readonly" type="text">
 		                                <div class="alertDiv" id="memberIdInsertMSG"></div>
 		                      		</div>
                         		</div>

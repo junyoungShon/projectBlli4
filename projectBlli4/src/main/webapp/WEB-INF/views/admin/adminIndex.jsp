@@ -15,22 +15,8 @@
 	<ul>
 		<li><a href="${initParam.root}member_goMain.do">goMain.do</a></li>
 		<li><a href="${initParam.root}admin_sendMail.do?memberId=sk159753&mailForm=findPassword">admin_sendMail.do</a></li>
-		<li><a href="${initParam.root}admin_insertBigCategory.do">대분류 리스트 긁어모아</a></li>
-		<li><a href="${initParam.root}admin_insertMidCategory.do">중분류 리스트 긁어모아</a></li>
-		<li><a href="${initParam.root}admin_insertSmallProduct.do">소분류 리스트 긁어모아</a></li>
-		<li><a href="${initParam.root}admin_insertPosting.do">포스팅 리스트 긁어모아</a></li>
-		<li><a href="${initParam.root}admin_postingListWithSmallProducts.do">소제품 하나로 추려줘</a></li>
-		<li><a href="${initParam.root}admin_unconfirmedSmallProduct.do">소제품 등록해줘</a></li>
-		<li><a href="${initParam.root}admin_unconfirmedPosting.do">포스팅 등록해줘</a></li>
-		<li><a href="${initParam.root}admin_checkPosting.do">싫어요</a></li>
-		<li><a href="${initParam.root}admin_checkMember.do">회원 목록</a></li>
-		<li><a href="${initParam.root}admin_checkLog.do">로그 조회</a></li>
-		<li><a href="${initParam.root}logout.do">로그아웃</a></li>
-		<li><a href="${initParam.root}admin_midCategoryUseWhenModifyBySmallProduct.do">중분류 제품 사용시기 수정 - 소분류 제품 사용시기를 기준으로</a></li>
-		<li><a href="${initParam.root}admin_allProductDownLoader.do">모든 제품 사진 다운로드</a></li>
-		<li><a href="${initParam.root}admin_checkUserExceptionLog.do">사용자에의한 익셉션 확인</a></li>
-		<li><a href="${initParam.root}admin_makingWordCloud.do">현재 confirmed인 포스팅을 대상으로 워드클라우드 생성</a></li>
-		<li><a href="${initParam.root}admin_monthlyProductImageDownLoader.do">블리의 월령별 추천상품을 모두 다운로드해요</a></li>
+
+		
 	</ul>
 <!--
   아래는 소셜 플러그인으로 로그인 버튼을 넣는다.

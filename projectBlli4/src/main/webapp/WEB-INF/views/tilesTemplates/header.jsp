@@ -263,6 +263,7 @@ clear:left;
    </div>
 </c:when>
 <c:otherwise>
+
 <div class="jbMenu">
        <div class="in_fr">
          <a href="${initParam.root}member_goMain.do"><img src="${initParam.root}img/top_logo.png" alt="탑로고" class="logo" style="margin-top:-6px"></a>
@@ -291,6 +292,7 @@ clear:left;
          </div>
       </div>
    </div>
+
 
 
 
