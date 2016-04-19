@@ -82,15 +82,18 @@ public class ProductServiceImpl implements ProductService{
 	public List<BlliSmallProductVO> selectSameAgeMomBestPickedSmallProductList(List<BlliMonthlyProductVO> blliMonthlyProductVO, BlliBabyVO blliBabyVO) {
 		List<BlliSmallProductVO> blliSmallProductVOList = new ArrayList<BlliSmallProductVO>();
 		List<BlliMidCategoryVO> blliMidCategoryVOList = new ArrayList<BlliMidCategoryVO>();
+		System.out.println("블리 먼슬리 상품 크기"+blliMonthlyProductVO.size()+blliMonthlyProductVO);
 		//월령별 중분류 리스트를 받아 이에 속하는 중분류 리스트를 반환 받자
-		for(int i=0;blliMonthlyProductVO.size()<i;i++){
+		for(int i=0;blliMonthlyProductVO.size()>i;i++){
 			List<BlliMidCategoryVO> tempList = productDAO.selectMidCategoryByMonthlyProductID(blliMonthlyProductVO.get(i).getMonthlyProductId());
+			System.out.println("프로덕트 서비스 중분류템프리스트"+tempList);
 			for(int j=0;j<tempList.size();j++){
 				if(tempList.get(j)!=null){
 					blliMidCategoryVOList.add(tempList.get(j));
 				}
 			}
 		}
+		System.out.println("프로덕트 서비스 중분류"+blliMidCategoryVOList);
 		//중분류리스트수에 따라 소분류 추천 갯수를 달리하자		
 		int recommMidNumber = blliMidCategoryVOList.size();
 		if(recommMidNumber>9){
@@ -111,19 +114,21 @@ public class ProductServiceImpl implements ProductService{
 			for(int i=0;i<blliMidCategoryVOList.size();i++){
 				// 중제품 당 찜 상위 2개씩을 가져온다.
 				List<BlliSmallProductVO> tempList = productDAO.selectSameAgeMomBestPickedSmallProductList(blliMidCategoryVOList.get(i).getMidCategoryId());
+				System.out.println("프로덕트 서비스 소분류템프리스트"+tempList);
 				for(int j=0;j<tempList.size();j++){
 					if(tempList.get(j)!=null){
-						tempList.get(j).setMinPrice(productDAO.selectMinPriceBySmallProductId(blliSmallProductVOList.get(i).getSmallProductId()));
+						tempList.get(j).setMinPrice(productDAO.selectMinPriceBySmallProductId(tempList.get(j).getSmallProductId()));
 						if(tempList.get(j).getMinPrice()!=null){
 							DecimalFormat df = new DecimalFormat("#,##0");
-							tempList.get(j).setMinPrice(df.format(Integer.parseInt(blliSmallProductVOList.get(i).getMinPrice())));
-							tempList.set(j, productDibChecker(blliBabyVO.getMemberId(), blliSmallProductVOList.get(i)));
+							tempList.get(j).setMinPrice(df.format(Integer.parseInt(tempList.get(j).getMinPrice())));
+							tempList.set(j, productDibChecker(blliBabyVO.getMemberId(), tempList.get(j)));
 						}
 						blliSmallProductVOList.add(tempList.get(j));
 					}
 				}
 			}
 		}
+		System.out.println("프로덕트 서비스 소분류"+blliSmallProductVOList);
 		return blliSmallProductVOList;
 	}
 	
@@ -282,7 +287,9 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public HashMap<String, Object> searchSmallProduct(String searchWord) {
 		HashMap<String, Object> smallProductInfo = new HashMap<String, Object>();
+		System.out.println(searchWord);
 		BlliSmallProductVO smallProduct = productDAO.searchSmallProduct(searchWord);
+		System.out.println(smallProduct);
 		ArrayList<BlliSmallProductBuyLinkVO> buyLink = null;
 		ArrayList<BlliSmallProductVO> otherSmallProductList = null;
 		if(smallProduct != null){

@@ -124,7 +124,9 @@ function search_unconfirmedPosting(){
 </script>
 </head>
 <body>
-
+<c:if test="${requestScope.smallProductId!=null }">
+	<a href="admin_insertPostingBySmallProduct.do?smallProductId=${requestScope.smallProductId}&smallProduct=${requestScope.smallProduct}">소제품 블로그 수집하기!</a>
+</c:if>
 <table width="70%" align="center" cellpadding="10">
 <tr>
 	<td colspan="2">

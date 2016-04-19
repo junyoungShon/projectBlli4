@@ -137,5 +137,7 @@ public interface AdminDAO {
 
 	List<BlliPostingVO> selectOtherSmallProductForPosting(BlliPostingVO vo);
 
+	String selectSmallProductBySmallProductId(String searchWord);
+
 }
  

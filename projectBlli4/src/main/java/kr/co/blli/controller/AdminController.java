@@ -12,6 +12,8 @@ import kr.co.blli.model.admin.AdminService;
 import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.BlliMemberVO;
 import kr.co.blli.model.vo.BlliPostingVO;
+import kr.co.blli.model.vo.BlliSmallProductVO;
+import kr.co.blli.model.vo.ListVO;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,9 +57,14 @@ public class AdminController {
 	public ModelAndView unconfirmedPosting(String pageNo, String category, String searchWord) throws IOException{
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("admin_unconfirmedPosting");
-		mav.addObject("resultList", adminService.unconfirmedPosting(pageNo, category, searchWord));
+		ListVO lvo= adminService.unconfirmedPosting(pageNo, category, searchWord);
+		mav.addObject("resultList", lvo);
 		mav.addObject("category", category);
 		mav.addObject("searchWord", searchWord);
+		if(category.equals("smallProductId")){
+			mav.addObject("smallProductId",searchWord);
+			mav.addObject("smallProduct", adminService.selectSmallProductBySmallProductId(searchWord));
+		}
 		return mav;
 	}	
 	/**
@@ -244,5 +251,13 @@ public class AdminController {
 	@ResponseBody
 	public List<HashMap<String,String>> admin_selectConfirmedProductByMidCategoryId(String midCategoryId){
 		return adminService.selectConfirmedProductByMidCategoryId(midCategoryId);
+	}
+	@RequestMapping("admin_insertPostingBySmallProduct.do")
+	public ModelAndView insertPostingBySmallProduct(BlliSmallProductVO blliSmallProductVO) throws IOException{
+		ModelAndView mav = new ModelAndView();
+		adminService.insertPostingBySmallProduct(blliSmallProductVO);
+		System.out.println(blliSmallProductVO);
+		mav.setViewName("redirect:admin_unconfirmedPosting.do?pageNo=1&category=smallProductId&searchWord="+blliSmallProductVO.getSmallProductId());
+		return mav;
 	}
 }

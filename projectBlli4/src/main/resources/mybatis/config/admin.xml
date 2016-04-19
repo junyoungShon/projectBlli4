@@ -418,6 +418,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	<select id="selectOtherSmallProductForPosting" resultMap="bpvRM">
  		select small_product_id , posting_url,posting_title from blli_posting where posting_url = #{postingUrl} and posting_title = #{postingTitle}
  	</select>
+ 	<select id="selectSmallProductBySmallProductId" resultType="String">
+ 		select small_product from blli_small_product where small_product_id= #{value}
+ 	</select>
 	<!-- 준영 끝 -->
  </mapper>
  

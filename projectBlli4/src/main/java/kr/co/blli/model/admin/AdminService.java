@@ -14,6 +14,7 @@ import javax.mail.MessagingException;
 import kr.co.blli.model.vo.BlliPostingVO;
 import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.BlliMemberVO;
+import kr.co.blli.model.vo.BlliSmallProductVO;
 import kr.co.blli.model.vo.BlliUserExceptionLogVO;
 import kr.co.blli.model.vo.ListVO;
 
@@ -70,4 +71,8 @@ public interface AdminService {
 			String midCategoryId);
 
 	public List<HashMap<Integer,Integer>> monthlyMidCategoryIndex();
+
+	void insertPostingBySmallProduct(BlliSmallProductVO blliSmallProductVO) throws IOException;
+
+	public String selectSmallProductBySmallProductId(String searchWord);
 }

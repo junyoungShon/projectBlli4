@@ -419,10 +419,11 @@ function appReadyAlert(){
 					$(':input[name="firstBabyBirthday"]').focus();
 					return false;
 				}
-				if($(':input[name="BlliBabyVO['+i+'].babyBirthday"]').val().search(/\W|\s/g) > -1 ){
-					alert((i+1)+'번째 아이의 이름에 특수문자나 공백을 사용하실 수 없습니다!');
-					$(':input[name="firstBabyBirthday"]').focus();
-					return false;
+				for(var i=0;i<$(':input[name="BlliBabyVO['+i+'].babyName"]').val().length;i++){
+					if($(':input[name="BlliBabyVO['+i+'].babyName"]').val().charAt(i) == ""){
+						alert((i+1)+'번째 아이의 이름에 공백이있습니다.!');
+						return false;
+					}
 				}
 				if(targetAmount>=2){
 					for(var j=targetAmount-1;j>0;j--){

@@ -125,10 +125,13 @@ public class MemberController {
 			}
 			//메인페이지로 이동할 때 회원에게 추천될 상품 리스트를 전달받는다.
 			List<BlliMonthlyProductVO> blliMonthlyProductVO = productService.selectRecommendingMidCategory(blliBabyVO);
+			System.out.println("중분류"+blliMonthlyProductVO);
 			//메인페이지로 이동할 때 회원에게 추천 될 소분류 상품 리스트를 전달 받는다.(또래엄마가 많이 찜한 상품)
 			List<BlliSmallProductVO> blliSmallProductVOList = productService.selectSameAgeMomBestPickedSmallProductList(blliMonthlyProductVO,blliBabyVO);
+			System.out.println("소분류"+blliSmallProductVOList);
 			
 			List<BlliPostingVO> blliPostingVOList = postingService.searchPostingBySmallProductList(blliSmallProductVOList,blliMemberVO.getMemberId(),"1");
+			System.out.println("포스팅"+blliPostingVOList);
 			for(int i=0;i<blliSmallProductVOList.size();i++){
 				if(blliSmallProductVOList.get(i)!=null) { //용호 추가 - null포인터 방지
 				}

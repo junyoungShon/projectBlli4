@@ -19,6 +19,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
+import kr.co.blli.model.scheduler.PostingScheduler;
 import kr.co.blli.model.vo.BlliDetailException;
 import kr.co.blli.model.vo.BlliLogVO;
 import kr.co.blli.model.vo.BlliMailVO;
@@ -57,7 +58,8 @@ public class AdminServiceImpl implements AdminService{
 	private BlliFileDownLoader blliFileDownLoader;
 	@Resource
 	private BlliWordCounter blliWordCounter;
-	
+	@Resource
+	private PostingScheduler postingScheduler;
 	
 	
 	/**
@@ -391,9 +393,9 @@ public class AdminServiceImpl implements AdminService{
 					System.out.println(otherPostingList.get(j));
 					if(!vo.getSmallProductId().equals(otherPostingList.get(j).getSmallProductId())){
 						adminDAO.insertPermanentDeadPosting(otherPostingList.get(j));
+						adminDAO.deleteOtherSmallProductPosting(otherPostingList.get(j));
 					}
 				}
-				adminDAO.deleteOtherSmallProductPosting(vo);
 			}
 			int updateResult = adminDAO.updateSmallProductStatus(smallProductId);
 			if(updateResult != 0){
@@ -849,4 +851,15 @@ public class AdminServiceImpl implements AdminService{
 		}
 		return monthlyIndexList;
 	}
+	
+	@Override
+	public void insertPostingBySmallProduct(BlliSmallProductVO blliSmallProductVO) throws IOException{
+		postingScheduler.insertPosting(blliSmallProductVO);
+	}
+	@Override
+	public String selectSmallProductBySmallProductId(String searchWord) {
+		
+		return adminDAO.selectSmallProductBySmallProductId(searchWord);
+	}
+	
 }

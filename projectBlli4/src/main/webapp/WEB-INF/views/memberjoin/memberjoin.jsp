@@ -114,10 +114,11 @@
 				$(this).val(userName.substring(0,9));
 				memberNameValidity = false;
 			}
-			if(userName.search(/\W|\s/g) > -1 ){
-				$('#memberNameInsertMSG').text('특수문자나 공백을 사용하실 수 없습니다!');
-				memberNameValidity = false;
-				return false;
+			for(var i=0;i<$(':input[name="memberName"]').val().length;i++){
+				if($(':input[name="memberName"]').val().charAt(i) == ""){
+					alert('이름에 공백이 존재합니다.');
+					return false;
+				}
 			}
 			if(userName.length>0){
 				$('#memberNameInsertMSG').text('유효한 이름입니다!');

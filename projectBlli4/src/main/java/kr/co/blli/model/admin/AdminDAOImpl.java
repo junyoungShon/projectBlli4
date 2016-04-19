@@ -279,4 +279,8 @@ public class AdminDAOImpl implements AdminDAO{
 	public List<BlliPostingVO> selectOtherSmallProductForPosting(BlliPostingVO vo) {
 		return sqlSessionTemplate.selectList("admin.selectOtherSmallProductForPosting",vo);
 	}
+	@Override
+	public String selectSmallProductBySmallProductId(String searchWord) {
+		return sqlSessionTemplate.selectOne("admin.selectSmallProductBySmallProductId", searchWord);
+	}
 }
