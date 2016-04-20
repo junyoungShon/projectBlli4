@@ -33,7 +33,7 @@ public class BlliFileUtils {
     		filePath = "C:\\Users\\"+System.getProperty("user.name")+"\\git\\blli\\blli\\src\\main\\webapp\\babyphoto\\";
     	}else{
     		//서버 환경일 경우 path
-    		filePath = "/usr/bin/apache-tomcat-7.0.64/webapps/ROOT/babyphoto/";
+    		filePath = "/usr/local/apache-tomcat-7.0.64/webapps/ROOT/babyphoto/";
     	}
         MultipartHttpServletRequest multipartHttpServletRequest  = (MultipartHttpServletRequest)request;
         

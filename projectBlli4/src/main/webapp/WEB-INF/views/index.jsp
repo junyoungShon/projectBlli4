@@ -73,9 +73,9 @@ function appReadyAlert(){
 				이미 블리 회원이신가요? <a href="${initParam.root}loginPage.do" style="color: gold; font-weight: bolder;">로그인</a>
 			</p>
 			<div class="login_bt">
-				<p><a href="#" onclick="checkLoginState()"><img src="./img/login_bt1.png" alt="페이스북으로 가입하기" style="width: 217px"></a>	</p>	
-				<p><a href="#" onclick="kakaoLogin()"><img src="./img/login_bt2.png" alt="카카오톡으로 가입하기" style="width: 217px"></a></p>
-				<p><a href="#" id="naver_id_login"><img src="./img/login_bt2.png" alt="네이버로 가입하기"></a></p>
+				<img src="./img/login_bt1.png" alt="페이스북으로 가입하기" style="width: 217px" onclick="checkLoginState()">	</p>	
+				<p><img src="./img/login_bt2.png" alt="카카오톡으로 가입하기" style="width: 217px" onclick="kakaoLogin()"></p>
+				<p id="naver_id_login"></p>
 				<p><a href="${initParam.root}goJoinMemberPage.do"><img src="./img/login_bt3.png" alt="이메일로 가입하기"></a></p>
 			</div>
 		</div>
